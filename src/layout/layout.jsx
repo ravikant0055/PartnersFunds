@@ -17,6 +17,7 @@ const Layout = () => {
                 </SignedIn>
             </div>
         </nav>
+        
         <main className='flex w-full flex-grow'>
             <Main/>
         </main>

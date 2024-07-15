@@ -1,11 +1,15 @@
 import React from 'react'
 import DesignerSidebar from './DesignerSidebar';
+//import { useDroppable } from '@dnd-kit/core';
 
 const Designer = () => {
+  
+  //const droppable = useDroppable();
+
   return (
     <div className='flex w-full h-full'>
         
-       <DesignerSidebar/> 
+       <DesignerSidebar/>
 
        {/* page code */}
        <div className='p-4 w-full'>

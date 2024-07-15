@@ -1,11 +1,13 @@
 import React from 'react'
+import SideBarBtnElement from '../SideBarBtnElement';
 
 const DesignerSidebar = () => {
   return (
-    <div className='w-[400px] max-w-[400px] flex flex-col flex-grow
-      gap-2 border-r bg-white overflow-y-auto h-full'>
-        Elemets
-    </div>
+    <aside className='w-[400px] max-w-[400px] flex flex-col flex-grow
+      gap-2 border-r p-4 bg-white overflow-y-auto h-full'>
+        Elements
+        <SideBarBtnElement />
+    </aside>
   )
 }
 

@@ -4,12 +4,21 @@ import SaveFormBtn from '../PageHeader/SaveFormBtn';
 import PublishFormBtn from '../PageHeader/PublishFormBtn';
 import paperSvg from '../../assests/paper.svg'
 import Designer from '../designer/Designer';
-import { DndContext } from '@dnd-kit/core';
+import { DndContext, MouseSensor, useSensor, useSensors } from '@dnd-kit/core';
 import DragOverlayWrapper from '../DragOverlayWrapper';
 
 const FormBuilder = () => {
+   
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10, // 10px
+    },
+  });
+
+  const sensors = useSensors(mouseSensor);
+
   return (
-    <DndContext>
+    <DndContext sensors={sensors}>
       <main className='flex flex-col w-full'>
         <nav className='flex justify-between border-b p-4 gap-3 items-center'>
           <h2 className='truncate font-medium'>

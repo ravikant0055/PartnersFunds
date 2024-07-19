@@ -9,14 +9,8 @@ import DragOverlayWrapper from '../DragOverlayWrapper';
 import { useDispatch, useSelector } from 'react-redux';
 
 const FormBuilder = () => {
-  const dispatch = useDispatch();
   const fetchedPageData = useSelector(state => state.page.fetchedPageData); // Selecting fetchedPageData from Redux state
   console.log("fetchedPageData",fetchedPageData);
-  // // Fetch page data on component mount (example)
-  // useEffect(() => {
-  //   const pageId = 123; // Replace with the actual pageId you want to fetch
-  //   dispatch(fetchPageById(pageId));
-  // }, [dispatch]);
    
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {

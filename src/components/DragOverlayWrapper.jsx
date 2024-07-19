@@ -1,7 +1,7 @@
 import { DragOverlay, useDndMonitor } from '@dnd-kit/core';
 import React, { useState } from 'react';
 import { SideBarBtnElementDragOverlay } from './SideBarBtnElement';
-import TextFields from './fields/TextFields';
+import TextFields, { TextFieldFormElement } from './fields/TextFields';
 
 
 function DragOverlayWrapper() {
@@ -27,7 +27,7 @@ function DragOverlayWrapper() {
 
     const isSidebarBtnElement = draggedItem.data?.current?.isDesignerBtnElement;
     if (isSidebarBtnElement) {
-       node = <SideBarBtnElementDragOverlay />;
+       node = <SideBarBtnElementDragOverlay formelement={TextFieldFormElement} />;
     }
 
     const isDesignerElement = draggedItem.data?.current?.isDesignerElement;

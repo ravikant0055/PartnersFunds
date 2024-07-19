@@ -5,13 +5,14 @@ import { cn } from "../../lib/utils";
 import TextFields from "../fields/TextFields";
 import { Button } from "../ui/button";
 import { BiSolidTrash } from "react-icons/bi";
+import { idGenerator } from 'src/lib/idGenerator'
 
 const Designer = () => {
 
-  const [data, setData] =useState([]); 
+  const [myData, setMyData] =useState({}); 
 
   const droppable = useDroppable({
-    id: "2",
+    id: "designer-drop-area",
     data: {
       type: "textfield",
       isDesignerBtnElement: true,
@@ -27,13 +28,19 @@ const Designer = () => {
 
       if (isDesignerBtnElement) {
         const type = active.data?.current?.type;
-        const newElement = "1";
+        // const newElement = myData[type].idGenerator();
 
-        setData([...data, type]);
-        //elem.push(type);
+        // setMyData([...myData, type]);
+        const newElement = idGenerator(); // Assuming idGenerator is imported or defined here
+        console.log("New Element", newElement); 
 
-        console.log("New Element", newElement);
-        console.log(data);
+        setMyData(prevData => ({
+          ...prevData,
+          [type]: [...(prevData[type] || []), newElement]
+        }));
+
+       
+        console.log(myData);
       }
 
       console.log("DRAG END", event);
@@ -53,24 +60,26 @@ const Designer = () => {
             droppable.isOver && "ring-2 ring-primary/20"
           )}
         >
-          {!droppable.isOver && data.length === 0 && (
+          {!droppable.isOver && Object.keys(myData).length === 0 && (
             <p className="text-xl text-slate-700 flex flex-grow items-center font-bold">
               Drop Here
             </p>
           )}
 
-          {droppable.isOver && data.length === 0 &&(
+          {droppable.isOver && Object.keys(myData).length === 0 &&(
             <div className="p-4 w-full">
               <div className="h-[120px] rounded-md bg-primary/20"></div>
             </div>
           )}
 
-          {data?.length > 0 && (
+          {Object.keys(myData)?.length > 0 && (
             <div className="flex flex-col text-black w-full gap-2 p-4">
-               {data.map((item,index) => (
+               {Object.keys(myData).map((type,index) => (
                      <div key={index}>
-                        <DesignerElementWrapper/>
-                     </div> 
+                     {myData[type].map((element, idx) => (
+                       <DesignerElementWrapper key={idx} element={element} />
+                     ))}
+                   </div> 
                  ))}
             </div>
           )}
@@ -86,7 +95,7 @@ const Designer = () => {
 function DesignerElementWrapper() {
   const [mouseIsOver ,setMouseISOver] = useState(false);
   const topHalf = useDroppable({
-    id: 2 + "-top",
+    id: 2 + "-top ",
     data: {
       type: "text field",
       elementId: 1,

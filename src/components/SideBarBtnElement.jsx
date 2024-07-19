@@ -1,14 +1,15 @@
 import React from 'react'
 import { Button } from './ui/button';
-import { MdTextFields } from 'react-icons/md';
 import { useDraggable } from '@dnd-kit/core';
-import { cn } from '../lib/utils';
+import { cn } from '../lib/utils'; 
 
-function SideBarBtnElement() {
+function SideBarBtnElement({formelement}) {
+  console.log("formelement",formelement?.type);
+  const Icon = formelement?.icon;
   const draggable = useDraggable({
-    id:"2",
+    id:`designer-btn-${formelement?.type}`,
     data: {
-        type: "textfield",
+        type: formelement?.type,
         isDesignerBtnElement : true
     }
   });
@@ -20,17 +21,19 @@ function SideBarBtnElement() {
             className={cn("flex flex-col gap-2 h-[120px] w-[120px] cursor-grab",
                 draggable.isDragging && "ring-2 ring-primary"
             )}>
-        <MdTextFields className='h-8 w-8 text-primary cursor-grab'/>
-        <p className='text-xs'> Text Feild</p>
+
+        {Icon && <Icon className='h-8 w-8 text-primary cursor-grab'/>} 
+        <p className='text-xs'>{formelement?.label}</p>
     </Button>
   )
 }
 
-export function SideBarBtnElementDragOverlay() {
+export function SideBarBtnElementDragOverlay({formelement}) {
+  const Icon = formelement?.icon;
   return (
     <Button variant={'outline'}
             className="flex flex-col gap-2 h-[120px] w-[120px] cursor-grab">
-        <MdTextFields className='h-8 w-8 text-primary cursor-grab'/>
+        {Icon && <Icon className='h-8 w-8 text-primary cursor-grab'/>}
         <p className='text-xs'> Text Feild</p>
     </Button>
   )

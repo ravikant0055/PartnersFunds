@@ -5,31 +5,27 @@ import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { Switch } from '../ui/switch';
 import { MdTextFields } from 'react-icons/md';
+import { LuHeading1 } from "react-icons/lu";
 
 const AttributesData = {
-  label:"Text field",
-  require: true,
-  placeholder: "value here..."
+  label:"Heading"
 }
 
-const TextFields = () => {
-  const {label, required, placeholder} = AttributesData;
+const Heading = () => {
+  const {heading} = AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Label>
-           {label}
-           {required && "*"}
-      </Label>
-      <Input readOnly disabled placeholder={placeholder} />
+      <Label>Heading</Label>
+      <p>{heading}</p>
       
     </div>
   )
 }
 
-export const TextFieldFormElement={
-    type:"textfield",
-    icon : MdTextFields,
-    label : "Text Field"
+export const HeadingFormElement={
+    type:"heading",
+    icon : LuHeading1,
+    label : "Heading"
 }
 
 
@@ -132,4 +128,4 @@ export function PropertiesComponent() {
   );
 }
 
-export default TextFields
+export default Heading

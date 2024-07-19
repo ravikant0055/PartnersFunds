@@ -1,10 +1,15 @@
 import React from 'react'
-import Newpage from './builder/Newpage';
+import CreatePage from './CreatePage';
 
 const Main = () => {
   return (
     <div className='w-full'>
-        <Newpage/>
+      <div className='flex w-full h-full items-center justify-center'>
+          <CreatePage />
+      </div>
+      {/* <div>
+           <Newpage/>
+      </div> */}
     </div>
   )
 }

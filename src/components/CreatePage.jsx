@@ -8,75 +8,95 @@ import { BsFileEarmarkPlus } from "react-icons/bs";
 import { toast } from "./ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { createPage, fetchPageById } from "../store/PageDataSlice";
 
 const CreatePage = () => {
     const form = useForm();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { creatingPage, createPageError, pageId, fetchingPage, fetchedPageData, fetchPageError } = useSelector(state => state.page);
 
-    async function onSubmit(values) {
-        console.log("form submit", values);
+    const onSubmit = async (values) => {
+
         try {
+            const createdPage = await dispatch(createPage(values));
+            const pageId = createdPage.payload;
+            // console.log("Created page:", createdPage);
 
-            // Step 1: POST request to create the form
-             
-            const currentDate = new Date().toISOString().split('T')[0];
-            const { page_name, page_title } = values;
-            const postResponse = await axios.post('http://localhost:8080/page/addPage', {
-                page_name: page_name,
-                page_file_name: page_name + ".html",
-                page_title: page_title,
-                parent_page_id: null,
-                created_by: "admin",
-                creation_date: currentDate,
-                last_updated_by: "admin",
-                last_update_date: currentDate,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            
-            const pageId=3;
-            console.log("mera output",postResponse.data);
+            // console.log(createdPage.payload);
 
-            // if (!postResponse.ok) {
-            //     throw new Error('Failed to create Page');
-            // }
-
-            // const postData = await postResponse.json();
-
-            // const pageId = postData.pageId;
-            // console.log('Page created successfully. Page ID:', pageId);
-
-
-
-            // Step 2: GET request to fetch form details using pageId
-            // const getResponse = await fetch(`http://localhost:8080/api/getPageById/${pageId}`);
-            // if (!getResponse.ok) {
-            //     throw new Error('Failed to fetch form details');
-            // }
-
-            // const getData = await getResponse.json();
-            // // Assuming getData contains name and description of the created form
-
-            // const {id, name, description } = getData;
-            // console.log('Form details fetched successfully:',id, name, description);
-
-            toast({
-                title: "Success",
-                description: "Page created successfully",
-            });
-
-            navigate(`/page/${pageId}`)
+            if (createdPage) {
+                const getPage = await dispatch(fetchPageById(pageId));
+                const getPageData = getPage.payload;
+                console.log("Fetched page data:", getPageData);
+                navigate(`/page/${pageId}`);
+            }
 
         } catch (error) {
-            console.error('Error creating form:', error);
-            toast({
-                title: "Error",
-                description: "Something went wrong, please try again later",
-                variant: "destructive",
-            });
+            console.error('Error:', error);
         }
+
+        // console.log("form submit", values);
+
+
+        // try {
+
+        //     // Step 1: POST request to create the form
+
+        //     // const currentDate = new Date().toISOString().split('T')[0];
+        //     // const { page_name, page_title } = values;
+        //     // const postResponse = await axios.post('http://localhost:8080/page/addPage', {
+        //     //     page_name: page_name,
+        //     //     page_file_name: page_name + ".html",
+        //     //     page_title: page_title,
+        //     //     parent_page_id: null,
+        //     //     created_by: "admin",
+        //     //     creation_date: currentDate,
+        //     //     last_updated_by: "admin",
+        //     //     last_update_date: currentDate,
+        //     // }, {
+        //     //     headers: {
+        //     //         'Content-Type': 'application/json',
+        //     //     }
+        //     // });
+
+
+        //     // console.log("mera output",postResponse.data);
+        //     // if (!postResponse.data || postResponse.data.success !== true) {
+        //     //     throw new Error('Failed to create Page');
+        //     // }
+        //     // const pageId = await postResponse.data;
+
+
+        //     // Step 2: GET request to fetch form details using pageId
+        //     // try {
+        //         const pageId = 1091;
+        //         const getResponse = await axios.get(`http://localhost:8080/api/getPageById/${pageId}`);
+        //         console.log("mera get wala output",getResponse.data);
+
+
+
+        //     // } catch (error) {
+        //     //     console.error('Error fetching form details:', error.message);
+        //     //     throw new Error('Failed to fetch page details');
+        //     // }
+
+        //     toast({
+        //         title: "Success",
+        //         description: "Page created successfully",
+        //     });
+
+        //     navigate(`/page/${pageId}`)
+
+        // } catch (error) {
+        //     console.error('Error creating form:', error);
+        //     toast({
+        //         title: "Error",
+        //         description: "Something went wrong, please try again later",
+        //         variant: "destructive",
+        //     });
+        // }
     }
 
     return (

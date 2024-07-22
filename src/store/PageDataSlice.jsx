@@ -48,6 +48,29 @@ export const fetchPageById = createAsyncThunk('page/fetchPageById',
   }
 );
 
+export const createAttribute = createAsyncThunk('',
+  async (values, { rejectWithValue }) => {
+    try {
+      const currentDate = new Date().toISOString().split('T')[0];
+      const { page_id, attribute_name, attribute_type } = values;
+      const response = await axios.post('http://localhost:8080/page/addPageProperties', {
+        page_id: 1030 ,
+        attribute_name:"submitbtn",
+        attribute_type:"button",
+        created_by:"Praveen",
+        creation_date:"2024-07-14T12:30:45.678Z",
+        last_updated_by:"Praveen",
+        last_update_date:"2024-07-14T12:30:45.678Z"
+          });
+      console.log("ID in Slice",response.data);
+      return response.data; // Return data from successful API call
+
+    } catch (error) {
+      return rejectWithValue(error.message); // Return error message
+    }
+  }
+)
+
 // Create slice for handling page state
 const PageDataSlice = createSlice({
   name: 'page',

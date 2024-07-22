@@ -30,11 +30,12 @@ function SideBarBtnElement({formelement}) {
 
 export function SideBarBtnElementDragOverlay({formelement}) {
   const Icon = formelement?.icon;
+  console.log("overlay", formelement?.label);
   return (
     <Button variant={'outline'}
             className="flex flex-col gap-2 h-[120px] w-[120px] cursor-grab">
         {Icon && <Icon className='h-8 w-8 text-primary cursor-grab'/>}
-        <p className='text-xs'> Text Feild</p>
+        <p className='text-xs'>{formelement?.label}</p>
     </Button>
   )
 }

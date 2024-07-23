@@ -4,36 +4,39 @@ import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { Switch } from '../ui/switch';
-import { MdTextFields } from 'react-icons/md';
+import { BsTextareaResize } from "react-icons/bs";
+import { Textarea } from '../ui/textarea';
 
 const AttributesData = {
-  label:"Text field",
+  label:"Text Area",
   require: true,
-  placeholder: "value here..."
+  placeholder: "value here...",
+  rows: 3,
 }
 
-const TextFields = () => {
-  const {label, required, placeholder} = AttributesData;
+const TextAreaField = () => {
+  const {label, required, placeholder, rows} = AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label>
            {label}
            {required && "*"}
       </Label>
-      <Input readOnly disabled placeholder={placeholder} />
+
+      <Textarea readOnly disabled placeholder={placeholder} rows={rows}/>
       
     </div>
   )
 }
 
-export const TextFieldFormElement={
-    type:"textfield",
-    icon : MdTextFields,
-    label : "Text Field"
+export const TextAreaFormElement={
+    type:"textarea",
+    icon : BsTextareaResize,
+    label : "Text Area"
 }
 
 
-export function TextProperties() {
+export function TextAreaProperties() {
   const form = useForm({
     mode: "onBlur",
     defaultValues: {
@@ -132,4 +135,4 @@ export function TextProperties() {
   );
 }
 
-export default TextFields
+export default TextAreaField;

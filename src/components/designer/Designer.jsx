@@ -3,15 +3,25 @@ import DesignerSidebar from "./DesignerSidebar";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import { cn } from "../../lib/utils";
 import TextFields from "../fields/TextFields";
-import Buttons from "../fields/Buttons"
+import Buttons from "../fields/Buttons";
 import { Button } from '../ui/button';
 import { BiSolidTrash } from "react-icons/bi";
-import { idGenerator } from 'src/lib/idGenerator'
+import { idGenerator } from 'src/lib/idGenerator';
 import Heading from "../fields/Heading";
+import { useDispatch, useSelector } from "react-redux";
+import { propOff, propOn } from "../../store/PropertiesSlice";
+import TextAreaField from "../fields/TextAreaField";
 
 const Designer = () => {
 
-  const [myData, setMyData] =useState({}); 
+  const [myData, setMyData] = useState([]); // Changed object to array
+  const {isOpen} = useSelector(state=> state.properties);
+  const dispatch = useDispatch();
+
+  const handleDeleteElement = (id) => {
+    setMyData((prevData) => prevData.filter((item) => item.id !== id));
+  };
+
 
   const droppable = useDroppable({
     id: "designer-drop-area",
@@ -29,23 +39,22 @@ const Designer = () => {
 
       if (isDesignerBtnElement) {
         const type = active.data?.current?.type;
-        // const newElement = myData[type].idGenerator();
-        
-        console.log("droppable", type);
-        // setMyData([...myData, type]);
-        const newElement = idGenerator(); // Assuming idGenerator is imported or defined here
-        console.log("New Element", newElement); 
-
-        setMyData(prevData => ({
-          ...prevData,
-          [type]: [...(prevData[type] || []), newElement]
-        }));
-
-       
-        console.log("myData" ,myData);
+        const newElement = { id: idGenerator(), type }; // Unique ID and type for new element
+        setMyData((prevData) => [...prevData, newElement]); // Add new element to myData
+      } else {
+        const activeIndex = myData.findIndex((item) => item.id === active.id);
+        const actualOverId = over.id.replace(/-(top|bottom)$/, '');
+        const overIndex = myData.findIndex((item) => item.id === actualOverId);
+        if (activeIndex !== overIndex && overIndex !== -1) { // Ensure valid index
+          const updatedData = [...myData];
+          const [movedItem] = updatedData.splice(activeIndex, 1);
+          updatedData.splice(overIndex, 0, movedItem);
+          setMyData(updatedData); // Update state to reorder elements
+         }
       }
 
-      console.log("DRAG END", event);
+      console.log("DRAG mydata", myData);
+      console.log("DRAG event", event);
     },
   });
 
@@ -54,7 +63,13 @@ const Designer = () => {
       <DesignerSidebar />
 
       {/* page code */}
-      <div className="p-4 w-full">
+      <div className="p-4 w-full" 
+           onClick={()=>{
+              if(isOpen){
+                dispatch(propOff());
+              }
+           }}
+      >
         <div
           ref={droppable.setNodeRef}
           className={cn(
@@ -62,27 +77,23 @@ const Designer = () => {
             droppable.isOver && "ring-2 ring-primary/20"
           )}
         >
-          {!droppable.isOver && Object.keys(myData).length === 0 && (
+          {!droppable.isOver && myData.length === 0 && ( // Adjusted condition to check array length
             <p className="text-xl text-slate-700 flex flex-grow items-center font-bold">
               Drop Here
             </p>
           )}
 
-          {droppable.isOver && Object.keys(myData).length === 0 &&(
+          {droppable.isOver && myData.length === 0 && ( // Adjusted condition to check array length
             <div className="p-4 w-full">
               <div className="h-[120px] rounded-md bg-primary/20"></div>
             </div>
           )}
 
-          {Object.keys(myData)?.length > 0 && (
+          {myData.length > 0 && ( // Adjusted condition to check array length
             <div className="flex flex-col text-black w-full gap-2 p-4">
-               {Object.keys(myData).map((type,index) => (
-                     <div key={index}>
-                     {myData[type].map((element) => (
-                       <DesignerElementWrapper key={element} element={type} />
-                     ))}
-                   </div> 
-                 ))}
+              {myData.map((element) => (
+                <DesignerElementWrapper key={element.id} element={element}  onDelete={handleDeleteElement} /> // Key and element passed to wrapper
+              ))}
             </div>
           )}
         </div>
@@ -91,15 +102,14 @@ const Designer = () => {
   );
 };
 
-
-
 // dragged item code
-function DesignerElementWrapper({element}) {
-  const [mouseIsOver ,setMouseIsOver] = useState(false);
+function DesignerElementWrapper({ element, onDelete }) {
+  const [mouseIsOver, setMouseIsOver] = useState(false);
+  const dispatch = useDispatch();
   const topHalf = useDroppable({
-    id: element.id + "-top ",
+    id: element.id + "-top",
     data: {
-      type: element,
+      type: element.type,
       elementId: element.id,
       isTopHalfDesignerElement: true,
     },
@@ -108,56 +118,61 @@ function DesignerElementWrapper({element}) {
   const bottomHalf = useDroppable({
     id: element.id + "-bottom",
     data: {
-      type: element,
+      type: element.type,
       elementId: element.id,
       isBottomHalfDesignerElement: true,
     },
-  });   
-  
+  });
+
   const draggable = useDraggable({
-    id: element.id + "-drag-handler",
+    id: element.id, // Use element.id directly
     data: {
-      type: element,
+      type: element.type,
       elementId: element.id,
       isDesignerElement: true,
     },
-  }); 
+  });
 
-
-  const removeElement = (e) =>{
-    console.log("delete button"+e);
-  }
-
-  const selectedElement = (e) =>{
-    console.log("item selected"+e);
-  }
-
-  const fieldType = {
-    "textfield" : <TextFields/>,
-    "heading" : <Heading/>,
-    "button" : <Buttons/>
+  const removeElement = (e) => {
+    console.log("delete button" + e);
+    onDelete(e);
+    dispatch(propOff());
   };
 
- // if(draggable.isDragging) return null;
+  const selectedElement = (e) => {
+    console.log("item selected",e);
+    dispatch(propOn(e));
+  };
+
+  const fieldType = {
+    textfield: <TextFields />,
+    heading: <Heading />,
+    button: <Buttons />,
+    textarea: <TextAreaField/>
+  };
+
+  if(draggable.isDragging) return null;
 
   return (
-    <div 
-     ref={draggable.setNodeRef}
-     {...draggable.listeners}
-     {...draggable.attributes}
-     className="relative h-[120px] flex flex-col text-foreground
-     hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
-     onMouseEnter={()=>{setMouseIsOver(true);}}
-     onMouseLeave={()=>{setMouseIsOver(false);}}
-     onClick={(e)=>{
-      e.stopPropagation();
-      selectedElement("myitem");
-     }}
-     >
-
+    <div
+      ref={draggable.setNodeRef}
+      {...draggable.listeners}
+      {...draggable.attributes}
+      className="relative h-[120px] flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
+      onMouseEnter={() => {
+        setMouseIsOver(true);
+      }}
+      onMouseLeave={() => {
+        setMouseIsOver(false);
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
+        selectedElement(element);
+      }}
+    >
       <div ref={topHalf.setNodeRef} className="absolute w-full h-1/2 rounded-t-md" />
       <div ref={bottomHalf.setNodeRef} className="absolute w-full bottom-0 h-1/2 rounded-b-md" />
-      
+
       {mouseIsOver && (
         <>
           <div className="absolute right-0 h-full">
@@ -166,7 +181,7 @@ function DesignerElementWrapper({element}) {
               variant={"outline"}
               onClick={(e) => {
                 e.stopPropagation(); // avoid selection of element while deleting
-                removeElement(2);
+                removeElement(element.id);
               }}
             >
               <BiSolidTrash className="h-6 w-6" />
@@ -180,17 +195,18 @@ function DesignerElementWrapper({element}) {
 
       {topHalf.isOver && <div className="absolute top-0 w-full rounded-md h-[7px] bg-primary rounded-b-none" />}
 
+      <div
+        className={cn(
+          "flex w-full h-[120px] items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none opacity-100",
+          mouseIsOver && "opacity-30"
+        )}
+      >
+        {fieldType[element.type]}
+      </div>
 
-      <div className={cn("flex w-full h-[120px] items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none opacity-100",
-         mouseIsOver && "opacity-30"
-         )}>
-        {fieldType[element]}
-       </div> 
-
-       {bottomHalf.isOver && <div className="absolute bottom-0 w-full rounded-md h-[7px] bg-primary rounded-t-none" />}
-
+      {bottomHalf.isOver && <div className="absolute bottom-0 w-full rounded-md h-[7px] bg-primary rounded-t-none" />}
     </div>
-)}
-
+  );
+}
 
 export default Designer;

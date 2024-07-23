@@ -4,6 +4,8 @@ import { SideBarBtnElementDragOverlay } from './SideBarBtnElement';
 import TextFields, { TextFieldFormElement } from './fields/TextFields';
 import Heading, { HeadingFormElement } from './fields/Heading';
 import Buttons, { ButtonFormElement } from './fields/Buttons';
+import { TextAreaFormElement } from './fields/TextAreaField';
+import TextAreaField from './fields/TextAreaField';
 
 
 function DragOverlayWrapper() {
@@ -34,7 +36,8 @@ function DragOverlayWrapper() {
         const formelement = {
             "textfield" : TextFieldFormElement,
             "heading"   : HeadingFormElement,
-            "button"    : ButtonFormElement
+            "button"    : ButtonFormElement,
+            "textarea"  : TextAreaFormElement,
 
         }
         node = <SideBarBtnElementDragOverlay formelement={formelement[type]}/>;
@@ -47,7 +50,8 @@ function DragOverlayWrapper() {
        const formshadow = {
         "textfield" : <TextFields/>,
         "heading"   : <Heading/>,
-        "button"   : <Buttons/>
+        "button"   : <Buttons/>,
+        "textarea": <TextAreaField/>,
        }
 
        console.log("2ndtype",type);

@@ -3,6 +3,7 @@ import SideBarBtnElement from '../SideBarBtnElement'
 import { TextFieldFormElement } from '../fields/TextFields'
 import { HeadingFormElement } from '../fields/Heading'
 import { ButtonFormElement } from '../fields/Buttons'
+import { TextAreaFormElement } from '../fields/TextAreaField'
 
 const FormElementsSidebar = () => {
   return (
@@ -12,7 +13,7 @@ const FormElementsSidebar = () => {
           <SideBarBtnElement formelement={TextFieldFormElement} />
           <SideBarBtnElement formelement={HeadingFormElement} />
           <SideBarBtnElement formelement={ButtonFormElement} />
-          <SideBarBtnElement  />
+          <SideBarBtnElement formelement={TextAreaFormElement} />
           <SideBarBtnElement  />
           <SideBarBtnElement  />
         </div>

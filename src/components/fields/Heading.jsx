@@ -4,7 +4,6 @@ import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { Switch } from '../ui/switch';
-import { MdTextFields } from 'react-icons/md';
 import { LuHeading1 } from "react-icons/lu";
 
 const AttributesData = {
@@ -29,7 +28,7 @@ export const HeadingFormElement={
 }
 
 
-export function PropertiesComponent() {
+export function HeadingProperties() {
   const form = useForm({
     mode: "onBlur",
     defaultValues: {

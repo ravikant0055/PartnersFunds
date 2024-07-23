@@ -27,7 +27,7 @@ export const ButtonFormElement={
 }
 
 
-export function PropertiesComponent() {
+export function ButtonProperties() {
   const form = useForm({
     mode: "onBlur",
     defaultValues: {

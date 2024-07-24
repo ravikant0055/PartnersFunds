@@ -5,23 +5,25 @@ import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { Switch } from '../ui/switch';
 import { MdTextFields } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 
 const AttributesData = {
   label:"Text field",
-  require: true,
+  required: true,
   placeholder: "value here..."
 }
 
-const TextFields = () => {
-  const {label, required, placeholder} = AttributesData;
+const TextFields = ({id}) => {
+  console.log("txt id",id);
+  const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label>
-           {label}
-           {required && "*"}
+         {property.label}
+         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
-      <Input readOnly disabled placeholder={placeholder} />
-      
+      <Input readOnly disabled placeholder={property.placeholder} />
     </div>
   )
 }
@@ -33,32 +35,49 @@ export const TextFieldFormElement={
 }
 
 
-export function TextProperties() {
+export function TextProperties({id}) {
+  const dispatch = useDispatch();
+  const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  console.log("property data",property);
+
   const form = useForm({
     mode: "onBlur",
     defaultValues: {
-      label: AttributesData.label,
-      required: AttributesData.required,
-      placeHolder: AttributesData.placeHolder,
+      id: id,
+      label: property.label,
+      required: property.required,
+      placeholder: property.placeholder,
     },
   });
 
-  useEffect(() => {
-    form.reset(AttributesData);
-  }, [form]);
+  useEffect(() => {  // Reset form values to default when the component mounts
+    form.reset({
+      label: property.label,
+      required: property.required,
+      placeholder: property.placeholder,
+    });
+  }, [form, property]);
 
-  function applyChanges() {
+
+  const applyChanges = (formData) => {
+    console.log("formdata",formData);
+    const existingProperty = property.id;
+    if (existingProperty) {
+      dispatch(updateprop({ id, ...formData }));
+    } else {
+      dispatch(addprop({ id, ...formData }));
+    }
     console.log("apply change");
-  }
+  };
 
   return (
-    <Form {...form}>
-      <form onBlur={form.handleSubmit(applyChanges)}
+     <Form {...form}>
+       <form onBlur={form.handleSubmit(applyChanges)}
         onSubmit={(e) => {
           e.preventDefault();
         }}
-        className="space-y-3"
-      >
+        className="space-y-3"> 
+        
         <FormField
           control={form.control}
           name="label"
@@ -79,28 +98,10 @@ export function TextProperties() {
 
         <FormField
           control={form.control}
-          name="placeHolder"
+          name="placeholder"
           render={({ field }) => (
             <FormItem>
               <FormLabel>PlaceHolder</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="font size"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Font size</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -127,7 +128,7 @@ export function TextProperties() {
             </FormItem>
           )}
         />
-      </form>
+      </form>  
     </Form>
   );
 }

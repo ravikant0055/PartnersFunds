@@ -11,18 +11,17 @@ import Heading from "../fields/Heading";
 import { useDispatch, useSelector } from "react-redux";
 import { propOff, propOn } from "../../store/PropertiesSlice";
 import TextAreaField from "../fields/TextAreaField";
+import { addElement, deleteElement, reorderElements } from "../../store/AttributeDataSlice";
 
 const Designer = () => {
 
-  const [myData, setMyData] = useState([]); // Changed object to array
-  const {isOpen} = useSelector(state=> state.properties);
+  const myData = useSelector((state) => state.attribute);
+  const {isOpen} = useSelector((state) => state.properties);
   const dispatch = useDispatch();
 
   const handleDeleteElement = (id) => {
-    setMyData((prevData) => prevData.filter((item) => item.id !== id));
+    dispatch(deleteElement(id));
   };
-
-
   const droppable = useDroppable({
     id: "designer-drop-area",
     data: {
@@ -40,19 +39,12 @@ const Designer = () => {
       if (isDesignerBtnElement) {
         const type = active.data?.current?.type;
         const newElement = { id: idGenerator(), type }; // Unique ID and type for new element
-        setMyData((prevData) => [...prevData, newElement]); // Add new element to myData
+        dispatch(addElement(newElement));
       } else {
-        const activeIndex = myData.findIndex((item) => item.id === active.id);
-        const actualOverId = over.id.replace(/-(top|bottom)$/, '');
-        const overIndex = myData.findIndex((item) => item.id === actualOverId);
-        if (activeIndex !== overIndex && overIndex !== -1) { // Ensure valid index
-          const updatedData = [...myData];
-          const [movedItem] = updatedData.splice(activeIndex, 1);
-          updatedData.splice(overIndex, 0, movedItem);
-          setMyData(updatedData); // Update state to reorder elements
-         }
+        const draggedId = active.id;
+        const overId = over.id.replace(/-(top|bottom)$/, '');
+        dispatch(reorderElements({ draggedId, overId }));
       }
-
       console.log("DRAG mydata", myData);
       console.log("DRAG event", event);
     },
@@ -68,8 +60,7 @@ const Designer = () => {
               if(isOpen){
                 dispatch(propOff());
               }
-           }}
-      >
+           }}>
         <div
           ref={droppable.setNodeRef}
           className={cn(
@@ -145,10 +136,10 @@ function DesignerElementWrapper({ element, onDelete }) {
   };
 
   const fieldType = {
-    textfield: <TextFields />,
-    heading: <Heading />,
-    button: <Buttons />,
-    textarea: <TextAreaField/>
+    textfield: <TextFields id={element.id} />,
+    heading: <Heading id={element.id} />,
+    button: <Buttons id={element.id} />,
+    textarea: <TextAreaField id={element.id} />
   };
 
   if(draggable.isDragging) return null;

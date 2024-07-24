@@ -6,6 +6,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { Switch } from '../ui/switch';
 import { BsTextareaResize } from "react-icons/bs";
 import { Textarea } from '../ui/textarea';
+import { useDispatch, useSelector } from 'react-redux';
+import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 
 const AttributesData = {
   label:"Text Area",
@@ -14,16 +16,16 @@ const AttributesData = {
   rows: 3,
 }
 
-const TextAreaField = () => {
-  const {label, required, placeholder, rows} = AttributesData;
+const TextAreaField = ({id}) => {
+  const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label>
-           {label}
-           {required && "*"}
+           {property.label}
+           {property.required && "*"}
       </Label>
 
-      <Textarea readOnly disabled placeholder={placeholder} rows={rows}/>
+      <Textarea readOnly disabled placeholder={property.placeholder} rows={property.rows}/>
       
     </div>
   )
@@ -36,23 +38,38 @@ export const TextAreaFormElement={
 }
 
 
-export function TextAreaProperties() {
+export function TextAreaProperties({id}) {
+  const dispatch = useDispatch();
+  const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const form = useForm({
     mode: "onBlur",
     defaultValues: {
-      label: AttributesData.label,
-      required: AttributesData.required,
-      placeHolder: AttributesData.placeHolder,
+      id: id,
+      label: property.label,
+      required: property.required,
+      placeholder: property.placeholder,
     },
   });
 
-  useEffect(() => {
-    form.reset(AttributesData);
-  }, [form]);
+  useEffect(() => {  // Reset form values to default when the component mounts
+    form.reset({
+      label: property.label,
+      required: property.required,
+      placeholder: property.placeholder,
+      rows: property.rows,
+    });
+  }, [form, property]);
 
-  function applyChanges() {
+  const applyChanges = (formData) => {
+    console.log("formdata",formData);
+    const existingProperty = property.id;
+    if (existingProperty) {
+      dispatch(updateprop({ id, ...formData }));
+    } else {
+      dispatch(addprop({ id, ...formData }));
+    }
     console.log("apply change");
-  }
+  };
 
   return (
     <Form {...form}>
@@ -82,7 +99,7 @@ export function TextAreaProperties() {
 
         <FormField
           control={form.control}
-          name="placeHolder"
+          name="placeholder"
           render={({ field }) => (
             <FormItem>
               <FormLabel>PlaceHolder</FormLabel>

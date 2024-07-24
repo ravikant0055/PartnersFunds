@@ -58,7 +58,7 @@ function DragOverlayWrapper() {
        node = (
         <div className='flex bg-accent border rounded-md h-[120px] w-full py-2
          px-4 opacity-90 pointer pointer-events-none'>
-        {formshadow[type]}
+           {formshadow[type]}
         </div>
        )
     }

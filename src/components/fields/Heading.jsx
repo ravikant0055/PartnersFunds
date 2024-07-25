@@ -20,6 +20,15 @@ const Heading = ({id}) => {
   )
 }
 
+export function HeadingPreview({id}){
+  const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  return (
+    <div className='flex flex-col gap-2 w-full'>
+      <Label>{property.label}</Label>
+    </div>
+  )
+}
+
 export const HeadingFormElement={
     type:"heading",
     icon : LuHeading1,

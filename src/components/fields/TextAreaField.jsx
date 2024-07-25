@@ -22,11 +22,24 @@ const TextAreaField = ({id}) => {
     <div className='flex flex-col gap-2 w-full'>
       <Label>
            {property.label}
-           {property.required && "*"}
+           {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
 
       <Textarea readOnly disabled placeholder={property.placeholder} rows={property.rows}/>
       
+    </div>
+  )
+}
+
+export function TextAreaFieldPreview({id}){
+  const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  return (
+    <div className='flex flex-col gap-2 w-full'>
+      <Label>
+           {property.label}
+           {property.required && <span className='text-red-600 font-bold'> *</span>}
+      </Label>
+      <Textarea placeholder={property.placeholder} rows={property.rows}/>
     </div>
   )
 }

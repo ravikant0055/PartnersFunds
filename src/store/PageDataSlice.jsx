@@ -48,16 +48,17 @@ export const fetchPageById = createAsyncThunk('page/fetchPageById',
   }
 );
 
-//create attribute by type
-export const createAttribute = createAsyncThunk('',
+//create attribute by type to generate attribute id 
+export const createAttribute = createAsyncThunk('page/createAttribute',
   async (values, { rejectWithValue }) => {
+    console.log("post api value",values);
     try {
       const currentDate = new Date().toISOString().split('T')[0];
-      const { page_id, attribute_type } = values;
-      const response = await axios.post('http://localhost:8080/page/addPageProperties', {
-        page_id: page_id ,
-        attribute_name:"submitbtn",
-        attribute_type:attribute_type,
+      const { pageId, type } = values;
+      const response = await axios.post('http://localhost:8080/page/addPageAttributes', {
+        page_id: pageId ,
+        attribute_name:type,
+        attribute_type:type,
         created_by:"Praveen",
         creation_date:currentDate,
         last_updated_by:"Praveen",

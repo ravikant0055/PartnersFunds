@@ -28,6 +28,20 @@ const TextFields = ({id}) => {
   )
 }
 
+export function TextFieldsPreview({id}) {
+  console.log("txt id",id);
+  const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  return (
+    <div className='flex flex-col gap-2 w-full'>
+      <Label>
+         {property.label}
+         {property.required && <span className='text-red-600 font-bold'> *</span>}
+      </Label>
+      <Input placeholder={property.placeholder} />
+    </div>
+  )
+}
+
 export const TextFieldFormElement={
     type:"textfield",
     icon : MdTextFields,
@@ -133,4 +147,4 @@ export function TextProperties({id}) {
   );
 }
 
-export default TextFields
+export default TextFields;

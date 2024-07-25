@@ -12,11 +12,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { propOff, propOn } from "../../store/PropertiesSlice";
 import TextAreaField from "../fields/TextAreaField";
 import { addElement, deleteElement, reorderElements } from "../../store/AttributeDataSlice";
+import { createAttribute } from "../../store/PageDataSlice";
 
 const Designer = () => {
 
   const myData = useSelector((state) => state.attribute);
   const {isOpen} = useSelector((state) => state.properties);
+  const pageId = useSelector((state) => state.page.fetchedPageData[0].page_id);
   const dispatch = useDispatch();
 
   const handleDeleteElement = (id) => {
@@ -30,7 +32,7 @@ const Designer = () => {
   });
 
   useDndMonitor({
-    onDragEnd: function (event) {
+    onDragEnd: async function (event) {
       const { active, over } = event;
       if (!active || !over) return;
 
@@ -38,8 +40,21 @@ const Designer = () => {
 
       if (isDesignerBtnElement) {
         const type = active.data?.current?.type;
-        const newElement = { id: idGenerator(), type }; // Unique ID and type for new element
-        dispatch(addElement(newElement));
+
+        const postdata ={
+          pageId:pageId,
+          type: type
+        }
+        try {
+          const res = await dispatch(createAttribute(postdata));  // Await the dispatch call
+          const attributeId = res.payload.attribute_id;
+          console.log("attributeID", attributeId);
+  
+          const newElement = { id: attributeId, type }; // Unique ID and type for new element
+          dispatch(addElement(newElement));
+        } catch (error) {
+          console.error("Error creating attribute:", error);
+        }
       } else {
         const draggedId = active.id;
         const overId = over.id.replace(/-(top|bottom)$/, '');

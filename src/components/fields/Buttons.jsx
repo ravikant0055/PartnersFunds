@@ -20,6 +20,15 @@ const Buttons = ({id}) => {
   )
 }
 
+export function ButtonsPreview({id}){
+  const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  return (
+    <div className='flex flex-col gap-2 w-full'>
+       <Button>{property.label}</Button>
+    </div>
+  )
+}
+
 export const ButtonFormElement={
     type:"button",
     icon : RxButton,

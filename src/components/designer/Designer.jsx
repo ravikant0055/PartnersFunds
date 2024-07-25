@@ -50,7 +50,7 @@ const Designer = () => {
           const attributeId = res.payload.attribute_id;
           console.log("attributeID", attributeId);
   
-          const newElement = { id: attributeId, type }; // Unique ID and type for new element
+          const newElement = { id: attributeId.toString(), type }; // Unique ID and type for new element
           dispatch(addElement(newElement));
         } catch (error) {
           console.error("Error creating attribute:", error);

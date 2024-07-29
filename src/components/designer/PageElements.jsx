@@ -7,6 +7,7 @@ import { DateFieldsPreview } from '../fields/DateField'
 import { SeparatorFieldsPreview } from '../fields/SaparatorField'
 import { SpacerFieldsPreview } from '../fields/SpacerField'
 import { CheckboxPreview } from '../fields/CheckboxField'
+import { SelectFieldsPreview } from '../fields/SelectField'
 
 const PageElements = ({element}) => {
   console.log("page element:",element.type);
@@ -19,7 +20,8 @@ const PageElements = ({element}) => {
     "datefield"      : <DateFieldsPreview id={element.id}/>,
     "separatorfield" : <SeparatorFieldsPreview id={element.id}/>,
     "spacerfield"    : <SpacerFieldsPreview id={element.id}/>,
-    "checkbox"       : <CheckboxPreview id={element.id}/>
+    "checkbox"       : <CheckboxPreview id={element.id}/>,
+    "selectfield"     : <SelectFieldsPreview id={element.id}/>
   }
   return (
     <div>{pageData[element.type]}</div>

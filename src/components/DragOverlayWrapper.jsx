@@ -10,6 +10,7 @@ import DateField, { DateFieldFormElement } from './fields/DateField';
 import SeparatorField, { SeparatorFormElement } from './fields/SaparatorField';
 import SpacerFields, { SpacerFormElement } from './fields/SpacerField';
 import CheckboxFields, { CheckboxFormElement } from './fields/CheckboxField';
+import SelectField, { SelectFieldFormElement } from './fields/SelectField';
 
 
 function DragOverlayWrapper() {
@@ -45,7 +46,8 @@ function DragOverlayWrapper() {
             "datefield"      : DateFieldFormElement,
             "separatorfield" : SeparatorFormElement,
             "spacerfield"    : SpacerFormElement,
-            "checkbox"       : CheckboxFormElement
+            "checkbox"       : CheckboxFormElement,
+            "selectfield"    : SelectFieldFormElement
 
         }
         node = <SideBarBtnElementDragOverlay formelement={formelement[type]}/>;
@@ -63,7 +65,8 @@ function DragOverlayWrapper() {
         "datefield"         : <DateField/>,
         "separatorfield"    : <SeparatorField/>,
         "spacerfield"       : <SpacerFields/>,
-        "checkbox"          : <CheckboxFields/>
+        "checkbox"          : <CheckboxFields/>,
+        "selectfield"       : <SelectField />
        }
 
        console.log("2ndtype",type);

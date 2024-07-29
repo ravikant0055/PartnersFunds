@@ -17,6 +17,7 @@ import DateField from "../fields/DateField";
 import SeparatorField from "../fields/SaparatorField";
 import SpacerFields from "../fields/SpacerField";
 import CheckboxFields from "../fields/CheckboxField";
+import SelectField from "../fields/SelectField";
 
 const Designer = () => {
 
@@ -180,7 +181,8 @@ function DesignerElementWrapper({ element, onDelete }) {
     datefield       : <DateField id={element.id} />,
     separatorfield  : <SeparatorField id={element.id} />,
     spacerfield     : <SpacerFields id={element.id}/>,
-    checkbox        : <CheckboxFields id={element.id}/>  
+    checkbox        : <CheckboxFields id={element.id}/>,
+    selectfield        : <SelectField id={element.id}/>
   };
 
   if(draggable.isDragging) return null;

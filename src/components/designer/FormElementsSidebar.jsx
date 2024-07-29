@@ -8,6 +8,7 @@ import { DateFieldFormElement } from '../fields/DateField'
 import { SeparatorFormElement } from '../fields/SaparatorField'
 import { SpacerFormElement } from '../fields/SpacerField'
 import { CheckboxFormElement } from '../fields/CheckboxField'
+import { SelectFieldFormElement } from '../fields/SelectField'
 
 const FormElementsSidebar = () => {
   return (
@@ -24,6 +25,7 @@ const FormElementsSidebar = () => {
           <SideBarBtnElement formelement={TextAreaFormElement} />
           <SideBarBtnElement formelement={DateFieldFormElement} />
           <SideBarBtnElement formelement={CheckboxFormElement} />
+          <SideBarBtnElement formelement={SelectFieldFormElement} />
         </div>
     </div>
   )

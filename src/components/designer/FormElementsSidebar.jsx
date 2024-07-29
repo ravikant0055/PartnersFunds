@@ -4,18 +4,26 @@ import { TextFieldFormElement } from '../fields/TextFields'
 import { HeadingFormElement } from '../fields/Heading'
 import { ButtonFormElement } from '../fields/Buttons'
 import { TextAreaFormElement } from '../fields/TextAreaField'
+import { DateFieldFormElement } from '../fields/DateField'
+import { SeparatorFormElement } from '../fields/SaparatorField'
+import { SpacerFormElement } from '../fields/SpacerField'
+import { CheckboxFormElement } from '../fields/CheckboxField'
 
 const FormElementsSidebar = () => {
   return (
     <div>
         <div className='grid grid-cols-2 gap-4 place-items-center'>
-          <p className='text-sm text-muted-foreground col-span-2 place-self-start my-2'>Elements</p>
+          <p className='text-sm text-muted-foreground col-span-2 place-self-start my-2'>Layout Elements</p>
+          <SideBarBtnElement formelement={SeparatorFormElement} />
+          <SideBarBtnElement formelement={SpacerFormElement} />
+
+          <p className='text-sm text-muted-foreground col-span-2 place-self-start my-2'>Form Elements</p>
           <SideBarBtnElement formelement={TextFieldFormElement} />
           <SideBarBtnElement formelement={HeadingFormElement} />
           <SideBarBtnElement formelement={ButtonFormElement} />
           <SideBarBtnElement formelement={TextAreaFormElement} />
-          <SideBarBtnElement  />
-          <SideBarBtnElement  />
+          <SideBarBtnElement formelement={DateFieldFormElement} />
+          <SideBarBtnElement formelement={CheckboxFormElement} />
         </div>
     </div>
   )

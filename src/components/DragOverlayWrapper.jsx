@@ -6,6 +6,10 @@ import Heading, { HeadingFormElement } from './fields/Heading';
 import Buttons, { ButtonFormElement } from './fields/Buttons';
 import { TextAreaFormElement } from './fields/TextAreaField';
 import TextAreaField from './fields/TextAreaField';
+import DateField, { DateFieldFormElement } from './fields/DateField';
+import SeparatorField, { SeparatorFormElement } from './fields/SaparatorField';
+import SpacerFields, { SpacerFormElement } from './fields/SpacerField';
+import CheckboxFields, { CheckboxFormElement } from './fields/CheckboxField';
 
 
 function DragOverlayWrapper() {
@@ -34,10 +38,14 @@ function DragOverlayWrapper() {
         const type = draggedItem.data?.current?.type;
         console.log("type",type);
         const formelement = {
-            "textfield" : TextFieldFormElement,
-            "heading"   : HeadingFormElement,
-            "button"    : ButtonFormElement,
-            "textarea"  : TextAreaFormElement,
+            "textfield"      : TextFieldFormElement,
+            "heading"        : HeadingFormElement,
+            "button"         : ButtonFormElement,
+            "textarea"       : TextAreaFormElement,
+            "datefield"      : DateFieldFormElement,
+            "separatorfield" : SeparatorFormElement,
+            "spacerfield"    : SpacerFormElement,
+            "checkbox"       : CheckboxFormElement
 
         }
         node = <SideBarBtnElementDragOverlay formelement={formelement[type]}/>;
@@ -46,12 +54,16 @@ function DragOverlayWrapper() {
     const isDesignerElement = draggedItem.data?.current?.isDesignerElement;
     if (isDesignerElement) {
        const type = draggedItem.data?.current?.type;
-
+      
        const formshadow = {
-        "textfield" : <TextFields/>,
-        "heading"   : <Heading/>,
-        "button"   : <Buttons/>,
-        "textarea": <TextAreaField/>,
+        "textfield"         : <TextFields/>,
+        "heading"           : <Heading/>,
+        "button"            : <Buttons/>,
+        "textarea"          : <TextAreaField/>,
+        "datefield"         : <DateField/>,
+        "separatorfield"    : <SeparatorField/>,
+        "spacerfield"       : <SpacerFields/>,
+        "checkbox"          : <CheckboxFields/>
        }
 
        console.log("2ndtype",type);

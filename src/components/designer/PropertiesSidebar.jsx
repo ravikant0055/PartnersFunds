@@ -7,6 +7,10 @@ import { propOff } from '../../store/PropertiesSlice';
 import { ButtonProperties } from '../fields/Buttons';
 import { HeadingProperties } from '../fields/Heading';
 import { TextAreaProperties } from '../fields/TextAreaField';
+import { DateProperties } from '../fields/DateField';
+import { SeparatorProperties } from '../fields/SaparatorField';
+import { SpacerProperties } from '../fields/SpacerField';
+import { CheckboxProperties } from '../fields/CheckboxField';
 
 const PropertiesSidebar = ({selectedElement}) => {
   const dispatch = useDispatch();
@@ -18,10 +22,14 @@ const PropertiesSidebar = ({selectedElement}) => {
   };
 
   const propertiesData = {
-      "textfield": <TextProperties id={id}/>,
-      "heading": <HeadingProperties id={id}/>,
-      "button": <ButtonProperties id={id}/>,
-      "textarea": <TextAreaProperties id={id}/>,
+      "textfield"      : <TextProperties id={id}/>,
+      "heading"        : <HeadingProperties id={id}/>,
+      "button"         : <ButtonProperties id={id}/>,
+      "textarea"       : <TextAreaProperties id={id}/>,
+      "datefield"      : <DateProperties id={id}/>,
+      "separatorfield" : <SeparatorProperties id={id}/>,
+      "spacerfield"    : <SpacerProperties id={id}/>,
+      "checkbox"       :  <CheckboxProperties id={id}/>
   }
 
   return (

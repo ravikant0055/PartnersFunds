@@ -6,13 +6,17 @@ import TextFields from "../fields/TextFields";
 import Buttons from "../fields/Buttons";
 import { Button } from '../ui/button';
 import { BiSolidTrash } from "react-icons/bi";
-import { idGenerator } from 'src/lib/idGenerator';
+//import { idGenerator } from 'src/lib/idGenerator';
 import Heading from "../fields/Heading";
 import { useDispatch, useSelector } from "react-redux";
 import { propOff, propOn } from "../../store/PropertiesSlice";
 import TextAreaField from "../fields/TextAreaField";
 import { addElement, deleteElement, reorderElements } from "../../store/AttributeDataSlice";
 import { createAttribute } from "../../store/PageDataSlice";
+import DateField from "../fields/DateField";
+import SeparatorField from "../fields/SaparatorField";
+import SpacerFields from "../fields/SpacerField";
+import CheckboxFields from "../fields/CheckboxField";
 
 const Designer = () => {
 
@@ -57,7 +61,7 @@ const Designer = () => {
         }
       } else {
         const draggedId = active.id;
-        const overId = over.id.replace(/-(top|bottom)$/, '');
+        const overId = over.id.replace(/-(top|bottom|right|left)$/, '');
         dispatch(reorderElements({ draggedId, overId }));
       }
       console.log("DRAG mydata", myData);
@@ -96,7 +100,7 @@ const Designer = () => {
           )}
 
           {myData.length > 0 && ( // Adjusted condition to check array length
-            <div className="flex flex-col text-black w-full gap-2 p-4">
+            <div className="flex flex-col flex-wrap text-black w-full gap-2 p-4">
               {myData.map((element) => (
                 <DesignerElementWrapper key={element.id} element={element}  onDelete={handleDeleteElement} /> // Key and element passed to wrapper
               ))}
@@ -130,6 +134,24 @@ function DesignerElementWrapper({ element, onDelete }) {
     },
   });
 
+  const right = useDroppable({
+    id: element.id + "-right",
+    data: {
+      type: element.type,
+      elementId: element.id,
+      isRightDesignerElement: true,
+    },
+  });
+
+  const left = useDroppable({
+    id: element.id + "-left",
+    data: {
+      type: element.type,
+      elementId: element.id,
+      isLeftDesignerElement: true,
+    },
+  });
+
   const draggable = useDraggable({
     id: element.id, // Use element.id directly
     data: {
@@ -151,10 +173,14 @@ function DesignerElementWrapper({ element, onDelete }) {
   };
 
   const fieldType = {
-    textfield: <TextFields id={element.id} />,
-    heading: <Heading id={element.id} />,
-    button: <Buttons id={element.id} />,
-    textarea: <TextAreaField id={element.id} />
+    textfield       : <TextFields id={element.id} />,
+    heading         : <Heading id={element.id} />,
+    button          : <Buttons id={element.id} />,
+    textarea        : <TextAreaField id={element.id} />,
+    datefield       : <DateField id={element.id} />,
+    separatorfield  : <SeparatorField id={element.id} />,
+    spacerfield     : <SpacerFields id={element.id}/>,
+    checkbox        : <CheckboxFields id={element.id}/>  
   };
 
   if(draggable.isDragging) return null;
@@ -164,7 +190,7 @@ function DesignerElementWrapper({ element, onDelete }) {
       ref={draggable.setNodeRef}
       {...draggable.listeners}
       {...draggable.attributes}
-      className="relative h-[120px] flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
+      className="relative flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
       onMouseEnter={() => {
         setMouseIsOver(true);
       }}
@@ -178,6 +204,8 @@ function DesignerElementWrapper({ element, onDelete }) {
     >
       <div ref={topHalf.setNodeRef} className="absolute w-full h-1/2 rounded-t-md" />
       <div ref={bottomHalf.setNodeRef} className="absolute w-full bottom-0 h-1/2 rounded-b-md" />
+      <div ref={right.setNodeRef} className="absolute right-0 top-0 bottom-0 w-1/2 rounded-r-md" />
+      <div ref={left.setNodeRef} className="absolute left-0 top-0 bottom-0 w-1/2 rounded-l-md" />
 
       {mouseIsOver && (
         <>
@@ -200,17 +228,19 @@ function DesignerElementWrapper({ element, onDelete }) {
       )}
 
       {topHalf.isOver && <div className="absolute top-0 w-full rounded-md h-[7px] bg-primary rounded-b-none" />}
-
+      {right.isOver && <div className="absolute right-0 top-0 bottom-0 rounded-md w-[7px] bg-primary rounded-l-none" />}
+      {left.isOver && <div className="absolute left-0 top-0 bottom-0 rounded-md w-[7px] bg-primary rounded-r-none" />}
+      {bottomHalf.isOver && <div className="absolute bottom-0 w-full rounded-md h-[7px] bg-primary rounded-t-none" />}
       <div
         className={cn(
-          "flex w-full h-[120px] items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none opacity-100",
+          "flex w-full py-4 h-fit items-center rounded-md bg-accent/40 px-4 pointer-events-none opacity-100",
           mouseIsOver && "opacity-30"
         )}
       >
         {fieldType[element.type]}
       </div>
 
-      {bottomHalf.isOver && <div className="absolute bottom-0 w-full rounded-md h-[7px] bg-primary rounded-t-none" />}
+     
     </div>
   );
 }

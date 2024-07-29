@@ -51,7 +51,7 @@ export function SelectFieldsPreview({ id }) {
                     <SelectValue placeholder={property.placeholder} />
                 </SelectTrigger>
                 <SelectContent>
-                    {options.map((option) => (
+                    {property.options.map((option) => (
                         <SelectItem key={option} value={option}>
                             {options}
                         </SelectItem>
@@ -144,6 +144,20 @@ export function SelectFieldProperties({ id }) {
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={form.control}
+                    name="required"
+                    render={({ field }) => (
+                        <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm ">
+                            <div className="space-y-0.5">
+                                <FormLabel>Required</FormLabel>
+                            </div>
+                            <FormControl>
+                                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
 
                 <FormField
                     control={form.control}
@@ -157,7 +171,7 @@ export function SelectFieldProperties({ id }) {
                                 className="gap-2" 
                                 onClick={(e) => {
                                 e.preventDefault();
-                                form.setValue("optins", field.value.concat("New Option"));
+                                form.setValue("options", field.value.concat("New Option"));
                                 }}
                               >
                                 <AiOutlinePlus />
@@ -184,21 +198,6 @@ export function SelectFieldProperties({ id }) {
                                     </div>
                                 ))}
                             </div>
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={form.control}
-                    name="required"
-                    render={({ field }) => (
-                        <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm ">
-                            <div className="space-y-0.5">
-                                <FormLabel>Required</FormLabel>
-                            </div>
-                            <FormControl>
-                                <Switch checked={field.value} onCheckedChange={field.onChange} />
-                            </FormControl>
                         </FormItem>
                     )}
                 />

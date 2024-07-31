@@ -4,74 +4,77 @@ import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { Switch } from '../ui/switch';
-import { IoMdCheckbox } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
-import { Checkbox } from '../ui/checkbox';
-import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 import { Button } from '../ui/button';
+import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
+import { IoIosRadioButtonOn } from "react-icons/io";
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 const AttributesData = {
     labelHeader: "Header Name",
-    label: "Checkbox",
+    label: "Radio Field",
     required: true,
-    options: ['Checkbox']
+    options: ['Radio Button']
 }
 
-const CheckboxFields = ({ id }) => {
+const RadioField = ({ id }) => {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
-    const cid = `checkbox-${id}`;
-    console.log("cid",cid);
+    const rid = `radio-${id}`;
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label>
-                    {property.labelHeader}
-                    {property.required && <span className='text-red-600 font-bold'> *</span>}
+                {property.labelHeader}
+                {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            {property.options.map((option, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                    <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`} />
-                    <Label htmlFor={`checkbox-${id}-${index}`}>{option}</Label>
-                </div>
-            ))}
+            <RadioGroup defaultValue="option-one">
+                {property.options.map((option, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                        <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
+                        <Label htmlFor={`radio-${id}-${index}`}>{option}</Label>
+                    </div>
+                ))}
+            </RadioGroup>
         </div>
     )
 }
 
-export function CheckboxPreview({ id }) {
+export function RadioFieldsPreview({ id }) {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label>
-                    {property.labelHeader}
-                    {property.required && <span className='text-red-600 font-bold'> *</span>}
+                {property.labelHeader}
+                {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            {property.options.map((option, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                    <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`} />
-                    <Label htmlFor={`checkbox-${id}-${index}`}>{option}</Label>
-                </div>
-            ))}
+            <RadioGroup defaultValue="option-one">
+                {property.options.map((option, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                        <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
+                        <Label htmlFor={`radio-${id}-${index}`}>{option}</Label>
+                    </div>
+                ))}
+            </RadioGroup>
         </div>
     )
 }
 
-export const CheckboxFormElement = {
-    type: "checkbox",
-    icon: IoMdCheckbox,
-    label: "Checkbox"
+export const RadioFieldFormElement = {
+    type: "radiofield",
+    icon: IoIosRadioButtonOn,
+    label: "Radio Field"
 }
 
 
-export function CheckboxProperties({ id }) {
+export function RadioFieldProperties({ id }) {
     const dispatch = useDispatch();
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     console.log("property data", property);
 
     const form = useForm({
-        mode: "onBlur",
+        mode: "onSubmit",
         defaultValues: {
             id: id,
             labelHeader: property.labelHeader,
@@ -105,12 +108,7 @@ export function CheckboxProperties({ id }) {
 
     return (
         <Form {...form}>
-            <form onBlur={form.handleSubmit(applyChanges)}
-                onSubmit={(e) => {
-                    e.preventDefault();
-                }}
-                className="space-y-3">
-                    
+            <form onSubmit={form.handleSubmit(applyChanges)} className="space-y-3">
                 <FormField
                     control={form.control}
                     name="labelHeader"
@@ -162,7 +160,7 @@ export function CheckboxProperties({ id }) {
                     )}
                 />
 
-<FormField
+                <FormField
                     control={form.control}
                     name="options"
                     render={({ field }) => (
@@ -213,4 +211,4 @@ export function CheckboxProperties({ id }) {
     );
 }
 
-export default CheckboxFields;
+export default RadioField;

@@ -12,6 +12,8 @@ import { SeparatorProperties } from '../fields/SaparatorField';
 import { SpacerProperties } from '../fields/SpacerField';
 import { CheckboxProperties } from '../fields/CheckboxField';
 import { SelectFieldProperties } from '../fields/SelectField';
+import { ToggleProperties } from '../fields/ToggleField';
+import { RadioFieldProperties } from '../fields/RadioField';
 
 const PropertiesSidebar = ({selectedElement}) => {
   const dispatch = useDispatch();
@@ -30,8 +32,10 @@ const PropertiesSidebar = ({selectedElement}) => {
       "datefield"      : <DateProperties id={id}/>,
       "separatorfield" : <SeparatorProperties id={id}/>,
       "spacerfield"    : <SpacerProperties id={id}/>,
-      "checkbox"       :  <CheckboxProperties id={id}/>,
-      "selectfield"    :  <SelectFieldProperties id={id}/>
+      "checkbox"       : <CheckboxProperties id={id}/>,
+      "selectfield"    : <SelectFieldProperties id={id}/>,
+      "togglefield"    : <ToggleProperties id={id}/>,
+      "radiofield"     : <RadioFieldProperties id={id} />
   }
 
   return (

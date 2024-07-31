@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { RxDropdownMenu } from "react-icons/rx";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { options } from 'joi';
 import { Button } from '../ui/button';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 
@@ -53,7 +52,7 @@ export function SelectFieldsPreview({ id }) {
                 <SelectContent>
                     {property.options.map((option) => (
                         <SelectItem key={option} value={option}>
-                            {options}
+                            {option}
                         </SelectItem>
                     ))}
                 </SelectContent>

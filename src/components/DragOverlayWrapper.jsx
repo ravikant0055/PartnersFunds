@@ -11,6 +11,8 @@ import SeparatorField, { SeparatorFormElement } from './fields/SaparatorField';
 import SpacerFields, { SpacerFormElement } from './fields/SpacerField';
 import CheckboxFields, { CheckboxFormElement } from './fields/CheckboxField';
 import SelectField, { SelectFieldFormElement } from './fields/SelectField';
+import ToggleField, { ToggleFieldFormElement } from './fields/ToggleField';
+import RadioField, { RadioFieldFormElement } from './fields/RadioField';
 
 
 function DragOverlayWrapper() {
@@ -47,7 +49,9 @@ function DragOverlayWrapper() {
             "separatorfield" : SeparatorFormElement,
             "spacerfield"    : SpacerFormElement,
             "checkbox"       : CheckboxFormElement,
-            "selectfield"    : SelectFieldFormElement
+            "selectfield"    : SelectFieldFormElement,
+            "togglefield"    : ToggleFieldFormElement,
+            "radiofield"     : RadioFieldFormElement
 
         }
         node = <SideBarBtnElementDragOverlay formelement={formelement[type]}/>;
@@ -66,7 +70,9 @@ function DragOverlayWrapper() {
         "separatorfield"    : <SeparatorField/>,
         "spacerfield"       : <SpacerFields/>,
         "checkbox"          : <CheckboxFields/>,
-        "selectfield"       : <SelectField />
+        "selectfield"       : <SelectField />,
+        "togglefield"       : <ToggleField/>,
+        "radiofield"        : <RadioField/>
        }
 
        console.log("2ndtype",type);

@@ -8,15 +8,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { RxDropdownMenu } from "react-icons/rx";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { options } from 'joi';
 import { Button } from '../ui/button';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { ImSpinner2 } from 'react-icons/im';
 
 const AttributesData = {
     label: "Select Field",
     required: true,
     placeholder: "value here...",
-    options: []
+    options: [],
+    expression: true,
 }
 
 const SelectField = ({ id }) => {
@@ -51,9 +53,9 @@ export function SelectFieldsPreview({ id }) {
                     <SelectValue placeholder={property.placeholder} />
                 </SelectTrigger>
                 <SelectContent>
-                    {property.options.map((option) => (
-                        <SelectItem key={option} value={option}>
-                            {options}
+                    {property.options.map((item) => (
+                        <SelectItem key={item} value={item}>
+                            {item}
                         </SelectItem>
                     ))}
                 </SelectContent>
@@ -81,7 +83,8 @@ export function SelectFieldProperties({ id }) {
             label: property.label,
             required: property.required,
             placeholder: property.placeholder,
-            options: property.options
+            options: property.options,
+            expression : property.expression
         },
     });
 
@@ -90,7 +93,8 @@ export function SelectFieldProperties({ id }) {
             label: property.label,
             required: property.required,
             placeholder: property.placeholder,
-            options: property.options
+            options: property.options,
+            expression : property.expression
         });
     }, [form, property]);
 
@@ -144,6 +148,7 @@ export function SelectFieldProperties({ id }) {
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name="required"
@@ -158,6 +163,86 @@ export function SelectFieldProperties({ id }) {
                         </FormItem>
                     )}
                 />
+                
+
+            <Dialog>
+                <DialogTrigger> 
+                    <div className='flex gap-10 justify-between items-center'>
+                        <FormLabel>Expression</FormLabel>
+                        <Button variant={"outline"} className="py-2 px-2 h-fit">
+                            <AiOutlinePlus/>
+                        </Button>
+                    </div>            
+                </DialogTrigger>
+
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Element Expression</DialogTitle>
+                        <DialogDescription>Create expression for your elements</DialogDescription>
+                    </DialogHeader>
+                    
+                    <Form {...form}>
+                        <form className="space-y-2">
+                            <div className='flex gap-5 justify-center items-center'>
+                                <FormField
+                                    control={form.control}
+                                    name="attribute"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Attribute</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="operator"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Operator</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="attvalues"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Values</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                                
+                                <Button variant={"outline"} className="py-2 px-2 mt-8 h-fit">
+                                    AND
+                                </Button>
+
+                                <Button variant={"outline"} className="py-2 px-2 mt-8 h-fit">
+                                    OR
+                                </Button>
+
+                            </div>
+                        </form>
+                    </Form>
+
+                    <DialogFooter>
+                        <Button control={form.control} disabled={form.formState.isSubmitting} className="w-full mt-4">
+                            {!form.formState.isSubmitting ? <span>Save</span> : <ImSpinner2 className="animate-spin" />}
+                        </Button>
+                    </DialogFooter>
+
+                </DialogContent>
+            </Dialog>
 
                 <FormField
                     control={form.control}
@@ -168,14 +253,13 @@ export function SelectFieldProperties({ id }) {
                               <FormLabel>Option</FormLabel>
                               <Button 
                                 variant={"outline"} 
-                                className="gap-2" 
+                                className="py-2 px-2 h-fit"  
                                 onClick={(e) => {
                                 e.preventDefault();
                                 form.setValue("options", field.value.concat("New Option"));
                                 }}
                               >
-                                <AiOutlinePlus />
-                                Add
+                                <AiOutlinePlus/>
                               </Button>
                             </div>
                             <div className='flex flex-col gap-2'>

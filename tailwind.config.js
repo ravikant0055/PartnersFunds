@@ -71,7 +71,33 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      maxHeight: {
+        'custom': '500px', // Custom max height for scrollable area
+      },
+      scrollbar: {
+        hidden: {
+          overflowY: 'auto',
+          scrollbarWidth: 'none', /* For Firefox */
+          msOverflowStyle: 'none', /* For Internet Explorer and Edge */
+        }
+      }
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require('tailwindcss-animate'),
+    function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hidden': {
+          'max-height': '500px',
+          'overflow-y': 'auto',
+          'scrollbar-width': 'none',
+          '-ms-overflow-style': 'none',
+        },
+        '.scrollbar-hidden::-webkit-scrollbar': {
+          width: '0',
+          height: '0',
+        },
+      }, ['responsive']);
+    }
+  ],
 }

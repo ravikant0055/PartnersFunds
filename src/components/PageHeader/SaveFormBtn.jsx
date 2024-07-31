@@ -4,9 +4,9 @@ import { Button } from '../ui/button';
 
 const SaveFormBtn = () => {
   return (
-    <Button>
-      <HiSaveAs className="h-4 w-4" />
-      Save
+    <Button >
+      <HiSaveAs className="h-4 w-4 mr-1" />
+       Save
     </Button>
   )
 }

@@ -19,14 +19,24 @@ const AttributesData = {
     placeholder: "value here...",
     options: [],
     expression: true,
+    color: "", // Default color
+    fontsize: "16px", // Default font color
+    height: 50, // Default height
+    width: "200px", // Default width
 }
 
 const SelectField = ({ id }) => {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     return (
-        <div className='flex flex-col gap-2 w-full'>
-            <Label>
+        <div className='flex flex-col gap-2 w-full' style={{
+            width: property.width + "px",
+        }} >
+            <Label style={{
+                color: property.color,
+                fontSize: property.fontsize + "px",
+                height: property.height + "px",
+            }} >
                 {property.label}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
@@ -43,8 +53,14 @@ export function SelectFieldsPreview({ id }) {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     return (
-        <div className='flex flex-col gap-2 w-full'>
-            <Label>
+        <div className='flex flex-col gap-2 w-full' style={{
+            width: property.width + "px",
+        }} >
+            <Label style={{
+                color: property.color,
+                fontSize: property.fontsize + "px",
+                height: property.height + "px",
+            }}>
                 {property.label}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
@@ -84,7 +100,11 @@ export function SelectFieldProperties({ id }) {
             required: property.required,
             placeholder: property.placeholder,
             options: property.options,
-            expression : property.expression
+            expression: property.expression,
+            color: property.color,
+            fontsize: property.fontsize,
+            height: property.height,
+            width: property.width,
         },
     });
 
@@ -94,9 +114,18 @@ export function SelectFieldProperties({ id }) {
             required: property.required,
             placeholder: property.placeholder,
             options: property.options,
-            expression : property.expression
+            expression: property.expression,
+            color: property.color,
+            fontsize: property.fontsize,
+            height: property.height,
+            width: property.width,
         });
     }, [form, property]);
+
+    const handleReset = () => {
+        form.reset(AttributesData);
+        dispatch(updateprop({ id, ...AttributesData }));
+    };
 
 
     const applyChanges = (formData) => {
@@ -163,86 +192,86 @@ export function SelectFieldProperties({ id }) {
                         </FormItem>
                     )}
                 />
-                
 
-            <Dialog>
-                <DialogTrigger> 
-                    <div className='flex gap-10 justify-between items-center'>
-                        <FormLabel>Expression</FormLabel>
-                        <Button variant={"outline"} className="py-2 px-2 h-fit">
-                            <AiOutlinePlus/>
-                        </Button>
-                    </div>            
-                </DialogTrigger>
 
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Element Expression</DialogTitle>
-                        <DialogDescription>Create expression for your elements</DialogDescription>
-                    </DialogHeader>
-                    
-                    <Form {...form}>
-                        <form className="space-y-2">
-                            <div className='flex gap-5 justify-center items-center'>
-                                <FormField
-                                    control={form.control}
-                                    name="attribute"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Attribute</FormLabel>
-                                            <FormControl>
-                                                <Input {...field} />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
+                <Dialog>
+                    <DialogTrigger>
+                        <div className='flex gap-10 justify-between items-center'>
+                            <FormLabel>Expression</FormLabel>
+                            <Button variant={"outline"} className="py-2 px-2 h-fit">
+                                <AiOutlinePlus />
+                            </Button>
+                        </div>
+                    </DialogTrigger>
 
-                                <FormField
-                                    control={form.control}
-                                    name="operator"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Operator</FormLabel>
-                                            <FormControl>
-                                                <Input {...field} />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Element Expression</DialogTitle>
+                            <DialogDescription>Create expression for your elements</DialogDescription>
+                        </DialogHeader>
 
-                                <FormField
-                                    control={form.control}
-                                    name="attvalues"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Values</FormLabel>
-                                            <FormControl>
-                                                <Input {...field} />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
-                                
-                                <Button variant={"outline"} className="py-2 px-2 mt-8 h-fit">
-                                    AND
-                                </Button>
+                        <Form {...form}>
+                            <form className="space-y-2">
+                                <div className='flex gap-5 justify-center items-center'>
+                                    <FormField
+                                        control={form.control}
+                                        name="attribute"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Attribute</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
 
-                                <Button variant={"outline"} className="py-2 px-2 mt-8 h-fit">
-                                    OR
-                                </Button>
+                                    <FormField
+                                        control={form.control}
+                                        name="operator"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Operator</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
 
-                            </div>
-                        </form>
-                    </Form>
+                                    <FormField
+                                        control={form.control}
+                                        name="attvalues"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Values</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
 
-                    <DialogFooter>
-                        <Button control={form.control} disabled={form.formState.isSubmitting} className="w-full mt-4">
-                            {!form.formState.isSubmitting ? <span>Save</span> : <ImSpinner2 className="animate-spin" />}
-                        </Button>
-                    </DialogFooter>
+                                    <Button variant={"outline"} className="py-2 px-2 mt-8 h-fit">
+                                        AND
+                                    </Button>
 
-                </DialogContent>
-            </Dialog>
+                                    <Button variant={"outline"} className="py-2 px-2 mt-8 h-fit">
+                                        OR
+                                    </Button>
+
+                                </div>
+                            </form>
+                        </Form>
+
+                        <DialogFooter>
+                            <Button control={form.control} disabled={form.formState.isSubmitting} className="w-full mt-4">
+                                {!form.formState.isSubmitting ? <span>Save</span> : <ImSpinner2 className="animate-spin" />}
+                            </Button>
+                        </DialogFooter>
+
+                    </DialogContent>
+                </Dialog>
 
                 <FormField
                     control={form.control}
@@ -250,17 +279,17 @@ export function SelectFieldProperties({ id }) {
                     render={({ field }) => (
                         <FormItem>
                             <div className='flex justify-between items-center'>
-                              <FormLabel>Option</FormLabel>
-                              <Button 
-                                variant={"outline"} 
-                                className="py-2 px-2 h-fit"  
-                                onClick={(e) => {
-                                e.preventDefault();
-                                form.setValue("options", field.value.concat("New Option"));
-                                }}
-                              >
-                                <AiOutlinePlus/>
-                              </Button>
+                                <FormLabel>Option</FormLabel>
+                                <Button
+                                    variant={"outline"}
+                                    className="py-2 px-2 h-fit"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        form.setValue("options", field.value.concat("New Option"));
+                                    }}
+                                >
+                                    <AiOutlinePlus />
+                                </Button>
                             </div>
                             <div className='flex flex-col gap-2'>
                                 {form.watch("options").map((option, index) => (
@@ -268,17 +297,17 @@ export function SelectFieldProperties({ id }) {
                                         <Input placeholder="" value={option} onChange={(e) => {
                                             field.value[index] = e.target.value;
                                             field.onChange(field.value);
-                                            }}
+                                        }}
                                         />
                                         <Button variant={"ghost"} size={"icon"} onClick={(e) => {
                                             e.preventDefault();
                                             const newOptions = [...field.value];
-                                            newOptions.splice(index,1);
+                                            newOptions.splice(index, 1);
                                             field.onChange(newOptions);
-                                         }}
+                                        }}
                                         >
-                                            <AiOutlineClose/>
-                                        </Button>    
+                                            <AiOutlineClose />
+                                        </Button>
                                     </div>
                                 ))}
                             </div>
@@ -286,9 +315,96 @@ export function SelectFieldProperties({ id }) {
                     )}
                 />
 
-                <Button className="w-full" type='submit'>
-                    save
-                </Button>
+                <FormField
+                    control={form.control}
+                    name="fontsize"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>FontSize</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="number"
+                                    step="1"
+                                    min="8"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+
+                <FormField
+                    control={form.control}
+                    name="color"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Colour</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="color"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="height"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Select height (px)</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="number"
+                                    step="1"
+                                    min="10"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="width"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Select width (px)</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="number"
+                                    step="1"
+                                    min="10"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <div className="w-full flex justify-between">
+                    <Button type='submit' className='w-[40%]'>
+                        Save
+                    </Button>
+                    <Button type='button' className='w-[40%]' onClick={handleReset}>
+                        Reset
+                    </Button>
+                </div>
             </form>
         </Form>
     );

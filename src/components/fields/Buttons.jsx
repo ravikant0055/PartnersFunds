@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 
 const AttributesData = {
-  label:"Button",
+  label: "Button",
   color: "", // Default color
   fontsize: "16px", // Default font size
   fontcolor: "", // Default font color
@@ -16,11 +16,11 @@ const AttributesData = {
   width: "200px", // Default width
 }
 
-const Buttons = ({id}) => {
+const Buttons = ({ id }) => {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Button 
+      <Button
         style={{
           backgroundColor: property.color,
           color: property.fontcolor,
@@ -35,11 +35,11 @@ const Buttons = ({id}) => {
   )
 }
 
-export function ButtonsPreview({id}){
+export function ButtonsPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Button 
+      <Button
         style={{
           backgroundColor: property.color,
           color: property.fontcolor,
@@ -54,14 +54,14 @@ export function ButtonsPreview({id}){
   )
 }
 
-export const ButtonFormElement={
-    type:"button",
-    icon : RxButton,
-    label : "Button"
+export const ButtonFormElement = {
+  type: "button",
+  icon: RxButton,
+  label: "Button"
 }
 
 
-export function ButtonProperties({id}) {
+export function ButtonProperties({ id }) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
 
@@ -90,7 +90,7 @@ export function ButtonProperties({id}) {
   }, [form, property]);
 
   const applyChanges = (formData) => {
-    console.log("formdata",formData);
+    console.log("formdata", formData);
     const existingProperty = property.id;
     if (existingProperty) {
       dispatch(updateprop({ id, ...formData }));
@@ -131,7 +131,7 @@ export function ButtonProperties({id}) {
           name="color"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Colour</FormLabel>
+              <FormLabel>Button Colour</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -145,7 +145,7 @@ export function ButtonProperties({id}) {
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name="fontsize"
           render={({ field }) => (
@@ -226,8 +226,8 @@ export function ButtonProperties({id}) {
             </FormItem>
           )}
         />
-       
-        
+
+
       </form>
     </Form>
   );

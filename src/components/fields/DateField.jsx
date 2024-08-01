@@ -17,7 +17,10 @@ import { cn } from 'src/lib/utils';
 const AttributesData = {
   label:"Date field",
   required: false,
+
 //   placeholder: "Pick a date"
+
+
 }
 
 const DateField = ({id}) => {

@@ -15,24 +15,49 @@ const AttributesData = {
     labelHeader: "Header Name",
     label: "Checkbox",
     required: true,
-    options: ['Checkbox']
+    options: ['Checkbox'],
+    fontsize: "16px", // Default font size
+    fontcolor: "", // Default font color
+    height: "50px", // Default height
+    width: "200px", // Default width
+    fontweight: "200" //Default font weight
 }
 
 const CheckboxFields = ({ id }) => {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const cid = `checkbox-${id}`;
-    console.log("cid",cid);
+    console.log("cid", cid);
     return (
         <div className='flex flex-col gap-2 w-full'>
-            <Label>
-                    {property.labelHeader}
-                    {property.required && <span className='text-red-600 font-bold'> *</span>}
+            <Label
+                style={{
+                    color: property.fontcolor,
+                    fontSize: property.fontsize + "px",
+                    height: property.height + "px",
+                    width: property.width + "px",
+                    fontWeight: property.fontweight
+                }}
+            >
+                {property.labelHeader}
+                {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
             {property.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
-                    <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`} />
-                    <Label htmlFor={`checkbox-${id}-${index}`}>{option}</Label>
+                    <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`} style={{
+                    color: property.fontcolor,
+                    fontSize: property.fontsize + "px",
+                    height: property.height + "px",
+                    width: property.width + "px",
+                    fontWeight: property.fontweight
+                }} />
+                    <Label htmlFor={`checkbox-${id}-${index}`} style={{
+                        color: property.fontcolor,
+                        fontSize: property.fontsize + "px",
+                        height: property.height + "px",
+                        width: property.width + "px",
+                        fontWeight: property.fontweight
+                    }}>{option}</Label>
                 </div>
             ))}
         </div>
@@ -44,14 +69,37 @@ export function CheckboxPreview({ id }) {
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     return (
         <div className='flex flex-col gap-2 w-full'>
-            <Label>
-                    {property.labelHeader}
-                    {property.required && <span className='text-red-600 font-bold'> *</span>}
+            <Label
+                style={{
+                    color: property.fontcolor,
+                    fontSize: property.fontsize + "px",
+                    height: property.height + "px",
+                    width: property.width + "px",
+                    fontWeight: property.fontweight
+                }}
+            >
+                {property.labelHeader}
+                {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
             {property.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
-                    <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`} />
-                    <Label htmlFor={`checkbox-${id}-${index}`}>{option}</Label>
+                    <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`}
+                    style={{
+                        color: property.fontcolor,
+                        fontSize: property.fontsize + "px",
+                        height: property.height + "px",
+                        width: property.width + "px",
+                        fontWeight: property.fontweight
+                    }} />
+                    <Label htmlFor={`checkbox-${id}-${index}`}
+                        style={{
+                            color: property.fontcolor,
+                            fontSize: property.fontsize + "px",
+                            height: property.height + "px",
+                            width: property.width + "px",
+                            fontWeight: property.fontweight
+                        }}
+                    >{option}</Label>
                 </div>
             ))}
         </div>
@@ -77,7 +125,12 @@ export function CheckboxProperties({ id }) {
             labelHeader: property.labelHeader,
             label: property.label,
             required: property.required,
-            options: property.options
+            options: property.options,
+            fontcolor: property.fontcolor,
+            fontsize: property.fontsize,
+            height: property.height,
+            width: property.width,
+            fontweight: property.fontweight
         },
     });
 
@@ -87,7 +140,12 @@ export function CheckboxProperties({ id }) {
             label: property.label,
             required: property.required,
             placeholder: property.placeholder,
-            options: property.options
+            options: property.options, 
+            fontcolor: property.fontcolor,
+            fontsize: property.fontsize,
+            height: property.height,
+            width: property.width,
+            fontweight: property.fontweight
         });
     }, [form, property]);
 
@@ -110,7 +168,7 @@ export function CheckboxProperties({ id }) {
                     e.preventDefault();
                 }}
                 className="space-y-3">
-                    
+
                 <FormField
                     control={form.control}
                     name="labelHeader"
@@ -162,7 +220,7 @@ export function CheckboxProperties({ id }) {
                     )}
                 />
 
-<FormField
+                <FormField
                     control={form.control}
                     name="options"
                     render={({ field }) => (
@@ -204,6 +262,111 @@ export function CheckboxProperties({ id }) {
                         </FormItem>
                     )}
                 />
+
+                {/* ======================== */}
+
+                {/* <FormField
+                    control={form.control}
+                    name="width"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Check Box width (px)</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="number"
+                                    step="1"
+                                    min="10"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                /> */}
+
+                {/* <FormField
+                    control={form.control}
+                    name="height"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Check Box height (px)</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="number"
+                                    step="1"
+                                    min="10"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                /> */}
+
+
+                <FormField
+                    control={form.control}
+                    name="fontcolor"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Text color</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="color"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="fontweight"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Font Weight</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="number"
+                                    step="1"
+                                    min="8"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="fontsize"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Font Size (px)</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="number"
+                                    step="1"
+                                    min="8"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                {/* ======================== */}
 
                 <Button className="w-full" type='submit'>
                     save

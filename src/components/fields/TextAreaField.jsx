@@ -14,6 +14,11 @@ const AttributesData = {
   require: true,
   placeholder: "value here...",
   rows: 3,
+  color: "", // Default color
+  fontsize: "16px", // Default font size
+  fontcolor: "", // Default font color
+  height: "50px", // Default height
+  width: "200px", // Default width
 }
 
 const TextAreaField = ({id}) => {
@@ -25,7 +30,13 @@ const TextAreaField = ({id}) => {
            {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
 
-      <Textarea readOnly disabled placeholder={property.placeholder} rows={property.rows}/>
+      <Textarea readOnly disabled placeholder={property.placeholder} rows={property.rows} style={{
+        color: property.color,
+        fontcolor:property.fontcolor,
+        fontSize: property.fontsize + "px",
+        height: property.height + "px",
+        width: property.width + "px",
+      }}/>
       
     </div>
   )
@@ -39,7 +50,13 @@ export function TextAreaFieldPreview({id}){
            {property.label}
            {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
-      <Textarea placeholder={property.placeholder} rows={property.rows}/>
+      <Textarea placeholder={property.placeholder} rows={property.rows} style={{
+        color: property.color,
+        fontcolor:property.fontcolor,
+        fontSize: property.fontsize + "px",
+        height: property.height + "px",
+        width: property.width + "px",
+      }}/>
     </div>
   )
 }
@@ -61,6 +78,13 @@ export function TextAreaProperties({id}) {
       label: property.label,
       required: property.required,
       placeholder: property.placeholder,
+      rows:property.rows,
+        color: property.color,
+        fontcolor:property.fontcolor,
+        fontsize: property.fontsize ,
+        height: property.height ,
+        width: property.width ,
+     
     },
   });
 
@@ -70,6 +94,11 @@ export function TextAreaProperties({id}) {
       required: property.required,
       placeholder: property.placeholder,
       rows: property.rows,
+      color: property.color,
+        fontcolor:property.fontcolor,
+        fontsize: property.fontsize ,
+        height: property.height ,
+        width: property.width ,
     });
   }, [form, property]);
 
@@ -130,13 +159,16 @@ export function TextAreaProperties({id}) {
 
         <FormField
           control={form.control}
-          name="font size"
+          name="fontsize"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Font size</FormLabel>
               <FormControl>
                 <Input
                   {...field}
+                  type="number"
+                  step="1"
+                  min="8"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
                   }}
@@ -145,6 +177,92 @@ export function TextAreaProperties({id}) {
             </FormItem>
           )}
         />
+
+        {/* ==================================== */}
+
+        <FormField
+          control={form.control}
+          name="width"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>TextArea width (px)</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="1"
+                  min="10"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+<FormField
+          control={form.control}
+          name="height"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>TextArea height (px)</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="1"
+                  min="10"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+
+<FormField
+          control={form.control}
+          name="color"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Text color</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="color"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+<FormField
+          control={form.control}
+          name="rows"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Rows</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="1"
+                  min="10"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        {/* ==================================== */}
        
         <FormField
           control={form.control}

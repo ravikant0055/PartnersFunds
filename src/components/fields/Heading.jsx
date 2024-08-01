@@ -8,52 +8,61 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 
 const AttributesData = {
-  label:"Heading"
+  label: "Heading",
+  fontsize: "16px",
+  fontweight: "300",
+  fontcolor:""
 }
 
-const Heading = ({id}) => {
+const Heading = ({ id }) => {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Label>{property.label}</Label>
+      <Label style={{ fontSize: property.fontsize + "px", fontWeight: property.fontweight, color:property.fontcolor }}>{property.label}</Label>
     </div>
   )
 }
 
-export function HeadingPreview({id}){
+export function HeadingPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Label>{property.label}</Label>
+      <Label style={{ fontSize: property.fontsize + "px", fontWeight: property.fontweight, color:property.fontcolor }}>{property.label}</Label>
     </div>
   )
 }
 
-export const HeadingFormElement={
-    type:"heading",
-    icon : LuHeading1,
-    label : "Heading"
+export const HeadingFormElement = {
+  type: "heading",
+  icon: LuHeading1,
+  label: "Heading"
 }
 
 
-export function HeadingProperties({id}) {
+export function HeadingProperties({ id }) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const form = useForm({
     mode: "onBlur",
     defaultValues: {
       label: property.label,
+      fontsize: property.fontsize,
+      fontweight: property.fontweight,
+      color:property.color
     },
   });
 
   useEffect(() => {  // Reset form values to default when the component mounts
     form.reset({
       label: property.label,
+      fontsize: property.fontsize,
+      fontweight: property.fontweight,
+      fontcolor:property.fontcolor
     });
   }, [form, property]);
 
   const applyChanges = (formData) => {
-    console.log("formdata",formData);
+    console.log("formdata", formData);
     const existingProperty = property.id;
     if (existingProperty) {
       dispatch(updateprop({ id, ...formData }));
@@ -88,17 +97,20 @@ export function HeadingProperties({id}) {
             </FormItem>
           )}
         />
-        
+        {/* ======================================== */}
 
         <FormField
           control={form.control}
-          name="font size"
+          name="fontsize"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Font size</FormLabel>
+              <FormLabel>Font Size (px)</FormLabel>
               <FormControl>
                 <Input
                   {...field}
+                  type="number"
+                  step="1"
+                  min="8"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
                   }}
@@ -107,6 +119,51 @@ export function HeadingProperties({id}) {
             </FormItem>
           )}
         />
+
+<FormField
+          control={form.control}
+          name="fontcolor"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Font Color</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="color"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+
+        <FormField
+          control={form.control}
+          name="fontweight"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Font Weight</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="1"
+                  min="8"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        {/* ======================================== */}
+
+
       </form>
     </Form>
   );

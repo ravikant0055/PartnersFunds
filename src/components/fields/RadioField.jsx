@@ -15,7 +15,12 @@ const AttributesData = {
     labelHeader: "Header Name",
     label: "Radio Field",
     required: true,
-    options: ['Radio Button']
+    options: ['Radio Button'],
+    fontsize: "16px", // Default font size
+    fontcolor: "", // Default font color
+    height: "50px", // Default height
+    width: "200px", // Default width
+    fontweight: "200" //Default font weight
 }
 
 const RadioField = ({ id }) => {
@@ -24,7 +29,15 @@ const RadioField = ({ id }) => {
     const rid = `radio-${id}`;
     return (
         <div className='flex flex-col gap-2 w-full'>
-            <Label>
+            <Label
+            style={{
+                color: property.fontcolor,
+                fontSize: property.fontsize + "px",
+                height: property.height + "px",
+                width: property.width + "px",
+                fontWeight: property.fontweight
+            }}
+            >
                 {property.labelHeader}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
@@ -32,7 +45,15 @@ const RadioField = ({ id }) => {
                 {property.options.map((option, index) => (
                     <div key={index} className="flex items-center space-x-2">
                         <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
-                        <Label htmlFor={`radio-${id}-${index}`}>{option}</Label>
+                        <Label htmlFor={`radio-${id}-${index}`}
+                        style={{
+                            color: property.fontcolor,
+                            fontSize: property.fontsize + "px",
+                            height: property.height + "px",
+                            width: property.width + "px",
+                            fontWeight: property.fontweight
+                        }}
+                        >{option}</Label>
                     </div>
                 ))}
             </RadioGroup>
@@ -45,7 +66,15 @@ export function RadioFieldsPreview({ id }) {
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     return (
         <div className='flex flex-col gap-2 w-full'>
-            <Label>
+            <Label
+            style={{
+                color: property.fontcolor,
+                fontSize: property.fontsize + "px",
+                height: property.height + "px",
+                width: property.width + "px",
+                fontWeight: property.fontweight
+            }}
+            >
                 {property.labelHeader}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
@@ -53,7 +82,15 @@ export function RadioFieldsPreview({ id }) {
                 {property.options.map((option, index) => (
                     <div key={index} className="flex items-center space-x-2">
                         <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
-                        <Label htmlFor={`radio-${id}-${index}`}>{option}</Label>
+                        <Label htmlFor={`radio-${id}-${index}`}
+                        style={{
+                            color: property.fontcolor,
+                            fontSize: property.fontsize + "px",
+                            height: property.height + "px",
+                            width: property.width + "px",
+                            fontWeight: property.fontweight
+                        }}
+                        >{option}</Label>
                     </div>
                 ))}
             </RadioGroup>
@@ -80,7 +117,12 @@ export function RadioFieldProperties({ id }) {
             labelHeader: property.labelHeader,
             label: property.label,
             required: property.required,
-            options: property.options
+            options: property.options,
+            fontcolor: property.fontcolor,
+            fontsize: property.fontsize,
+            height: property.height,
+            width: property.width,
+            fontweight: property.fontweight
         },
     });
 
@@ -90,7 +132,12 @@ export function RadioFieldProperties({ id }) {
             label: property.label,
             required: property.required,
             placeholder: property.placeholder,
-            options: property.options
+            options: property.options,
+            fontcolor: property.fontcolor,
+            fontsize: property.fontsize,
+            height: property.height,
+            width: property.width,
+            fontweight: property.fontweight
         });
     }, [form, property]);
 
@@ -202,6 +249,67 @@ export function RadioFieldProperties({ id }) {
                         </FormItem>
                     )}
                 />
+
+                {/* ======================================= */}
+                <FormField
+                    control={form.control}
+                    name="fontcolor"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Text color</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="color"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="fontweight"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Font Weight</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="number"
+                                    step="1"
+                                    min="8"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="fontsize"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Font Size (px)</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="number"
+                                    step="1"
+                                    min="8"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                {/* ======================================= */}
 
                 <Button className="w-full" type='submit'>
                     save

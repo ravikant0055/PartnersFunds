@@ -14,6 +14,7 @@ const AttributesData = {
   fontcolor: "", // Default font color
   height: "50px", // Default height
   width: "200px", // Default width
+  onclick: ""
 }
 
 const Buttons = ({ id }) => {
@@ -37,15 +38,18 @@ const Buttons = ({ id }) => {
 
 export function ButtonsPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const alertFunc = () => {
+    console.log("Button Clicked", property.onclick);
+    };
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Button
+      <Button onClick={alertFunc}
         style={{
           backgroundColor: property.color,
           color: property.fontcolor,
-          fontSize: property.fontsize,
-          height: property.height,
-          width: property.width,
+          fontSize: property.fontsize + "px",
+          height: property.height + "px",
+          width: property.width + "px",
         }}
       >
         {property.label}
@@ -75,6 +79,7 @@ export function ButtonProperties({ id }) {
       fontcolor: property.fontcolor,
       height: property.height,
       width: property.width,
+      onclick: property.onclick
     },
   });
 
@@ -86,6 +91,7 @@ export function ButtonProperties({ id }) {
       fontcolor: property.fontcolor,
       height: property.height,
       width: property.width,
+      onclick: property.onclick
     });
   }, [form, property]);
 
@@ -218,6 +224,25 @@ export function ButtonProperties({ id }) {
                   type="number"
                   step="1"
                   min="10"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+<FormField
+          control={form.control}
+          name="onclick"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>onClick</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="text"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
                   }}

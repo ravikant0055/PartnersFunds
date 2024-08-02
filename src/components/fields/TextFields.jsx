@@ -13,27 +13,36 @@ const AttributesData = {
   label: "Text field",
   required: true,
   placeholder: "value here...",
-  color: "", // Default color
-  fontsize: 16, // Default font size
-  fontcolor: "", // Default font color
+  labelcolor: "", // Default color
+  labelsize: 16, // Default font size
+  textsize: 16,
+  textcolor: "", // Default font color
   height: 50, // Default height
-  width: 200, // Default width
+  width: 500, // Default width
 }
 
 const TextFields = ({ id }) => {
-  console.log("txt id", id);
+  const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  useEffect(() => {
+    dispatch(addprop({ id, ...AttributesData }));
+    console.log("txt id", id);
+  }, [dispatch, id]);
+
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Label
-      
+      <Label style={{
+        color: property.labelcolor,
+        fontSize: property.labelsize + "px"
+      }}
+
       >
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
       <Input readOnly disabled placeholder={property.placeholder} style={{
-        color: property.color,
-        fontcolor:property.fontcolor,
+        fontSize: property.textsize + "px",
+        color: property.textcolor,
         fontSize: property.fontsize + "px",
         height: property.height + "px",
         width: property.width + "px",
@@ -47,16 +56,18 @@ export function TextFieldsPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Label
-     
+      <Label style={{
+        color: property.labelcolor,
+        fontSize: property.labelsize + "px"
+      }}
+
       >
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
-      <Input placeholder={property.placeholder}  style={{
-        color: property.color,
-        fontcolor:property.fontcolor,
-        fontSize: property.fontsize + "px",
+      <Input placeholder={property.placeholder} style={{
+        fontSize: property.textsize + "px",
+        color: property.textcolor,
         height: property.height + "px",
         width: property.width + "px",
       }} />
@@ -83,9 +94,10 @@ export function TextProperties({ id }) {
       label: property.label,
       required: property.required,
       placeholder: property.placeholder,
-      color: property.color,
-      fontsize: property.fontsize,
-      fontcolor: property.color,
+      labelcolor: property.labelcolor,
+      textsize: property.textsize,
+      labelsize: property.labelsize,
+      textcolor: property.textcolor,
       height: property.height,
       width: property.width,
     },
@@ -96,20 +108,21 @@ export function TextProperties({ id }) {
       label: property.label,
       required: property.required,
       placeholder: property.placeholder,
-      color: property.color,
-      fontcolor:property.fontcolor,
-      fontSize: property.fontsize ,
+      labelcolor: property.labelcolor,
+      textcolor: property.textcolor,
+      textsize: property.textsize,
+      labelsize: property.labelsize,
       height: property.height,
-      width: property.width 
-     
-    
+      width: property.width
+
+
     });
   }, [form, property]);
 
   const handleReset = () => {
     form.reset(AttributesData);
     dispatch(updateprop({ id, ...AttributesData }));
-};
+  };
 
 
   const applyChanges = (formData) => {
@@ -167,10 +180,31 @@ export function TextProperties({ id }) {
         {/* ====================================== */}
         <FormField
           control={form.control}
-          name="fontsize"
+          name="labelsize"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>FontSize</FormLabel>
+              <FormLabel>Label Size</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="1"
+                  min="8"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="textsize"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Text Size</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -189,10 +223,10 @@ export function TextProperties({ id }) {
 
         <FormField
           control={form.control}
-          name="color"
+          name="labelcolor"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Colour</FormLabel>
+              <FormLabel>Label Color</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -208,10 +242,10 @@ export function TextProperties({ id }) {
 
         <FormField
           control={form.control}
-          name="fontcolor"
+          name="textcolor"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Font color</FormLabel>
+              <FormLabel>Text Color</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -284,14 +318,14 @@ export function TextProperties({ id }) {
           )}
         />
 
-<div className="w-full flex justify-between">
-                    <Button type='submit' className='w-[40%]'>
-                        Save
-                    </Button>
-                    <Button type='button' className='w-[40%]' onClick={handleReset}>
-                        Reset
-                    </Button>
-                </div>
+        <div className="w-full flex justify-between">
+          <Button type='submit' className='w-[40%]'>
+            Save
+          </Button>
+          <Button type='button' className='w-[40%]' onClick={handleReset}>
+            Reset
+          </Button>
+        </div>
       </form>
     </Form>
   );

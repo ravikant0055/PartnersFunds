@@ -20,6 +20,7 @@ import CheckboxFields from "../fields/CheckboxField";
 import SelectField from "../fields/SelectField";
 import ToggleField from "../fields/ToggleField";
 import RadioField from "../fields/RadioField";
+import { deleteprop } from "../../store/AttributePropDataSlice";
 
 const Designer = () => {
 
@@ -30,6 +31,7 @@ const Designer = () => {
 
   const handleDeleteElement = (id) => {
     dispatch(deleteElement(id));
+    dispatch(deleteprop(id));
   };
   const droppable = useDroppable({
     id: "designer-drop-area",

@@ -16,43 +16,42 @@ const AttributesData = {
     label: "Radio Field",
     required: true,
     options: ['Radio Button'],
-    fontsize: "16px", // Default font size
-    fontcolor: "", // Default font color
-    height: "50px", // Default height
-    width: "200px", // Default width
-    fontweight: "200" //Default font weight
+    fontsize: 16, // Default font size
+    headercolor: "",
+    radiocolor: "", // Default font color
+    fontweight: 200 //Default font weight
 }
 
 const RadioField = ({ id }) => {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(addprop({ id, ...AttributesData }));
+      }, [dispatch, id]);
     const rid = `radio-${id}`;
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label
             style={{
-                color: property.fontcolor,
+                color: property.headercolor,
                 fontSize: property.fontsize + "px",
-                height: property.height + "px",
-                width: property.width + "px",
                 fontWeight: property.fontweight
             }}
             >
                 {property.labelHeader}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            <RadioGroup defaultValue="option-one">
+            <RadioGroup defaultValue="option-one"  style={{
+                            color: property.radiocolor,
+                            fontSize: property.fontsize + "px",
+                            fontWeight: property.fontweight
+                        }}>
                 {property.options.map((option, index) => (
                     <div key={index} className="flex items-center space-x-2">
                         <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
                         <Label htmlFor={`radio-${id}-${index}`}
-                        style={{
-                            color: property.fontcolor,
-                            fontSize: property.fontsize + "px",
-                            height: property.height + "px",
-                            width: property.width + "px",
-                            fontWeight: property.fontweight
-                        }}
+                       
                         >{option}</Label>
                     </div>
                 ))}
@@ -68,28 +67,23 @@ export function RadioFieldsPreview({ id }) {
         <div className='flex flex-col gap-2 w-full'>
             <Label
             style={{
-                color: property.fontcolor,
+                color: property.headercolor,
                 fontSize: property.fontsize + "px",
-                height: property.height + "px",
-                width: property.width + "px",
                 fontWeight: property.fontweight
             }}
             >
                 {property.labelHeader}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            <RadioGroup defaultValue="option-one">
+            <RadioGroup defaultValue="option-one" style={{
+                            color: property.radiocolor,
+                            fontSize: property.fontsize + "px",
+                            fontWeight: property.fontweight
+                        }}>
                 {property.options.map((option, index) => (
                     <div key={index} className="flex items-center space-x-2">
                         <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
                         <Label htmlFor={`radio-${id}-${index}`}
-                        style={{
-                            color: property.fontcolor,
-                            fontSize: property.fontsize + "px",
-                            height: property.height + "px",
-                            width: property.width + "px",
-                            fontWeight: property.fontweight
-                        }}
                         >{option}</Label>
                     </div>
                 ))}
@@ -118,10 +112,9 @@ export function RadioFieldProperties({ id }) {
             label: property.label,
             required: property.required,
             options: property.options,
-            fontcolor: property.fontcolor,
+            headercolor: property.headercolor,
+            radiocolor:property.radiocolor,
             fontsize: property.fontsize,
-            height: property.height,
-            width: property.width,
             fontweight: property.fontweight
         },
     });
@@ -133,13 +126,17 @@ export function RadioFieldProperties({ id }) {
             required: property.required,
             placeholder: property.placeholder,
             options: property.options,
-            fontcolor: property.fontcolor,
+            headercolor: property.headercolor,
+            radiocolor:property.radiocolor,
             fontsize: property.fontsize,
-            height: property.height,
-            width: property.width,
             fontweight: property.fontweight
         });
     }, [form, property]);
+
+    const handleReset = () => {
+        form.reset(AttributesData);
+        dispatch(updateprop({ id, ...AttributesData }));
+    };
 
 
     const applyChanges = (formData) => {
@@ -253,10 +250,28 @@ export function RadioFieldProperties({ id }) {
                 {/* ======================================= */}
                 <FormField
                     control={form.control}
-                    name="fontcolor"
+                    name="headercolor"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Text color</FormLabel>
+                            <FormLabel>Header Color</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="color"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="radiocolor"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Radio Color</FormLabel>
                             <FormControl>
                                 <Input
                                     {...field}
@@ -311,9 +326,14 @@ export function RadioFieldProperties({ id }) {
                 />
                 {/* ======================================= */}
 
-                <Button className="w-full" type='submit'>
-                    save
-                </Button>
+                <div className="w-full flex justify-between">
+                    <Button type='submit' className='w-[40%]'>
+                        Save
+                    </Button>
+                    <Button type='button' className='w-[40%]' onClick={handleReset}>
+                        Reset
+                    </Button>
+                </div>
             </form>
         </Form>
     );

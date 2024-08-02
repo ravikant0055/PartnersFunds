@@ -12,6 +12,7 @@ import ExpressionBtn from '../PageHeader/ExpressionBtn';
 const FormBuilder = () => {
   const fetchedPageData = useSelector(state => state.page.fetchedPageData); // Selecting fetchedPageData from Redux state
   console.log("fetchedPageData",fetchedPageData);
+  console.log("fetchedPageData id",fetchedPageData[0]?.page_id);
    
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -31,7 +32,7 @@ const FormBuilder = () => {
             <div className='flex items-center gap-3'>
               <ExpressionBtn/>
               <PreviewDialogBtn/>
-              <SaveFormBtn/>
+              <SaveFormBtn id={fetchedPageData[0]?.page_id}/>
               <PublishFormBtn/>
             </div>
         </nav>

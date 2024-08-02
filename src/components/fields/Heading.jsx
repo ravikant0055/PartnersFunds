@@ -6,19 +6,29 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import { LuHeading1 } from "react-icons/lu";
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
+import { Button } from '../ui/button';
 
 const AttributesData = {
   label: "Heading",
-  fontsize: "16px",
-  fontweight: "300",
+  fontsize: 16,
+  fontweight: 500,
   fontcolor:""
 }
 
 const Heading = ({ id }) => {
+  console.log("txt id", id);
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(addprop({ id, ...AttributesData }));
+  }, [dispatch, id]);
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Label style={{ fontSize: property.fontsize + "px", fontWeight: property.fontweight, color:property.fontcolor }}>{property.label}</Label>
+      <Label style={{ fontSize: property.fontsize + "px", 
+                      fontWeight: property.fontweight, 
+                      color:property.fontcolor }}>
+              {property.label}
+      </Label>
     </div>
   )
 }
@@ -27,7 +37,11 @@ export function HeadingPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Label style={{ fontSize: property.fontsize + "px", fontWeight: property.fontweight, color:property.fontcolor }}>{property.label}</Label>
+      <Label style={{ fontSize: property.fontsize + "px", 
+                      fontWeight: property.fontweight, 
+                      color:property.fontcolor }}>
+              {property.label}
+      </Label>
     </div>
   )
 }
@@ -48,7 +62,7 @@ export function HeadingProperties({ id }) {
       label: property.label,
       fontsize: property.fontsize,
       fontweight: property.fontweight,
-      color:property.color
+      fontcolor:property.fontcolor
     },
   });
 
@@ -60,6 +74,11 @@ export function HeadingProperties({ id }) {
       fontcolor:property.fontcolor
     });
   }, [form, property]);
+
+  const handleReset = () => {
+    form.reset(AttributesData);
+    dispatch(updateprop({ id, ...AttributesData }));
+};
 
   const applyChanges = (formData) => {
     console.log("formdata", formData);
@@ -74,10 +93,7 @@ export function HeadingProperties({ id }) {
 
   return (
     <Form {...form}>
-      <form onBlur={form.handleSubmit(applyChanges)}
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
+      <form onSubmit={form.handleSubmit(applyChanges)}
         className="space-y-3"
       >
         <FormField
@@ -162,7 +178,14 @@ export function HeadingProperties({ id }) {
         />
 
         {/* ======================================== */}
-
+        <div className="w-full flex justify-between">
+                    <Button type='submit' className='w-[40%]'>
+                        Save
+                    </Button>
+                    <Button type='button' className='w-[40%]' onClick={handleReset}>
+                        Reset
+                    </Button>
+                </div>
 
       </form>
     </Form>

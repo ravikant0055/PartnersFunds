@@ -18,16 +18,19 @@ const AttributesData = {
     options: [],
     expression: true,
     color: "", // Default color
-    fontsize: "16px", // Default font color
-    height: 50, // Default height
-    width: "200px", // Default width
+    fontsize: 16, // Default font color
+    height: 20, // Default height
+    width: 500, // Default width
 }
 
 
 const SelectField = ({ id }) => {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
-    
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(addprop({ id, ...AttributesData }));
+      }, [dispatch, id]);
     
     return (
         <div className='flex flex-col gap-2 w-full' style={{

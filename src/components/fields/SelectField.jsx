@@ -204,6 +204,7 @@ export function SelectFieldProperties({ id }) {
                         </div>
                     </DialogTrigger>
 
+                    {/* Expression Code Start*/}
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Element Expression</DialogTitle>
@@ -271,6 +272,8 @@ export function SelectFieldProperties({ id }) {
                         </DialogFooter>
 
                     </DialogContent>
+                    {/* Expression Code End */}
+                    
                 </Dialog>
 
                 <FormField

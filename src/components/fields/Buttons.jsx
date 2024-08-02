@@ -10,10 +10,10 @@ import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 const AttributesData = {
   label: "Button",
   color: "", // Default color
-  fontsize: "16px", // Default font size
+  fontsize: 16, // Default font size
   fontcolor: "", // Default font color
-  height: "50px", // Default height
-  width: "200px", // Default width
+  height: 50, // Default height
+  width: 200, // Default width
   onclick: ""
 }
 
@@ -95,6 +95,11 @@ export function ButtonProperties({ id }) {
     });
   }, [form, property]);
 
+  const handleReset = () => {
+    form.reset(AttributesData);
+    dispatch(updateprop({ id, ...AttributesData }));
+};
+
   const applyChanges = (formData) => {
     console.log("formdata", formData);
     const existingProperty = property.id;
@@ -108,10 +113,7 @@ export function ButtonProperties({ id }) {
 
   return (
     <Form {...form}>
-      <form onBlur={form.handleSubmit(applyChanges)}
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
+      <form onSubmit={form.handleSubmit(applyChanges)}
         className="space-y-3"
       >
         <FormField
@@ -252,6 +254,14 @@ export function ButtonProperties({ id }) {
           )}
         />
 
+                <div className="w-full flex justify-between">
+                    <Button type='submit' className='w-[40%]'>
+                        Save
+                    </Button>
+                    <Button type='button' className='w-[40%]' onClick={handleReset}>
+                        Reset
+                    </Button>
+                </div>
 
       </form>
     </Form>

@@ -7,16 +7,17 @@ import { Switch } from '../ui/switch';
 import { MdTextFields } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
+import { Button } from '../ui/button';
 
 const AttributesData = {
   label: "Text field",
   required: true,
   placeholder: "value here...",
   color: "", // Default color
-  fontsize: "16px", // Default font size
+  fontsize: 16, // Default font size
   fontcolor: "", // Default font color
-  height: "50px", // Default height
-  width: "200px", // Default width
+  height: 50, // Default height
+  width: 200, // Default width
 }
 
 const TextFields = ({ id }) => {
@@ -95,15 +96,20 @@ export function TextProperties({ id }) {
       label: property.label,
       required: property.required,
       placeholder: property.placeholder,
+      color: property.color,
+      fontcolor:property.fontcolor,
+      fontSize: property.fontsize ,
+      height: property.height,
+      width: property.width 
      
-        color: property.color,
-        fontcolor:property.fontcolor,
-        fontSize: property.fontsize ,
-        height: property.height,
-        width: property.width 
     
     });
   }, [form, property]);
+
+  const handleReset = () => {
+    form.reset(AttributesData);
+    dispatch(updateprop({ id, ...AttributesData }));
+};
 
 
   const applyChanges = (formData) => {
@@ -119,10 +125,7 @@ export function TextProperties({ id }) {
 
   return (
     <Form {...form}>
-      <form onBlur={form.handleSubmit(applyChanges)}
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
+      <form onSubmit={form.handleSubmit(applyChanges)}
         className="space-y-3">
 
         <FormField
@@ -280,6 +283,15 @@ export function TextProperties({ id }) {
             </FormItem>
           )}
         />
+
+<div className="w-full flex justify-between">
+                    <Button type='submit' className='w-[40%]'>
+                        Save
+                    </Button>
+                    <Button type='button' className='w-[40%]' onClick={handleReset}>
+                        Reset
+                    </Button>
+                </div>
       </form>
     </Form>
   );

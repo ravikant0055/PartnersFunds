@@ -15,10 +15,10 @@ const SavePageSlice = createSlice({
         //   state[index] = { ...state[index], ...updatedPage };
         // }
         // return state;
-        const { id, JsonElements } = action.payload;
+        const { id, mergedArray } = action.payload;
         const index = state.findIndex((item) => item.id === id);
         if (index !== -1) {
-          state[index] = { id, JsonElements };
+          state[index] = { id, mergedArray };
         }
         return state;
       },

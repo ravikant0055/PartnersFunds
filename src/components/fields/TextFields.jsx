@@ -75,6 +75,31 @@ export function TextFieldsPreview({ id }) {
   )
 }
 
+export function TextFieldsPage({ properties, id }) {
+  console.log("txt id", id);
+  const property = properties;
+  return (
+    <div className='flex flex-col gap-2 w-full'>
+      <Label style={{
+        color: property.labelcolor,
+        fontSize: property.labelsize + "px"
+      }}
+
+      >
+        {property.label}
+        {property.required && <span className='text-red-600 font-bold'> *</span>}
+      </Label>
+      <Input placeholder={property.placeholder} style={{
+        fontSize: property.textsize + "px",
+        color: property.textcolor,
+        height: property.height + "px",
+        width: property.width + "px",
+      }} />
+    </div>
+  )
+}
+
+
 export const TextFieldFormElement = {
   type: "textfield",
   icon: MdTextFields,

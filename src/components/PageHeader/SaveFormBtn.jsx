@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addpage, updatepage } from '../../store/SavePageSlice';
 import { toast } from '../ui/use-toast';
 import { FaSpinner } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 
 const SaveFormBtn = ({ id }) => {
   const dispatch = useDispatch();
@@ -14,6 +15,9 @@ const SaveFormBtn = ({ id }) => {
   console.log("Savebuttomnfile", property);
   const page = useSelector((state) => state.savepage);
   console.log("page", page);
+  console.log("page", JSON.stringify(page));
+  console.log("myDATAAAAAAAAAAAAAAA",myData);
+
 
   const mergedArray = myData.map(item => {
     const { id, ...propertyData } = property.find(prop => prop.id === item.id) || {};
@@ -24,24 +28,28 @@ const SaveFormBtn = ({ id }) => {
     };
   });
 
+  const navigate = useNavigate();
+
   const formContent = async () => {
     try {
+      console.log("json data mergedArray",mergedArray);
       const JsonElements = JSON.stringify(mergedArray);
       console.log("json data",JsonElements);
       const existingPage = page.find(p => p.id === id);
       if (existingPage) {
-        dispatch(updatepage({ id, JsonElements }));
+        dispatch(updatepage({ id, mergedArray }));
         toast({
           title: "Success",
           description: "Your page has been updated",
         });
       } else {
-        dispatch(addpage({ id, JsonElements }));
+        dispatch(addpage({ id, mergedArray }));
         toast({
           title: "Success",
           description: "New page has been added",
         });
       }
+      navigate(`/`);
     } catch (error) {
       toast({
         title: "Error",

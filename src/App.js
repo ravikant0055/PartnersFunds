@@ -6,6 +6,7 @@ import Main from './components/Main';
 import ErrorPage from './components/builder/ErrorPage';
 import { Provider } from 'react-redux';
 import store from './store/store';
+import SubmitPage from './components/SubmitPage';
 
 
 function App() {
@@ -23,6 +24,10 @@ function App() {
         {
           path: "/page/:pageId",
           element: <Newpage/>,
+        },
+        {
+          path: "/submitPage",
+          element: <SubmitPage/>,
         }
       ],
     },

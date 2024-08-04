@@ -14,6 +14,7 @@ import { RadioFieldsPreview } from '../fields/RadioField'
 const PageElements = ({element}) => {
   console.log("page element:",element.type);
   console.log("page  id:",element.id);
+  console.log("elemt" , element);
   const pageData = {
     "textfield"      : <TextFieldsPreview id={element.id}/>,
     "textarea"       : <TextAreaFieldPreview id={element.id}/>,
@@ -27,6 +28,9 @@ const PageElements = ({element}) => {
     "togglefield"    : <ToggleFieldsPreview id={element.id}/>,
     "radiofield"     : <RadioFieldsPreview id={element.id} />
   }
+
+  
+
   return (
     <div>{pageData[element.type]}</div>
   )

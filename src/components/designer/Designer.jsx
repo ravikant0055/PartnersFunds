@@ -26,7 +26,7 @@ const Designer = () => {
 
   const myData = useSelector((state) => state.attribute);
   const {isOpen} = useSelector((state) => state.properties);
-  const pageId = useSelector((state) => state.page.fetchedPageData[0].page_id);
+  const pageId = useSelector((state) => state.page.fetchedPageData?.page_id);
   const dispatch = useDispatch();
 
   const handleDeleteElement = (id) => {

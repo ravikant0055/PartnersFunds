@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
@@ -35,6 +35,44 @@ const Heading = ({ id }) => {
 
 export function HeadingPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  return (
+    <div className='flex flex-col gap-2 w-full'>
+      <Label style={{ fontSize: property.fontsize + "px", 
+                      fontWeight: property.fontweight, 
+                      color:property.fontcolor }}>
+              {property.label}
+      </Label>
+    </div>
+  )
+}
+
+export function HeadingPage({ id, properties,submitValues }) {
+  // const property = properties;
+  const [values, setValues] = useState("");
+  const property = AttributesData;
+  
+  properties.forEach((item) => {
+    switch (item.property_name) {
+      case "label":
+        property.label = item.property_value;
+        break;
+      case "fontsize":
+        property.fontsize = item.property_value;
+        break;
+      case "fontweight":
+        // Handle font weight if needed
+        property.fontweight = item.property_value;
+        break;
+      case "fontcolor":
+        property.labelcolor = item.property_value;
+        break;
+      // Add more cases as needed for other properties
+      default:
+        break;
+    }
+  });
+  console.log("property.fontsize", property.fontsize);
+  
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label style={{ fontSize: property.fontsize + "px", 

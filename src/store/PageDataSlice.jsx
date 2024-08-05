@@ -8,6 +8,9 @@ const initialState = {
   fetchingPage: false,
   fetchedPageData: null,
   fetchPageError: null,
+  savingPage:false,
+  savedPageData:null,
+  savePageError:null
 };
 
 // Async thunk for creating a page
@@ -73,6 +76,26 @@ export const createAttribute = createAsyncThunk('page/createAttribute',
   }
 )
 
+export const addPageAsync = createAsyncThunk('savepage/addPage',
+  async (values, { rejectWithValue }) => {
+    try {
+      // const currentDate = new Date().toISOString().split('T')[0];
+      const { pageId, JsonElements } = values;
+      console.log("values before  Api :  ", pageId);
+      console.log("values before  Api :  ", JsonElements);
+      const response = await axios.post('http://localhost:8080/page/pagePropDetails', {
+        id:pageId,
+        JsonElements: JsonElements,
+      });
+      console.log("Saved page Slice",response.data);
+      return response.data; // Return data from successful API call
+
+    } catch (error) {
+      return rejectWithValue(error.message); // Return error message
+    }
+  }
+);
+
 // Create slice for handling page state
 const PageDataSlice = createSlice({
   name: 'page',
@@ -104,6 +127,19 @@ const PageDataSlice = createSlice({
       .addCase(fetchPageById.rejected, (state, action) => {
         state.fetchingPage = false;
         state.fetchPageError = action.payload;
+      })
+      .addCase(addPageAsync.pending, (state) => {
+        state.savingPage = true; // Add a property for tracking save status
+        state.savePageError = null;
+        state.savedPageData = null;
+      })
+      .addCase(addPageAsync.fulfilled, (state, action) => {
+        state.savingPage = false;
+        state.savedPageData = action.payload;
+      })
+      .addCase(addPageAsync.rejected, (state, action) => {
+        state.savingPage = false;
+        state.savePageError = action.payload;
       });
   },
 });

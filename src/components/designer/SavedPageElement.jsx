@@ -1,37 +1,37 @@
 import React from 'react'
-import { TextFieldsPage, TextFieldsPreview } from '../fields/TextFields'
-import { TextAreaFieldPreview } from '../fields/TextAreaField'
-import { HeadingPreview } from '../fields/Heading'
-import { ButtonsPreview } from '../fields/Buttons'
-import { DateFieldsPreview } from '../fields/DateField'
-import { SeparatorFieldsPreview } from '../fields/SaparatorField'
-import { SpacerFieldsPreview } from '../fields/SpacerField'
-import { CheckboxPreview } from '../fields/CheckboxField'
-import { SelectFieldsPreview } from '../fields/SelectField'
-import { ToggleFieldsPreview } from '../fields/ToggleField'
-import { RadioFieldsPreview } from '../fields/RadioField'
+import { TextFieldsPage } from '../fields/TextFields'
+import { TextAreaFieldPage } from '../fields/TextAreaField'
+import { HeadingPage } from '../fields/Heading'
+import { ButtonsPage } from '../fields/Buttons'
+import { DateFieldsPage } from '../fields/DateField'
+import { SeparatorFieldsPage } from '../fields/SaparatorField'
+import { SpacerFieldsPage } from '../fields/SpacerField'
+import { CheckboxPage } from '../fields/CheckboxField'
+import { SelectFieldsPage } from '../fields/SelectField'
+import { ToggleFieldsPage } from '../fields/ToggleField'
+import { RadioFieldsPage } from '../fields/RadioField'
 
-const SavedPageElement = ({element}) => {
+const SavedPageElement = ({element, submitValues}) => {
     console.log("Merger  : => ",element);
-  console.log("Type :",element.type);
+  console.log("Type :",element.attribute_type);
   const pageData = {
-    "textfield"      : <TextFieldsPage id={element.id} properties={element.properties}/>,
-    "textarea"       : <TextAreaFieldPreview id={element.id} properties={element.properties}/>,
-    "heading"        : <HeadingPreview id={element.id} properties={element.properties}/>,
-    "button"         : <ButtonsPreview id={element.id} properties={element.properties}/>,
-    "datefield"      : <DateFieldsPreview id={element.id} properties={element.properties}/>,
-    "separatorfield" : <SeparatorFieldsPreview id={element.id} properties={element.properties}/>,
-    "spacerfield"    : <SpacerFieldsPreview id={element.id} properties={element.properties}/>,
-    "checkbox"       : <CheckboxPreview id={element.id} properties={element.properties}/>,
-    "selectfield"    : <SelectFieldsPreview id={element.id} properties={element.properties}/>,
-    "togglefield"    : <ToggleFieldsPreview id={element.id} properties={element.properties}/>,
-    "radiofield"     : <RadioFieldsPreview id={element.id} properties={element.properties} />
+    "textfield"      : <TextFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues} />,
+    "textarea"       : <TextAreaFieldPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "heading"        : <HeadingPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "button"         : <ButtonsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "datefield"      : <DateFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "separatorfield" : <SeparatorFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "spacerfield"    : <SpacerFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "checkbox"       : <CheckboxPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "selectfield"    : <SelectFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "togglefield"    : <ToggleFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "radiofield"     : <RadioFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>
   }
 
   
 
   return (
-    <div>{pageData[element.type]}</div>
+    <div>{pageData[element.attribute_type]}</div>
   )
 }
 

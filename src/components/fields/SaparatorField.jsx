@@ -16,6 +16,10 @@ export function SeparatorFieldsPreview({id}) {
   return <Separator/>;
 }
 
+export function SeparatorFieldsPage({id, properties}) {
+  return <Separator/>;
+}
+
 export const SeparatorFormElement={
     type  : "separatorfield",
     icon  : RiSeparator,

@@ -6,6 +6,7 @@ import { addpage, updatepage } from '../../store/SavePageSlice';
 import { toast } from '../ui/use-toast';
 import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+import { addPageAsync } from '../../store/PageDataSlice';
 
 const SaveFormBtn = ({ id }) => {
   const dispatch = useDispatch();
@@ -35,20 +36,25 @@ const SaveFormBtn = ({ id }) => {
       console.log("json data mergedArray",mergedArray);
       const JsonElements = JSON.stringify(mergedArray);
       console.log("json data",JsonElements);
-      const existingPage = page.find(p => p.id === id);
-      if (existingPage) {
-        dispatch(updatepage({ id, mergedArray }));
-        toast({
-          title: "Success",
-          description: "Your page has been updated",
-        });
-      } else {
-        dispatch(addpage({ id, mergedArray }));
-        toast({
-          title: "Success",
-          description: "New page has been added",
-        });
+      // const existingPage = page.find(p => p.id === id);
+      const postdata ={
+        pageId:id,
+        JsonElements: JsonElements
       }
+      dispatch(addPageAsync(postdata));
+      // if (existingPage) {
+      //   dispatch(updatepage({ id, mergedArray }));
+      //   toast({
+      //     title: "Success",
+      //     description: "Your page has been updated",
+      //   });
+      // } else {
+      //   dispatch(addpage({ id, mergedArray }));
+      //   toast({
+      //     title: "Success",
+      //     description: "New page has been added",
+      //   });
+      // }
       navigate(`/`);
     } catch (error) {
       toast({

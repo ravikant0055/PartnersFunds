@@ -63,6 +63,28 @@ export function ButtonsPreview({ id }) {
   )
 }
 
+export function ButtonsPage({ id, properties }) {
+  const property = properties;
+  const alertFunc = () => {
+    console.log("Button Clicked", property.onclick);
+    };
+  return (
+    <div className='flex flex-col gap-2 w-full'>
+      <Button onClick={alertFunc}
+        style={{
+          backgroundColor: property.color,
+          color: property.fontcolor,
+          fontSize: property.fontsize + "px",
+          height: property.height + "px",
+          width: property.width + "px",
+        }}
+      >
+        {property.label}
+      </Button>
+    </div>
+  )
+}
+
 export const ButtonFormElement = {
   type: "button",
   icon: RxButton,

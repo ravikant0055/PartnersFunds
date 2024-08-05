@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
@@ -62,6 +62,67 @@ export function TextAreaFieldPreview({id}){
         height: property.height + "px",
         width: property.width + "px",
       }}/>
+    </div>
+  )
+}
+
+export function TextAreaFieldPage({id, properties , submitValues}){
+  const property = AttributesData;
+  const [values, setValues] = useState("");
+  properties.forEach((item) => {
+    switch (item.property_name) {
+      case "label":
+        property.label = item.property_value;
+        break;
+      case "require":
+        property.require = item.property_value;
+        break;
+      case "rows":
+        property.rows = item.property_value;
+        break;
+      case "placeholder":
+        property.placeholder = item.property_value;
+        break;
+      case "fontsize":
+        property.textsize = item.property_value;
+        break;
+      case "fontcolor":
+        property.fontcolor = item.property_value;
+        break;
+      case "color": // Assuming "color" is used interchangeably with "fontcolor"
+      property.color = item.property_value;
+        break;
+      case "height":
+        property.height = item.property_value;
+        break;
+      case "width":
+        property.width = item.property_value;
+        break;
+      // Add more cases as needed for other properties
+      default:
+        break;
+    }
+  });
+  return (
+    <div className='flex flex-col gap-2 w-full'>
+      <Label>
+           {property.label}
+           {property.require && <span className='text-red-600 font-bold'> *</span>}
+      </Label>
+      <Textarea placeholder={property.placeholder} rows={property.rows} style={{
+        color: property.color,
+        fontcolor:property.fontcolor,
+        fontSize: property.fontsize + "px",
+        height: property.height + "px",
+        width: property.width + "px",
+      }} 
+      onChange={(e)=> setValues(e.target.value)}
+      onBlur={(e)=>{
+        if(!submitValues) return;
+        submitValues(id, e.target.value)
+      }}
+      value={values}
+      />
     </div>
   )
 }

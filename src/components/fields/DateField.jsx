@@ -84,6 +84,46 @@ export function DateFieldsPreview({id}) {
   )
 }
 
+export function DateFieldsPage({id, properties}) {
+  const [date, setDate] = useState(); 
+
+  console.log("txt id",id);
+  const property = properties;
+  return (
+    <div className='flex flex-col gap-2 w-full'>
+      <Label>
+         {property.label}
+         {property.required && <span className='text-red-600 font-bold'> *</span>}
+      </Label>
+      <Popover>
+         <PopoverTrigger asChild>
+            <Button variant={"outline"} className={cn('w-full justify-start text-left font-normal',
+                !date && "text-muted-foreground"
+            )} >
+              <CalendarIcon className='mr-2 h-4 w-4'/>
+              {date ? format(date,"PPP") : <span>Pick a date</span>}
+            </Button>
+         </PopoverTrigger>
+         <PopoverContent className='w-auto p-0' align='start'>
+            <Calendar mode="single" selected={date}
+              onSelect={(date)=>{
+                  setDate(date);
+
+                //   if(!submitValue) return;
+
+                //   const value = date?.toUTCString() || "";
+                //   const valid = DateFieldFormElement.validate(element, value);
+                //   setError(!valid);
+                //   submitValue(element.id,value);
+              }}
+              initialFocus
+            />
+         </PopoverContent>
+      </Popover>
+    </div>
+  )
+}
+
 export const DateFieldFormElement = {
     type:"datefield",
     icon : BsCalendarDate,

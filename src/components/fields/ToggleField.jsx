@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
@@ -40,6 +40,30 @@ export function ToggleFieldsPreview({id}) {
   return (
     <div className='flex items-top space-x-2'>
             <Switch />
+            <div className='grid gap-1.5 leading-none'>
+                <Label>
+                    {property.label}
+                    {property.required && <span className='text-red-600 font-bold'> *</span>}
+                </Label>
+            </div>
+        </div>
+  )
+}
+
+export function ToggleFieldsPage({id, properties ,submitValues}) {
+  console.log("txt id",id);
+  const [values, setValues] = useState("");
+  const property = properties;
+  return (
+    <div className='flex items-top space-x-2'>
+            <Switch 
+            onChange={(e)=> setValues(e.target.value)}
+            onBlur={(e)=>{
+              if(!submitValues) return;
+              submitValues(id, e.target.value)
+            }}
+            value={values}
+            />
             <div className='grid gap-1.5 leading-none'>
                 <Label>
                     {property.label}

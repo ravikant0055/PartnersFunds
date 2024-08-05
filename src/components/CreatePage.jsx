@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { createPage, fetchPageById } from "../store/PageDataSlice";
+import { IoDocuments } from "react-icons/io5";
 
 const CreatePage = () => {
     const form = useForm();
@@ -20,6 +21,8 @@ const CreatePage = () => {
 
         try {
             const createdPage = await dispatch(createPage(values));
+            console.log("createdPage", createdPage.payload);
+            
             const pageId = createdPage.payload;
 
             if (createdPage) {
@@ -102,7 +105,7 @@ const CreatePage = () => {
                 className="group border border-primary/20 w-[350px] h-[190px] items-center justify-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4 mt-4"
                 onClick={() => navigate('/submitPage')}
             >
-                <BsFileEarmarkPlus className="h-8 w-8 text-muted-foreground group-hover:text-primary" />
+                <IoDocuments className="h-10 w-10 text-muted-foreground group-hover:text-primary" />
                 <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">Saved Pages</p>
             </Button>
         </div >

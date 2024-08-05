@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
@@ -43,7 +43,6 @@ const TextFields = ({ id }) => {
       <Input readOnly disabled placeholder={property.placeholder} style={{
         fontSize: property.textsize + "px",
         color: property.textcolor,
-        fontSize: property.fontsize + "px",
         height: property.height + "px",
         width: property.width + "px",
       }} />
@@ -75,9 +74,41 @@ export function TextFieldsPreview({ id }) {
   )
 }
 
-export function TextFieldsPage({ properties, id }) {
+export function TextFieldsPage({ properties, id, submitValues }) {
+  const [values, setValues] = useState("");
   console.log("txt id", id);
-  const property = properties;
+  const property = {
+    label: "",
+    labelcolor: "",
+    labelsize: "",
+    textcolor: "",
+    textsize: "",
+    height: "",
+    width: "",
+    placeholder: "",
+    required: false
+  };
+  
+  properties.forEach((item) => {
+    switch (item.property_name) {
+      case "label":
+        property.label = item.property_value;
+        break;
+      case "fontsize":
+        property.labelsize = item.property_value;
+        break;
+      case "fontweight":
+        // Handle font weight if needed
+        break;
+      case "fontcolor":
+        property.labelcolor = item.property_value;
+        break;
+      // Add more cases as needed for other properties
+      default:
+        break;
+    }
+  });
+  // const property = properties;
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label style={{
@@ -94,7 +125,14 @@ export function TextFieldsPage({ properties, id }) {
         color: property.textcolor,
         height: property.height + "px",
         width: property.width + "px",
-      }} />
+      }}
+      onChange={(e)=> setValues(e.target.value)}
+      onBlur={(e)=>{
+        if(!submitValues) return;
+        submitValues(id, e.target.value)
+      }}
+      value={values}
+      />
     </div>
   )
 }

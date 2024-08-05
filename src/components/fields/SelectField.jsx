@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
@@ -30,8 +30,8 @@ const SelectField = ({ id }) => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(addprop({ id, ...AttributesData }));
-      }, [dispatch, id]);
-    
+    }, [dispatch, id]);
+
     return (
         <div className='flex flex-col gap-2 w-full' style={{
             width: property.width + "px",
@@ -84,6 +84,79 @@ export function SelectFieldsPreview({ id }) {
     )
 }
 
+export function SelectFieldsPage({ id, properties, submitValues }) {
+    console.log("txt id", id);
+    const [values, setValues] = useState("");
+    const property = properties;
+    return (
+        <div className='flex flex-col gap-2 w-full' style={{
+            width: property.width + "px",
+        }} >
+            <Label style={{
+                color: property.color,
+                fontSize: property.fontsize + "px",
+                height: property.height + "px",
+            }}>
+                {property.label}
+                {property.required && <span className='text-red-600 font-bold'> *</span>}
+            </Label>
+            <Select>
+                <SelectTrigger>
+                    <SelectValue placeholder={property.placeholder} />
+                </SelectTrigger>
+                <SelectContent>
+                    {property.options.map((item) => (
+                        <SelectItem key={item} value={item} >
+                            {item}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+        </div>
+    )
+}
+
+// export function SelectFieldsPage({ id, properties, submitValues }) {
+//     const [values, setValues] = useState(""); // Initialize the state for selected value
+//     const property = properties;
+//     const handleChange = (e) => {
+//         const value = e.target.value;
+//         setValues(e.target.value);
+//         if (submitValues) {
+//             submitValues(id, e.target.value);
+//         }
+//     };
+
+//     return (
+//         <div className='flex flex-col gap-2 w-full' style={{ width: property.width + "px" }}>
+//             <Label style={{
+//                 color: property.color,
+//                 fontSize: property.fontsize + "px",
+//                 height: property.height + "px",
+//             }}>
+//                 {property.label}
+//                 {property.required && <span className='text-red-600 font-bold'> *</span>}
+//             </Label>
+//             <Select
+//                 onChange={handleChange}
+//                 value={values} 
+//             >
+//                 <SelectTrigger>
+//                     <SelectValue placeholder={property.placeholder} />
+//                 </SelectTrigger>
+//                 <SelectContent>
+//                     {property.options.map((item) => (
+//                         <SelectItem key={item} value={item}>
+//                             {item}
+//                         </SelectItem>
+//                     ))}
+//                 </SelectContent>
+//             </Select>
+//         </div>
+//     );
+// }
+
+
 export const SelectFieldFormElement = {
     type: "selectfield",
     icon: RxDropdownMenu,
@@ -95,7 +168,7 @@ export function SelectFieldProperties({ id }) {
     const dispatch = useDispatch();
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const expressionData = useSelector((state) => state.expressiondata);
-    console.log("expData" , expressionData.length);
+    console.log("expData", expressionData.length);
     console.log("property data", property);
 
     const form = useForm({
@@ -198,7 +271,7 @@ export function SelectFieldProperties({ id }) {
                         </FormItem>
                     )}
                 />
-                
+
                 <FormField
                     control={form.control}
                     name="expression"
@@ -222,8 +295,8 @@ export function SelectFieldProperties({ id }) {
                         </FormItem>
                     )}
                 />
-                
-                
+
+
                 <FormField
                     control={form.control}
                     name="options"

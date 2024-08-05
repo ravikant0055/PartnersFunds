@@ -12,7 +12,7 @@ import ExpressionBtn from '../PageHeader/ExpressionBtn';
 const FormBuilder = () => {
   const fetchedPageData = useSelector(state => state.page.fetchedPageData); // Selecting fetchedPageData from Redux state
   console.log("fetchedPageData",fetchedPageData);
-  console.log("fetchedPageData id",fetchedPageData[0]?.page_id);
+  console.log("fetchedPageData id",fetchedPageData?.page_id);
    
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -27,12 +27,12 @@ const FormBuilder = () => {
       <main className='flex flex-col w-full'>
         <nav className='flex justify-between border-b p-4 gap-3 items-center'>
           <h2 className='truncate font-medium'>
-              <span className='text-muted-foreground mr-2'>Page: {fetchedPageData[0]?.page_name}</span>
+              <span className='text-muted-foreground mr-2'>Page: {fetchedPageData?.page_name}</span>
           </h2>
             <div className='flex items-center gap-3'>
               <ExpressionBtn/>
               <PreviewDialogBtn/>
-              <SaveFormBtn id={fetchedPageData[0]?.page_id}/>
+              <SaveFormBtn id={fetchedPageData?.page_id}/>
               <PublishFormBtn/>
             </div>
         </nav>

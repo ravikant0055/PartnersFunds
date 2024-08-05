@@ -110,6 +110,48 @@ export function CheckboxPreview({ id }) {
     )
 }
 
+export function CheckboxPage({ id, properties }) {
+    const property = properties;
+    console.log("txt id", id);
+    return (
+        <div className='flex flex-col gap-2 w-full'>
+            <Label
+                style={{
+                    color: property.fontcolor,
+                    fontSize: property.fontsize + "px",
+                    height: property.height + "px",
+                    width: property.width + "px",
+                    fontWeight: property.fontweight
+                }}
+            >
+                {property.labelHeader}
+                {property.required && <span className='text-red-600 font-bold'> *</span>}
+            </Label>
+            {property.options.map((option, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                    <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`}
+                    style={{
+                        color: property.fontcolor,
+                        fontSize: property.fontsize + "px",
+                        height: property.height + "px",
+                        width: property.width + "px",
+                        fontWeight: property.fontweight
+                    }} />
+                    <Label htmlFor={`checkbox-${id}-${index}`}
+                        style={{
+                            color: property.fontcolor,
+                            fontSize: property.fontsize + "px",
+                            height: property.height + "px",
+                            width: property.width + "px",
+                            fontWeight: property.fontweight
+                        }}
+                    >{option}</Label>
+                </div>
+            ))}
+        </div>
+    )
+}
+
 export const CheckboxFormElement = {
     type: "checkbox",
     icon: IoMdCheckbox,

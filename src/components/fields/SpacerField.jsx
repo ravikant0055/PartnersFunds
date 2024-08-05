@@ -30,6 +30,14 @@ export function SpacerFieldsPreview({id}) {
   )
 }
 
+export function SpacerFieldsPage({id, properties}) {
+  const property = properties;
+  const height = property.height;
+  return (
+    <div style={{height ,width : "100px"}}></div>
+  )
+}
+
 export const SpacerFormElement={
     type:"spacerfield",
     icon : LuSeparatorHorizontal,

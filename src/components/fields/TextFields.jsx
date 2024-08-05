@@ -8,6 +8,7 @@ import { MdTextFields } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { Button } from '../ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const AttributesData = {
   label: "Text field",
@@ -18,6 +19,9 @@ const AttributesData = {
   fontcolor: "", // Default font color
   height: 50, // Default height
   width: 200, // Default width
+  labelposition : false,
+  disable: false,
+  value: ""
 }
 
 const TextFields = ({ id }) => {
@@ -31,10 +35,8 @@ const TextFields = ({ id }) => {
   }, [dispatch, id, property]);
   
   return (
-    <div className='flex flex-col gap-2 w-full'>
-      <Label
-      
-      >
+    <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full`}>
+      <Label>
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
@@ -44,7 +46,7 @@ const TextFields = ({ id }) => {
         fontSize: property.fontsize + "px",
         height: property.height + "px",
         width: property.width + "px",
-      }} />
+      }} className='border-black' />
     </div>
   )
 }
@@ -52,21 +54,61 @@ const TextFields = ({ id }) => {
 export function TextFieldsPreview({ id }) {
   console.log("txt id", id);
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const attributePropData = useSelector((state) => state.propertiesdata);
+  const dispatch = useDispatch();
+
+  console.log("Input preview value",property.value);
+
+  const evaluateConditions = (conditions, data) => {
+    if (!conditions || !conditions.length) return false;
+
+    return conditions.reduce((result, condition) => {
+      const attributeData = data.find(item => item.id === condition.attribute);
+      if (!attributeData) return result;
+
+      let conditionResult;
+      switch (condition.operator) {
+        case '==':
+          conditionResult = attributeData.value === condition.attvalues;
+          break;
+        case '!=':
+          conditionResult = attributeData.value !== condition.attvalues;
+          break;
+        // Add more operators as needed
+        default:
+          conditionResult = false;
+      }
+
+      if (condition.parentOperator === 'AND') {
+        return result && conditionResult;
+      } else if (condition.parentOperator === 'OR') {
+        return result || conditionResult;
+      } else {
+        return conditionResult;
+      }
+    }, true);
+  };
+
+  const disableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
+  const shouldDisable = evaluateConditions(disableConditions, attributePropData);
+
   return (
-    <div className='flex flex-col gap-2 w-full'>
-      <Label
-     
-      >
+    <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full`}>
+      <Label>
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
-      <Input placeholder={property.placeholder}  style={{
-        color: property.color,
-        fontcolor:property.fontcolor,
-        fontSize: property.fontsize + "px",
-        height: property.height + "px",
-        width: property.width + "px",
-      }} />
+      <Input disabled={shouldDisable}  placeholder={property.placeholder} 
+             value={property.value}
+             onChange={(e) => dispatch(updateprop({ id, value: e.target.value }))}
+             style={{
+                color: property.color,
+                fontcolor:property.fontcolor,
+                fontSize: property.fontsize + "px",
+                height: property.height + "px",
+                width: property.width + "px",
+                }} 
+      />
     </div>
   )
 }
@@ -81,6 +123,7 @@ export const TextFieldFormElement = {
 export function TextProperties({ id }) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const expressionData = useSelector((state) => state.expressiondata);
   console.log("property data", property);
 
   const form = useForm({
@@ -88,7 +131,9 @@ export function TextProperties({ id }) {
     defaultValues: {
       id: id,
       label: property.label,
+      labelposition : property.labelposition,
       required: property.required,
+      disable: property.disable,
       placeholder: property.placeholder,
       color: property.color,
       fontsize: property.fontsize,
@@ -101,15 +146,15 @@ export function TextProperties({ id }) {
   useEffect(() => {  // Reset form values to default when the component mounts
     form.reset({
       label: property.label,
+      labelposition : property.labelposition,
       required: property.required,
+      disable: property.disable,
       placeholder: property.placeholder,
       color: property.color,
       fontcolor:property.fontcolor,
       fontSize: property.fontsize ,
       height: property.height,
       width: property.width 
-     
-    
     });
   }, [form, property]);
 
@@ -148,6 +193,78 @@ export function TextProperties({ id }) {
                     if (e.key === "Enter") e.currentTarget.blur();
                   }}
                 />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+              control={form.control}
+              name="labelposition"
+              render={({ field }) => (
+                  <FormItem>
+                      <FormLabel>Label Position</FormLabel>
+                      <FormControl>
+                          <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={field.value ? 'Top' : 'Side'} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                        <SelectItem value="true">Top</SelectItem>
+                                        <SelectItem value="false">Side</SelectItem>
+                                </SelectContent>
+                          </Select>
+                      </FormControl>
+                  </FormItem>
+              )}
+         />
+
+        <FormField
+          control={form.control}
+          name="required"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Required</FormLabel>
+              <FormControl>
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Yes</SelectItem>
+                    <SelectItem value="false">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="disable"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Disable</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="select expression">
+                      {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    {expressionData?.map((item) => (
+                      <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
+                        {item.expressionname}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
             </FormItem>
           )}
@@ -276,20 +393,7 @@ export function TextProperties({ id }) {
 
         {/* ====================================== */}
 
-        <FormField
-          control={form.control}
-          name="required"
-          render={({ field }) => (
-            <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm ">
-              <div className="space-y-0.5">
-                <FormLabel>Required</FormLabel>
-              </div>
-              <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+                 
 
 <div className="w-full flex justify-between">
                     <Button type='submit' className='w-[40%]'>

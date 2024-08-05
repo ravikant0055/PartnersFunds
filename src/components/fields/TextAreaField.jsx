@@ -43,7 +43,8 @@ const TextAreaField = ({id}) => {
         fontSize: property.fontsize + "px",
         height: property.height + "px",
         width: property.width + "px",
-      }}/>
+      }} className='border-black'
+      />
       
     </div>
   )

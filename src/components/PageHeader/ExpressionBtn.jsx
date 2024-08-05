@@ -21,7 +21,6 @@ const ExpressionBtn = () => {
   const attributeData = useSelector((state) => state.propertiesdata);
   console.log("expressionData:", expressionData);
 
-  const arr=["button","input","radio"];
   const operator=["*","is","is not","==","!=","<",">"];
   const myvalue=["a","b","c"];
 

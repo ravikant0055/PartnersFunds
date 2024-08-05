@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { RxButton } from "react-icons/rx";
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const AttributesData = {
   label: "Button",
@@ -14,6 +15,7 @@ const AttributesData = {
   fontcolor: "", // Default font color
   height: 50, // Default height
   width: 200, // Default width
+  disable:false,
   onclick: ""
 }
 
@@ -45,12 +47,50 @@ const Buttons = ({ id }) => {
 
 export function ButtonsPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const attributePropData = useSelector((state) => state.propertiesdata);
+
   const alertFunc = () => {
     console.log("Button Clicked", property.onclick);
-    };
+  };
+
+  const evaluateConditions = (conditions, data) => {
+    if (!conditions || !conditions.length) return false;
+
+    return conditions.reduce((result, condition) => {
+      const attributeData = data.find(item => item.id === condition.attribute);
+      if (!attributeData) return result;
+
+      let conditionResult;
+      switch (condition.operator) {
+        case '==':
+          conditionResult = attributeData.value === condition.attvalues;
+          break;
+        case '!=':
+          conditionResult = attributeData.value !== condition.attvalues;
+          break;
+        // Add more operators as needed
+        default:
+          conditionResult = false;
+      }
+
+      if (condition.parentOperator === 'AND') {
+        return result && conditionResult;
+      } else if (condition.parentOperator === 'OR') {
+        return result || conditionResult;
+      } else {
+        return conditionResult;
+      }
+    }, true);
+  };
+
+  const disableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
+  const shouldDisable = evaluateConditions(disableConditions, attributePropData);  
+
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Button onClick={alertFunc}
+      <Button
+        disabled={shouldDisable}
+        onClick={alertFunc}
         style={{
           backgroundColor: property.color,
           color: property.fontcolor,
@@ -75,13 +115,15 @@ export const ButtonFormElement = {
 export function ButtonProperties({ id }) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
-
+  const expressionData = useSelector((state) => state.expressiondata);
+  
   const form = useForm({
     mode: "onBlur",
     defaultValues: {
       id: id,
       label: property.label,
       color: property.color,
+      disable:property.disable,
       fontsize: property.fontsize,
       fontcolor: property.fontcolor,
       height: property.height,
@@ -94,6 +136,7 @@ export function ButtonProperties({ id }) {
     form.reset({
       label: property.label,
       color: property.color,
+      disable:property.disable,
       fontsize: property.fontsize,
       fontcolor: property.fontcolor,
       height: property.height,
@@ -136,6 +179,36 @@ export function ButtonProperties({ id }) {
                     if (e.key === "Enter") e.currentTarget.blur();
                   }}
                 />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="disable"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Disable</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="select expression">
+                      {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    {expressionData?.map((item) => (
+                      <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
+                        {item.expressionname}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
             </FormItem>
           )}

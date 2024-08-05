@@ -241,7 +241,7 @@ function DesignerElementWrapper({ element, onDelete }) {
       {bottomHalf.isOver && <div className="absolute bottom-0 w-full rounded-md h-[7px] bg-primary rounded-t-none" />}
       <div
         className={cn(
-          "flex w-full py-4 h-fit items-center rounded-md bg-accent/40 px-4 pointer-events-none opacity-100",
+          "flex w-full py-4 h-fit items-center rounded-md px-4 pointer-events-none opacity-100",
           mouseIsOver && "opacity-30"
         )}
       >

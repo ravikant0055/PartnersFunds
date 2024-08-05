@@ -16,19 +16,26 @@ const AttributesData = {
     required: true,
     placeholder: "value here...",
     options: [],
-    expression: true,
+    disable: "no",
     color: "", // Default color
     fontsize: "16px", // Default font color
     height: 50, // Default height
     width: "200px", // Default width
+    
 }
 
 
 const SelectField = ({ id }) => {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
-    
-    
+    const dispatch = useDispatch();
+
+     useEffect(() => {
+        if (!property || property.id !== id) {
+            dispatch(addprop({ id, ...AttributesData }));
+        }
+     }, [dispatch, id, property]);
+
     return (
         <div className='flex flex-col gap-2 w-full' style={{
             width: property.width + "px",
@@ -53,6 +60,10 @@ const SelectField = ({ id }) => {
 export function SelectFieldsPreview({ id }) {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+    console.log("disvaeid",property.disable);
+
+    const shouldDisable = property.disable!== "no" && property.disable === "1108";
+    
     return (
         <div className='flex flex-col gap-2 w-full' style={{
             width: property.width + "px",
@@ -65,13 +76,13 @@ export function SelectFieldsPreview({ id }) {
                 {property.label}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            <Select>
+            <Select disabled={shouldDisable}>
                 <SelectTrigger>
                     <SelectValue placeholder={property.placeholder} />
                 </SelectTrigger>
                 <SelectContent>
-                    {property.options.map((item) => (
-                        <SelectItem key={item} value={item}>
+                    {property.options.map((item,index) => (
+                        <SelectItem key={index} value={item}>
                             {item}
                         </SelectItem>
                     ))}
@@ -103,7 +114,7 @@ export function SelectFieldProperties({ id }) {
             required: property.required,
             placeholder: property.placeholder,
             options: property.options,
-            expression: property.expression,
+            disable: property.disable,
             color: property.color,
             fontsize: property.fontsize,
             height: property.height,
@@ -117,7 +128,7 @@ export function SelectFieldProperties({ id }) {
             required: property.required,
             placeholder: property.placeholder,
             options: property.options,
-            expression: property.expression,
+            disable: property.disable,
             color: property.color,
             fontsize: property.fontsize,
             height: property.height,
@@ -198,18 +209,27 @@ export function SelectFieldProperties({ id }) {
                 
                 <FormField
                     control={form.control}
-                    name="expression"
+                    name="disable"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Expressions</FormLabel>
+                            <FormLabel>Disable</FormLabel>
                             <FormControl>
-                                <Select>
+                                <Select
+                                   value={field.value}
+                                   onValueChange={field.onChange}
+                                   >
                                     <SelectTrigger>
-                                        <SelectValue placeholder={"select expression"} />
+                                        <SelectValue placeholder="select expression">
+                                            {console.log("EXP name",expressionData.find((item) => item.expression_id === field.value)?.expressionname)}
+                                            {field.value==="no" ? "Don't Apply" : expressionData?.find((item) => item.expression_id === field.value)?.expressionname}
+                                        </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value="no">
+                                            Don't Apply
+                                        </SelectItem>
                                         {expressionData?.map((item) => (
-                                            <SelectItem key={item} value={item}>
+                                            <SelectItem key={item.expression_id} value={item.expression_id}>
                                                 {item.expressionname}
                                             </SelectItem>
                                         ))}

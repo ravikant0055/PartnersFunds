@@ -26,6 +26,13 @@ const AttributesData = {
 const CheckboxFields = ({ id }) => {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (!property || property.id !== id) {
+            dispatch(addprop({ id, ...AttributesData }));
+        }
+    }, [dispatch, id, property]);
+    
     const cid = `checkbox-${id}`;
     console.log("cid", cid);
     return (

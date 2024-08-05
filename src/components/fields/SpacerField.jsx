@@ -14,6 +14,13 @@ const AttributesData = {
 const SpacerFields = ({id}) => {
   console.log("txt id",id);
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const dispatch = useDispatch();
+    useEffect(() => {
+        if (!property || property.id !== id) {
+          dispatch(addprop({ id, ...AttributesData }));
+      }
+  }, [dispatch, id, property]);
+  
   return (
     <div className='flex flex-col gap-2 w-full items-center'>
       <Label className='text-muted-foreground'>Spacer field : {property.height}px </Label>
@@ -40,6 +47,7 @@ export const SpacerFormElement={
 export function SpacerProperties({id}) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  
   console.log("property data",property);
 
   const form = useForm({

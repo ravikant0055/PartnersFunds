@@ -26,6 +26,13 @@ const AttributesData = {
 const RadioField = ({ id }) => {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (!property || property.id !== id) {
+          dispatch(addprop({ id, ...AttributesData }));
+      }
+  }, [dispatch, id, property]);
+    
     const rid = `radio-${id}`;
     return (
         <div className='flex flex-col gap-2 w-full'>

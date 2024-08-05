@@ -19,6 +19,13 @@ const AttributesData = {
 
 const Buttons = ({ id }) => {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!property || property.id !== id) {
+        dispatch(addprop({ id, ...property }));
+    }
+  }, [ id, property]);
+
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Button

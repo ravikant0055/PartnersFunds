@@ -9,17 +9,20 @@ import { useForm } from 'react-hook-form';
 import { IoClose } from "react-icons/io5";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { useDispatch, useSelector } from 'react-redux';
-import { addexp } from '../../store/ExpressionSlice';
+import { addexp, removeexp } from '../../store/ExpressionSlice';
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+import { createExpression } from '../../store/PageDataSlice';
 
 const ExpressionBtn = () => {
   const [conditions, setConditions] = useState([{ attribute: '', operator: '', attvalues: '', parentOperator: null }]);
   const [isExplist, SetIsExplist] = useState(false);
   const expressionData = useSelector((state) => state.expressiondata);
+  const attributeData = useSelector((state) => state.propertiesdata);
+  console.log("expressionData:", expressionData);
 
   const arr=["button","input","radio"];
-  const operator=["equal","not equal","*"];
+  const operator=["*","is","is not","==","!=","<",">"];
   const myvalue=["a","b","c"];
 
   const dispatch = useDispatch();
@@ -31,27 +34,44 @@ const ExpressionBtn = () => {
     },
   });
 
-  const applyChanges = (formdata) => {
+  const removeExpression = (expId) => {
+       console.log("exp del id" ,expId);
+       dispatch(removeexp(expId));
+  }
+
+  const applyChanges = async (formdata) => {
     const updatedFormData = {
       ...formdata,
       conditions: conditions.map((item) => ({ ...item })),
     };
     console.log("form data", updatedFormData);
-    dispatch(addexp(updatedFormData));
+
+    try {
+      const res = await dispatch(createExpression(updatedFormData));
+      console.log("my expression api response",res);
+      const expID = res.payload.expression_ID;
+      const updatedFormDataWithID = {
+        ...updatedFormData,
+        expression_id: expID,
+      };
+      dispatch(addexp(updatedFormDataWithID));
+    }catch (error) {
+      console.error("Error creating attribute:", error);
+    }
+
     form.reset({
       expressionname: '',
       conditions: [{ attribute: '', operator: '', attvalues: '', parentOperator: null }],
     });
     setConditions([{ attribute: '', operator: '', attvalues: '', parentOperator: null }]);
   };
-
+  
   const handleConditionChange = (index, field, value) => {
     setConditions((prevConditions) =>
       prevConditions.map((condition, i) =>
         i === index ? { ...condition, [field]: value } : condition
       )
     );
-    //form.setValue(`conditions[${index}].${field}`, value); 
   };
 
   const addCondition = (index, parentOperator) => {
@@ -79,7 +99,7 @@ const ExpressionBtn = () => {
         </div>
       </DialogTrigger>
 
-      <DialogContent >
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Element Expression</DialogTitle>
           <div className='flex justify-between items-center'>
@@ -125,11 +145,11 @@ const ExpressionBtn = () => {
                                 <SelectValue placeholder="Select" />
                               </SelectTrigger>
                               <SelectContent>
-                                {arr.map((item) => (
-                                  <SelectItem key={item} value={item}>
-                                    {item}
-                                  </SelectItem>
-                                ))}
+                                  {attributeData?.map((item) => (
+                                    <SelectItem key={item.id} value={item.id}>
+                                        {item.label}
+                                    </SelectItem>
+                                  ))}
                               </SelectContent>
                             </Select>
                           </FormControl>
@@ -218,14 +238,14 @@ const ExpressionBtn = () => {
         (
           expressionData?.map((item,index)=>(
             <div key={index}>
-                <div className='flex gap-4 justify-between'>
-                  <div className='flex gap-2'>
-                    <h1>{index+1}</h1>
+                <div className='flex gap-4 justify-between items-center'>
+                  <div className='flex gap-2 bg-slate-100 w-full px-2 py-1 rounded-sm'>
+                    <h1>{index+1 +"."}</h1>
                     <h1>{item.expressionname}</h1>
                   </div>
                   <div className='flex gap-5'>
-                   <CiEdit className="h-6 w-6 text-cyan-700" />
-                   <MdDelete className="h-6 w-6 text-red-500" />
+                   <CiEdit className="h-6 w-6 text-cyan-700 cursor-pointer" />
+                   <MdDelete onClick={() => removeExpression(item.expression_id)} className="h-6 w-6 text-red-500 cursor-pointer" />
                   </div>
                 </div>
             </div>
@@ -233,6 +253,7 @@ const ExpressionBtn = () => {
         )
       }
       </DialogContent>
+      
     </Dialog>
   );
 };

@@ -73,6 +73,47 @@ export const createAttribute = createAsyncThunk('page/createAttribute',
   }
 )
 
+
+//create aexpression by name and value to generate expression id 
+export const createExpression = createAsyncThunk('page/createExpression',
+  async (values, { rejectWithValue }) => {
+    console.log("exp value",values);
+    try {
+      const currentDate = new Date().toISOString().split('T')[0];
+      const { expressionname, conditions } = values;
+
+      const Exp_attribute_data = conditions.map(condition => ({
+        ATTRIBUTE_ID: condition.attribute,
+        EXP_OPERATOR: condition.operator,
+        VALUE: condition.attvalues,
+        PARENT_OPERATOR: condition.parentOperator,
+        CREATED_BY: "Ravi",
+        CREATION_DATE: currentDate,
+        LAST_UPDATED_BY: "Ravi",
+        LAST_UPDATE_DATE: currentDate
+      }));
+
+      console.log("exp post array data",Exp_attribute_data);
+      
+
+      const response = await axios.post('http://localhost:8080/api/expressions', {
+            EXPRESSION_NAME: expressionname,
+            Exp_attribute_data: Exp_attribute_data,
+            CREATED_BY:"Ravi",
+            CREATION_DATE:currentDate,
+            LAST_UPDATED_BY:"Ravi",
+            LAST_UPDATE_DATE:currentDate
+      });
+      return response.data;
+
+    } catch (error) {
+      return rejectWithValue(error.message); // Return error message
+    }
+  }
+)
+
+
+
 // Create slice for handling page state
 const PageDataSlice = createSlice({
   name: 'page',

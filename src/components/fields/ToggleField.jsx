@@ -16,6 +16,13 @@ const AttributesData = {
 const ToggleField = ({id}) => {
   console.log("txt id",id);
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const dispatch = useDispatch();
+    useEffect(() => {
+        if (!property || property.id !== id) {
+          dispatch(addprop({ id, ...AttributesData }));
+      }
+  }, [dispatch, id, property]);
+  
   return (
     <div className='flex items-top space-x-2'>
             <Switch />

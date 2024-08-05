@@ -16,6 +16,13 @@ const AttributesData = {
 
 const Heading = ({ id }) => {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const dispatch = useDispatch();
+    useEffect(() => {
+        if (!property || property.id !== id) {
+          dispatch(addprop({ id, ...AttributesData }));
+      }
+  }, [dispatch, id, property]);
+  
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label style={{ fontSize: property.fontsize + "px", fontWeight: property.fontweight, color:property.fontcolor }}>{property.label}</Label>

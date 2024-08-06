@@ -21,6 +21,10 @@ import SelectField from "../fields/SelectField";
 import ToggleField from "../fields/ToggleField";
 import RadioField from "../fields/RadioField";
 import { deleteprop } from "src/store/AttributePropDataSlice";
+import Barchart from "../fields/BarChart";
+import Linechart from "../fields/LineChart";
+import Piechart from "../fields/PieChart";
+import Radarchart from "../fields/RadarChart";
 
 const Designer = () => {
 
@@ -188,7 +192,11 @@ function DesignerElementWrapper({ element, onDelete }) {
     checkbox        : <CheckboxFields id={element.id}/>,
     selectfield     : <SelectField id={element.id}/>,
     togglefield     : <ToggleField id={element.id}/>,
-    radiofield      : <RadioField id={element.id} />
+    radiofield      : <RadioField id={element.id} />,
+    barchart        : <Barchart id={element.id}/>,
+    linechart       : <Linechart id={element.id}/>,
+    piechart        : <Piechart id={element.id}/>,
+    radarchart      : <Radarchart id={element.id}/>,
   };
 
   if(draggable.isDragging) return null;

@@ -10,6 +10,10 @@ import { CheckboxPreview } from '../fields/CheckboxField'
 import { SelectFieldsPreview } from '../fields/SelectField'
 import { ToggleFieldsPreview } from '../fields/ToggleField'
 import { RadioFieldsPreview } from '../fields/RadioField'
+import { BarchartPreview } from '../fields/BarChart'
+import { LinechartPreview } from '../fields/LineChart'
+import { PiechartPreview } from '../fields/PieChart'
+import { RadarchartPreview } from '../fields/RadarChart'
 
 const PageElements = ({element}) => {
   console.log("page element:",element.type);
@@ -25,7 +29,11 @@ const PageElements = ({element}) => {
     "checkbox"       : <CheckboxPreview id={element.id}/>,
     "selectfield"    : <SelectFieldsPreview id={element.id}/>,
     "togglefield"    : <ToggleFieldsPreview id={element.id}/>,
-    "radiofield"     : <RadioFieldsPreview id={element.id} />
+    "radiofield"     : <RadioFieldsPreview id={element.id} />,
+    "barchart"       : <BarchartPreview id={element.id}/>,
+    "linechart"      : <LinechartPreview id={element.id}/>,
+    "piechart"       : <PiechartPreview id={element.id}/>,
+    "radarchart"     : <RadarchartPreview id={element.id}/>,
   }
   return (
     <div>{pageData[element.type]}</div>

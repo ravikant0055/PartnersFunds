@@ -13,6 +13,10 @@ import CheckboxFields, { CheckboxFormElement } from './fields/CheckboxField';
 import SelectField, { SelectFieldFormElement } from './fields/SelectField';
 import ToggleField, { ToggleFieldFormElement } from './fields/ToggleField';
 import RadioField, { RadioFieldFormElement } from './fields/RadioField';
+import Barchart, { BarchartFormElement } from './fields/BarChart';
+import Linechart, { LinechartFormElement } from './fields/LineChart';
+import Piechart, { PiechartFormElement } from './fields/PieChart';
+import Radarchart, { RadarchartFormElement } from './fields/RadarChart';
 
 
 function DragOverlayWrapper() {
@@ -51,7 +55,11 @@ function DragOverlayWrapper() {
             "checkbox"       : CheckboxFormElement,
             "selectfield"    : SelectFieldFormElement,
             "togglefield"    : ToggleFieldFormElement,
-            "radiofield"     : RadioFieldFormElement
+            "radiofield"     : RadioFieldFormElement,
+            "barchart"       : BarchartFormElement,
+            "linechart"      : LinechartFormElement,
+            "piechart"       : PiechartFormElement,
+            "radarchart"     : RadarchartFormElement
 
         }
         node = <SideBarBtnElementDragOverlay formelement={formelement[type]}/>;
@@ -72,7 +80,11 @@ function DragOverlayWrapper() {
         "checkbox"          : <CheckboxFields/>,
         "selectfield"       : <SelectField />,
         "togglefield"       : <ToggleField/>,
-        "radiofield"        : <RadioField/>
+        "radiofield"        : <RadioField/>,
+        "barchart"          : <Barchart/>,
+        "linechart"         : <Linechart/>,
+        "piechart"          : <Piechart/>,
+        "radarhart"         : <Radarchart/>
        }
 
        console.log("2ndtype",type);

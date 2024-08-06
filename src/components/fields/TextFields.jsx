@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { toast } from '../ui/use-toast';
 
 const AttributesData = {
   label: "Text field",
@@ -74,6 +75,12 @@ export function TextFieldsPreview({ id }) {
         case '!=':
           conditionResult = attributeData.value !== condition.attvalues;
           break;
+        case '>':
+            conditionResult = attributeData.value > condition.attvalues;
+          break;
+        case '<':
+            conditionResult = attributeData.value < condition.attvalues;
+          break;  
         // Add more operators as needed
         default:
           conditionResult = false;
@@ -169,6 +176,7 @@ export function TextProperties({ id }) {
     const existingProperty = property.id;
     if (existingProperty) {
       dispatch(updateprop({ id, ...formData }));
+      
     } else {
       dispatch(addprop({ id, ...formData }));
     }
@@ -395,7 +403,7 @@ export function TextProperties({ id }) {
 
                  
 
-<div className="w-full flex justify-between">
+                <div className="w-full flex justify-between">
                     <Button type='submit' className='w-[40%]'>
                         Save
                     </Button>

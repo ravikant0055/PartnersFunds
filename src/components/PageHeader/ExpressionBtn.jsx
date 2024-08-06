@@ -22,7 +22,6 @@ const ExpressionBtn = () => {
   console.log("expressionData:", expressionData);
 
   const operator=["*","is","is not","==","!=","<",">"];
-  const myvalue=["a","b","c"];
 
   const dispatch = useDispatch();
 
@@ -187,18 +186,7 @@ const ExpressionBtn = () => {
                         <FormItem>
                           <FormLabel>Values</FormLabel>
                           <FormControl>
-                            <Select value={condition.attvalues}  onValueChange={(value) => handleConditionChange(index, 'attvalues', value)}>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {myvalue.map((item) => (
-                                  <SelectItem key={item} value={item}>
-                                    {item}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                            <Input {...field} />
                           </FormControl>
                         </FormItem>
                       )}

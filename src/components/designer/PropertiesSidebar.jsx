@@ -14,6 +14,10 @@ import { CheckboxProperties } from '../fields/CheckboxField';
 import { SelectFieldProperties } from '../fields/SelectField';
 import { ToggleProperties } from '../fields/ToggleField';
 import { RadioFieldProperties } from '../fields/RadioField';
+import { BarchartProperties } from '../fields/BarChart';
+import { LinechartProperties } from '../fields/LineChart';
+import { PiechartProperties } from '../fields/PieChart';
+import { RadarchartProperties } from '../fields/RadarChart';
 
 const PropertiesSidebar = ({selectedElement}) => {
   const dispatch = useDispatch();
@@ -35,7 +39,11 @@ const PropertiesSidebar = ({selectedElement}) => {
       "checkbox"       : <CheckboxProperties id={id}/>,
       "selectfield"    : <SelectFieldProperties id={id}/>,
       "togglefield"    : <ToggleProperties id={id}/>,
-      "radiofield"     : <RadioFieldProperties id={id} />
+      "radiofield"     : <RadioFieldProperties id={id} />,
+      "barchart"       : <BarchartProperties id={id}/>,
+      "linechart"      : <LinechartProperties id={id}/>,
+      "piechart"       : <PiechartProperties id={id}/>,
+      "radarchart"     : <RadarchartProperties id={id}/>
   }
 
   return (

@@ -11,6 +11,8 @@ import { CheckboxFormElement } from '../fields/CheckboxField'
 import { SelectFieldFormElement } from '../fields/SelectField'
 import { ToggleFieldFormElement } from '../fields/ToggleField'
 import { RadioFieldFormElement } from '../fields/RadioField'
+import { ImageFormElement } from '../fields/Image'
+import { IconFormElement } from '../fields/Icon'
 
 const FormElementsSidebar = () => {
   return (
@@ -30,6 +32,8 @@ const FormElementsSidebar = () => {
           <SideBarBtnElement formelement={SelectFieldFormElement} />
           <SideBarBtnElement formelement={ToggleFieldFormElement} />
           <SideBarBtnElement formelement={RadioFieldFormElement} />
+          <SideBarBtnElement formelement={ImageFormElement} />
+          <SideBarBtnElement formelement={IconFormElement} />
         </div>
     </div>
   )

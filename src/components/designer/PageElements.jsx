@@ -10,6 +10,8 @@ import { CheckboxPreview } from '../fields/CheckboxField'
 import { SelectFieldsPreview } from '../fields/SelectField'
 import { ToggleFieldsPreview } from '../fields/ToggleField'
 import { RadioFieldsPreview } from '../fields/RadioField'
+import { ImageFieldPreview } from '../fields/Image'
+import { IconFieldPreview } from '../fields/Icon'
 
 const PageElements = ({element}) => {
   console.log("page element:",element.type);
@@ -25,7 +27,9 @@ const PageElements = ({element}) => {
     "checkbox"       : <CheckboxPreview id={element.id}/>,
     "selectfield"    : <SelectFieldsPreview id={element.id}/>,
     "togglefield"    : <ToggleFieldsPreview id={element.id}/>,
-    "radiofield"     : <RadioFieldsPreview id={element.id} />
+    "radiofield"     : <RadioFieldsPreview id={element.id} />,
+    "image"          : <ImageFieldPreview id={element.id} />,
+    "icon"           : <IconFieldPreview id={element.id} />
   }
   return (
     <div>{pageData[element.type]}</div>

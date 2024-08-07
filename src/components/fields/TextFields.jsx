@@ -3,7 +3,6 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
-import { Switch } from '../ui/switch';
 import { MdTextFields } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
@@ -21,7 +20,7 @@ const AttributesData = {
   textcolor: "", // Default font color
   height: 50, // Default height
   width: 500, // Default width
-  labelposition : false,
+  labelposition: false,
   disable: false,
   value: ""
 }
@@ -29,18 +28,19 @@ const AttributesData = {
 const TextFields = ({ id }) => {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
-    useEffect(() => {
-        if (!property || property.id !== id) {
-          dispatch(addprop({ id, ...AttributesData }));
-      }
+  useEffect(() => {
+    if (!property || property.id !== id) {
+      dispatch(addprop({ id, ...AttributesData }));
+    }
   }, [dispatch, id, property]);
-  
+
   return (
-    <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full`}>
+    <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full`}>
       <Label
-      style={{
-        color: property.labelcolor,
-        fontSize: property.labelsize + "px"}}
+        style={{
+          color: property.labelcolor,
+          fontSize: property.labelsize + "px"
+        }}
       >
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
@@ -61,7 +61,7 @@ export function TextFieldsPreview({ id }) {
   const attributePropData = useSelector((state) => state.propertiesdata);
   const dispatch = useDispatch();
 
-  console.log("Input preview value",property.value);
+  console.log("Input preview value", property.value);
 
   const evaluateConditions = (conditions, data) => {
     if (!conditions || !conditions.length) return false;
@@ -79,11 +79,11 @@ export function TextFieldsPreview({ id }) {
           conditionResult = attributeData.value !== condition.attvalues;
           break;
         case '>':
-            conditionResult = attributeData.value > condition.attvalues;
+          conditionResult = attributeData.value > condition.attvalues;
           break;
         case '<':
-            conditionResult = attributeData.value < condition.attvalues;
-          break;  
+          conditionResult = attributeData.value < condition.attvalues;
+          break;
         // Add more operators as needed
         default:
           conditionResult = false;
@@ -103,25 +103,26 @@ export function TextFieldsPreview({ id }) {
   const shouldDisable = evaluateConditions(disableConditions, attributePropData);
 
   return (
-    <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full`}>
+    <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full`}>
       <Label
-      style={{
-        color: property.labelcolor,
-        fontSize: property.labelsize + "px"}}
+        style={{
+          color: property.labelcolor,
+          fontSize: property.labelsize + "px"
+        }}
       >
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
-      <Input disabled={shouldDisable}  placeholder={property.placeholder} 
-             value={property.value}
-             onChange={(e) => dispatch(updateprop({ id, value: e.target.value }))}
-             style={{
-                color: property.color,
-                fontcolor:property.fontcolor,
-                fontSize: property.fontsize + "px",
-                height: property.height + "px",
-                width: property.width + "px",
-                }} 
+      <Input disabled={shouldDisable} placeholder={property.placeholder}
+        value={property.value}
+        onChange={(e) => dispatch(updateprop({ id, value: e.target.value }))}
+        style={{
+          color: property.color,
+          fontcolor: property.fontcolor,
+          fontSize: property.fontsize + "px",
+          height: property.height + "px",
+          width: property.width + "px",
+        }}
       />
     </div>
   )
@@ -130,33 +131,37 @@ export function TextFieldsPreview({ id }) {
 export function TextFieldsPage({ properties, id, submitValues }) {
   const [values, setValues] = useState("");
   console.log("txt id", id);
-  const property = {
-    label: "",
-    labelcolor: "",
-    labelsize: "",
-    textcolor: "",
-    textsize: "",
-    height: "",
-    width: "",
-    placeholder: "",
-    required: false
-  };
-  
+  const property = AttributesData;
+
   properties.forEach((item) => {
     switch (item.property_name) {
       case "label":
         property.label = item.property_value;
         break;
-      case "fontsize":
-        property.labelsize = item.property_value;
+      case "required":
+        property.required = item.property_value;
         break;
-      case "fontweight":
-        // Handle font weight if needed
+      case "placeholder":
+        property.placeholder = item.property_value;
         break;
-      case "fontcolor":
+      case "labelcolor":
         property.labelcolor = item.property_value;
         break;
-      // Add more cases as needed for other properties
+      case "labelsize":
+        property.labelsize = item.property_value;
+        break;
+      case "textsize":
+        property.textsize = item.property_value;
+        break;
+      case "textcolor":
+        property.textcolor = item.property_value;
+        break;
+      case "height":
+        property.height = item.property_value;
+        break;
+      case "width":
+        property.width = item.property_value;
+        break;
       default:
         break;
     }
@@ -179,12 +184,12 @@ export function TextFieldsPage({ properties, id, submitValues }) {
         height: property.height + "px",
         width: property.width + "px",
       }}
-      onChange={(e)=> setValues(e.target.value)}
-      onBlur={(e)=>{
-        if(!submitValues) return;
-        submitValues(id, e.target.value)
-      }}
-      value={values}
+        onChange={(e) => setValues(e.target.value)}
+        onBlur={(e) => {
+          if (!submitValues) return;
+          submitValues(id, e.target.value)
+        }}
+        value={values}
       />
     </div>
   )
@@ -209,7 +214,7 @@ export function TextProperties({ id }) {
     defaultValues: {
       id: id,
       label: property.label,
-      labelposition : property.labelposition,
+      labelposition: property.labelposition,
       required: property.required,
       disable: property.disable,
       placeholder: property.placeholder,
@@ -225,7 +230,7 @@ export function TextProperties({ id }) {
   useEffect(() => {  // Reset form values to default when the component mounts
     form.reset({
       label: property.label,
-      labelposition : property.labelposition,
+      labelposition: property.labelposition,
       required: property.required,
       disable: property.disable,
       placeholder: property.placeholder,
@@ -234,7 +239,7 @@ export function TextProperties({ id }) {
       textsize: property.textsize,
       labelsize: property.labelsize,
       height: property.height,
-      width: property.width 
+      width: property.width
     });
   }, [form, property]);
 
@@ -249,7 +254,7 @@ export function TextProperties({ id }) {
     const existingProperty = property.id;
     if (existingProperty) {
       dispatch(updateprop({ id, ...formData }));
-      
+
     } else {
       dispatch(addprop({ id, ...formData }));
     }
@@ -280,25 +285,25 @@ export function TextProperties({ id }) {
         />
 
         <FormField
-              control={form.control}
-              name="labelposition"
-              render={({ field }) => (
-                  <FormItem>
-                      <FormLabel>Label Position</FormLabel>
-                      <FormControl>
-                          <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder={field.value ? 'Top' : 'Side'} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                        <SelectItem value="true">Top</SelectItem>
-                                        <SelectItem value="false">Side</SelectItem>
-                                </SelectContent>
-                          </Select>
-                      </FormControl>
-                  </FormItem>
-              )}
-         />
+          control={form.control}
+          name="labelposition"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Label Position</FormLabel>
+              <FormControl>
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Top' : 'Side'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Top</SelectItem>
+                    <SelectItem value="false">Side</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -495,9 +500,9 @@ export function TextProperties({ id }) {
 
         {/* ====================================== */}
 
-                 
 
-                        <div className="w-full flex justify-between">
+
+        <div className="w-full flex justify-between">
           <Button type='submit' className='w-[40%]'>
             Save
           </Button>

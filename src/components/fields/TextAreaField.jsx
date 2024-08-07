@@ -10,67 +10,64 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 
 const AttributesData = {
-  label:"Text Area",
+  label: "Text Area",
   require: true,
   placeholder: "value here...",
   rows: 3,
-  color: "", // Default color
   fontsize: "16px", // Default font size
   fontcolor: "", // Default font color
   height: "50px", // Default height
   width: "200px", // Default width
 }
 
-const TextAreaField = ({id}) => {
+const TextAreaField = ({ id }) => {
   console.log("txt id", id);
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
-    useEffect(() => {
-        if (!property || property.id !== id) {
-          dispatch(addprop({ id, ...AttributesData }));
-      }
+  useEffect(() => {
+    if (!property || property.id !== id) {
+      dispatch(addprop({ id, ...AttributesData }));
+    }
   }, [dispatch, id, property]);
-  
+
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label>
-           {property.label}
-           {property.required && <span className='text-red-600 font-bold'> *</span>}
+        {property.label}
+        {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
 
       <Textarea readOnly disabled placeholder={property.placeholder} rows={property.rows} style={{
-        color: property.color,
-        fontcolor:property.fontcolor,
+        fontcolor: property.fontcolor,
         fontSize: property.fontsize + "px",
         height: property.height + "px",
         width: property.width + "px",
       }} className='border-black'
       />
-      
+
     </div>
   )
 }
 
-export function TextAreaFieldPreview({id}){
+export function TextAreaFieldPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label>
-           {property.label}
-           {property.required && <span className='text-red-600 font-bold'> *</span>}
+        {property.label}
+        {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
       <Textarea placeholder={property.placeholder} rows={property.rows} style={{
-        color: property.color,
-        fontcolor:property.fontcolor,
+        fontcolor: property.fontcolor,
         fontSize: property.fontsize + "px",
         height: property.height + "px",
         width: property.width + "px",
-      }}/>
+      }} />
     </div>
   )
 }
 
-export function TextAreaFieldPage({id, properties , submitValues}){
+export function TextAreaFieldPage({ id, properties, submitValues }) {
   const property = AttributesData;
   const [values, setValues] = useState("");
   properties.forEach((item) => {
@@ -93,9 +90,6 @@ export function TextAreaFieldPage({id, properties , submitValues}){
       case "fontcolor":
         property.fontcolor = item.property_value;
         break;
-      case "color": // Assuming "color" is used interchangeably with "fontcolor"
-      property.color = item.property_value;
-        break;
       case "height":
         property.height = item.property_value;
         break;
@@ -110,35 +104,34 @@ export function TextAreaFieldPage({id, properties , submitValues}){
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label>
-           {property.label}
-           {property.require && <span className='text-red-600 font-bold'> *</span>}
+        {property.label}
+        {property.require && <span className='text-red-600 font-bold'> *</span>}
       </Label>
       <Textarea placeholder={property.placeholder} rows={property.rows} style={{
-        color: property.color,
-        fontcolor:property.fontcolor,
+        fontcolor: property.fontcolor,
         fontSize: property.fontsize + "px",
         height: property.height + "px",
         width: property.width + "px",
-      }} 
-      onChange={(e)=> setValues(e.target.value)}
-      onBlur={(e)=>{
-        if(!submitValues) return;
-        submitValues(id, e.target.value)
       }}
-      value={values}
+        onChange={(e) => setValues(e.target.value)}
+        onBlur={(e) => {
+          if (!submitValues) return;
+          submitValues(id, e.target.value)
+        }}
+        value={values}
       />
     </div>
   )
 }
 
-export const TextAreaFormElement={
-    type:"textarea",
-    icon : BsTextareaResize,
-    label : "Text Area"
+export const TextAreaFormElement = {
+  type: "textarea",
+  icon: BsTextareaResize,
+  label: "Text Area"
 }
 
 
-export function TextAreaProperties({id}) {
+export function TextAreaProperties({ id }) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const form = useForm({
@@ -148,13 +141,12 @@ export function TextAreaProperties({id}) {
       label: property.label,
       required: property.required,
       placeholder: property.placeholder,
-      rows:property.rows,
-        color: property.color,
-        fontcolor:property.fontcolor,
-        fontsize: property.fontsize ,
-        height: property.height ,
-        width: property.width ,
-     
+      rows: property.rows,
+      fontcolor: property.fontcolor,
+      fontsize: property.fontsize,
+      height: property.height,
+      width: property.width,
+
     },
   });
 
@@ -164,16 +156,15 @@ export function TextAreaProperties({id}) {
       required: property.required,
       placeholder: property.placeholder,
       rows: property.rows,
-      color: property.color,
-        fontcolor:property.fontcolor,
-        fontsize: property.fontsize ,
-        height: property.height ,
-        width: property.width ,
+      fontcolor: property.fontcolor,
+      fontsize: property.fontsize,
+      height: property.height,
+      width: property.width,
     });
   }, [form, property]);
 
   const applyChanges = (formData) => {
-    console.log("formdata",formData);
+    console.log("formdata", formData);
     const existingProperty = property.id;
     if (existingProperty) {
       dispatch(updateprop({ id, ...formData }));
@@ -271,7 +262,7 @@ export function TextAreaProperties({id}) {
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name="height"
           render={({ field }) => (
@@ -292,27 +283,7 @@ export function TextAreaProperties({id}) {
           )}
         />
 
-
-<FormField
-          control={form.control}
-          name="color"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Text color</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="color"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-<FormField
+        <FormField
           control={form.control}
           name="rows"
           render={({ field }) => (
@@ -333,7 +304,7 @@ export function TextAreaProperties({id}) {
           )}
         />
         {/* ==================================== */}
-       
+
         <FormField
           control={form.control}
           name="required"

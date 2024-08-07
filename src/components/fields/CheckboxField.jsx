@@ -32,7 +32,7 @@ const CheckboxFields = ({ id }) => {
             dispatch(addprop({ id, ...AttributesData }));
         }
     }, [dispatch, id, property]);
-    
+
     const cid = `checkbox-${id}`;
     console.log("cid", cid);
     return (
@@ -52,12 +52,12 @@ const CheckboxFields = ({ id }) => {
             {property.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
                     <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`} style={{
-                    color: property.fontcolor,
-                    fontSize: property.fontsize + "px",
-                    height: property.height + "px",
-                    width: property.width + "px",
-                    fontWeight: property.fontweight
-                }} />
+                        color: property.fontcolor,
+                        fontSize: property.fontsize + "px",
+                        height: property.height + "px",
+                        width: property.width + "px",
+                        fontWeight: property.fontweight
+                    }} />
                     <Label htmlFor={`checkbox-${id}-${index}`} style={{
                         color: property.fontcolor,
                         fontSize: property.fontsize + "px",
@@ -91,13 +91,13 @@ export function CheckboxPreview({ id }) {
             {property.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
                     <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`}
-                    style={{
-                        color: property.fontcolor,
-                        fontSize: property.fontsize + "px",
-                        height: property.height + "px",
-                        width: property.width + "px",
-                        fontWeight: property.fontweight
-                    }} />
+                        style={{
+                            color: property.fontcolor,
+                            fontSize: property.fontsize + "px",
+                            height: property.height + "px",
+                            width: property.width + "px",
+                            fontWeight: property.fontweight
+                        }} />
                     <Label htmlFor={`checkbox-${id}-${index}`}
                         style={{
                             color: property.fontcolor,
@@ -113,9 +113,43 @@ export function CheckboxPreview({ id }) {
     )
 }
 
-export function CheckboxPage({ id, properties }) {
-    const property = properties;
+export function CheckboxPage({ id, properties, submitValues }) {
+    const property = AttributesData;
     console.log("txt id", id);
+    properties.forEach((item) => {
+        switch (item.property_name) {
+            case "labelHeader":
+                property.labelHeader = item.property_value;
+                break;
+            case "label":
+                property.label = item.property_value;
+                break;
+            case "required":
+                property.required = item.property_value;
+                break;
+            case "options":
+                property.options = item.property_value;
+                break;
+            case "fontsize":
+                property.textsize = item.property_value;
+                break;
+            case "height":
+                property.height = item.property_value;
+                break;
+            case "width":
+                property.width = item.property_value;
+                break;
+            case "fontcolor":
+                property.fontcolor = item.property_value;
+                break;
+            case "fontweight":
+                property.fontweight = item.property_value;
+                break;
+            // Add more cases as needed for other properties
+            default:
+                break;
+        }
+    });
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label
@@ -133,19 +167,20 @@ export function CheckboxPage({ id, properties }) {
             {property.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
                     <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`}
-                    style={{
-                        color: property.fontcolor,
-                        fontSize: property.fontsize + "px",
-                        height: property.height + "px",
-                        width: property.width + "px",
-                        fontWeight: property.fontweight
-                    }} />
+                        style={{
+                        //     color: property.fontcolor,
+                        //     fontSize: property.fontsize + "px",
+                        //     height: property.height + "px",
+                        //     width: property.width + "px",
+                            fontWeight: property.fontweight
+                        }} 
+                        />
                     <Label htmlFor={`checkbox-${id}-${index}`}
                         style={{
-                            color: property.fontcolor,
-                            fontSize: property.fontsize + "px",
-                            height: property.height + "px",
-                            width: property.width + "px",
+                        //     color: property.fontcolor,
+                        //     fontSize: property.fontsize + "px",
+                        //     height: property.height + "px",
+                        //     width: property.width + "px",
                             fontWeight: property.fontweight
                         }}
                     >{option}</Label>
@@ -189,7 +224,7 @@ export function CheckboxProperties({ id }) {
             label: property.label,
             required: property.required,
             placeholder: property.placeholder,
-            options: property.options, 
+            options: property.options,
             fontcolor: property.fontcolor,
             fontsize: property.fontsize,
             height: property.height,

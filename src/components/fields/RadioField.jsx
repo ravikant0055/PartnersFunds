@@ -28,33 +28,33 @@ const RadioField = ({ id }) => {
     const dispatch = useDispatch();
     useEffect(() => {
         if (!property || property.id !== id) {
-          dispatch(addprop({ id, ...AttributesData }));
-      }
-  }, [dispatch, id, property]);
-    
+            dispatch(addprop({ id, ...AttributesData }));
+        }
+    }, [dispatch, id, property]);
+
     const rid = `radio-${id}`;
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label
-            style={{
-                color: property.headercolor,
-                fontSize: property.fontsize + "px",
-                fontWeight: property.fontweight
-            }}
+                style={{
+                    color: property.headercolor,
+                    fontSize: property.fontsize + "px",
+                    fontWeight: property.fontweight
+                }}
             >
                 {property.labelHeader}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            <RadioGroup defaultValue="option-one"  style={{
-                            color: property.radiocolor,
-                            fontSize: property.fontsize + "px",
-                            fontWeight: property.fontweight
-                        }}>
+            <RadioGroup defaultValue="option-one" style={{
+                color: property.radiocolor,
+                fontSize: property.fontsize + "px",
+                fontWeight: property.fontweight
+            }}>
                 {property.options.map((option, index) => (
                     <div key={index} className="flex items-center space-x-2">
                         <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
                         <Label htmlFor={`radio-${id}-${index}`}
-                       
+
                         >{option}</Label>
                     </div>
                 ))}
@@ -69,20 +69,20 @@ export function RadioFieldsPreview({ id }) {
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label
-            style={{
-                color: property.headercolor,
-                fontSize: property.fontsize + "px",
-                fontWeight: property.fontweight
-            }}
+                style={{
+                    color: property.headercolor,
+                    fontSize: property.fontsize + "px",
+                    fontWeight: property.fontweight
+                }}
             >
                 {property.labelHeader}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
             <RadioGroup defaultValue="option-one" style={{
-                            color: property.radiocolor,
-                            fontSize: property.fontsize + "px",
-                            fontWeight: property.fontweight
-                        }}>
+                color: property.radiocolor,
+                fontSize: property.fontsize + "px",
+                fontWeight: property.fontweight
+            }}>
                 {property.options.map((option, index) => (
                     <div key={index} className="flex items-center space-x-2">
                         <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
@@ -95,26 +95,63 @@ export function RadioFieldsPreview({ id }) {
     )
 }
 
-export function RadioFieldsPage({ id, properties }) {
-    const property = properties;
+export function RadioFieldsPage({ id, properties, submitValues }) {
+    const property = AttributesData;
     console.log("txt id", id);
+    properties.forEach((item) => {
+        switch (item.property_name) {
+            case "labelHeader":
+                property.labelHeader = item.property_value;
+                break;
+            case "label":
+                property.label = item.property_value;
+                break;
+            case "required":
+                property.required = item.property_value;
+                break;
+            case "headercolor":
+                property.headercolor = item.property_value;
+                break;
+            case "radiocolor":
+                property.radiocolor = item.property_value;
+                break;
+            case "options":
+                property.options = item.property_value;
+                break;
+            case "fontsize":
+                property.textsize = item.property_value;
+                break;
+            case "height":
+                property.height = item.property_value;
+                break;
+            case "width":
+                property.width = item.property_value;
+                break;
+            case "fontweight":
+                property.fontweight = item.property_value;
+                break;
+            // Add more cases as needed for other properties
+            default:
+                break;
+        }
+    });
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label
-            style={{
-                color: property.headercolor,
-                fontSize: property.fontsize + "px",
-                fontWeight: property.fontweight
-            }}
+                style={{
+                    color: property.headercolor,
+                    fontSize: property.fontsize + "px",
+                    fontWeight: property.fontweight
+                }}
             >
                 {property.labelHeader}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
             <RadioGroup defaultValue="option-one" style={{
-                            color: property.radiocolor,
-                            fontSize: property.fontsize + "px",
-                            fontWeight: property.fontweight
-                        }}>
+                color: property.radiocolor,
+                fontSize: property.fontsize + "px",
+                fontWeight: property.fontweight
+            }}>
                 {property.options.map((option, index) => (
                     <div key={index} className="flex items-center space-x-2">
                         <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
@@ -148,7 +185,7 @@ export function RadioFieldProperties({ id }) {
             required: property.required,
             options: property.options,
             headercolor: property.headercolor,
-            radiocolor:property.radiocolor,
+            radiocolor: property.radiocolor,
             fontsize: property.fontsize,
             fontweight: property.fontweight
         },
@@ -162,7 +199,7 @@ export function RadioFieldProperties({ id }) {
             placeholder: property.placeholder,
             options: property.options,
             headercolor: property.headercolor,
-            radiocolor:property.radiocolor,
+            radiocolor: property.radiocolor,
             fontsize: property.fontsize,
             fontweight: property.fontweight
         });

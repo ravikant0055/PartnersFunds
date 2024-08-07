@@ -12,13 +12,12 @@ import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 
 const AttributesData = {
     label: "Select Field",
-    labelposition:false,
+    labelposition: false,
     required: false,
     placeholder: "Select",
     options: [],
     disable: false,
-    value:"",
-    color: "", // Default color
+    value: "",
     fontsize: "16px", // Default font color
     height: 20, // Default height
     width: "200px", // Default width
@@ -30,18 +29,17 @@ const SelectField = ({ id }) => {
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const dispatch = useDispatch();
 
-     useEffect(() => {
+    useEffect(() => {
         if (!property || property.id !== id) {
             dispatch(addprop({ id, ...AttributesData }));
         }
-     }, [dispatch, id, property]);
+    }, [dispatch, id, property]);
 
     return (
-        <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full`} style={{
+        <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full`} style={{
             width: property.width + "px",
         }} >
             <Label className='text-nowrap' style={{
-                color: property.color,
                 fontSize: property.fontsize + "px",
                 height: property.height + "px",
             }} >
@@ -63,11 +61,11 @@ export function SelectFieldsPreview({ id }) {
     const attributePropData = useSelector((state) => state.propertiesdata);
     const dispatch = useDispatch();
 
-    console.log("disable prop value",property.disable);
-    console.log("disable json prop value",JSON.parse(property.disable));
-    console.log("attributePropData",attributePropData);
-    console.log("selected value preview",property.value);
-    
+    console.log("disable prop value", property.disable);
+    console.log("disable json prop value", JSON.parse(property.disable));
+    console.log("attributePropData", attributePropData);
+    console.log("selected value preview", property.value);
+
 
     //const shouldDisable = property.disable!== "no" && property.disable === "1108";
     const evaluateConditions = (conditions, data) => {
@@ -103,29 +101,28 @@ export function SelectFieldsPreview({ id }) {
     const disableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
     const shouldDisable = evaluateConditions(disableConditions, attributePropData);
 
-    console.log("shouldDisable:",shouldDisable);
-    
+    console.log("shouldDisable:", shouldDisable);
+
 
     return (
-        <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full`} style={{width: property.width + "px",}}>
+        <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full`} style={{ width: property.width + "px", }}>
             <Label className='text-nowrap' style={{
-                color: property.color,
                 fontSize: property.fontsize + "px",
                 height: property.height + "px",
             }}>
                 {property.label}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            <Select 
-                 disabled={shouldDisable}
-                 value={property.value} 
-                 onValueChange={(value) => dispatch(updateprop({ id, value }))}
+            <Select
+                disabled={shouldDisable}
+                value={property.value}
+                onValueChange={(value) => dispatch(updateprop({ id, value }))}
             >
                 <SelectTrigger>
                     <SelectValue placeholder={property.placeholder} />
                 </SelectTrigger>
                 <SelectContent>
-                    {property.options.map((item,index) => (
+                    {property.options.map((item, index) => (
                         <SelectItem key={index} value={item}>
                             {item}
                         </SelectItem>
@@ -139,13 +136,39 @@ export function SelectFieldsPreview({ id }) {
 export function SelectFieldsPage({ id, properties, submitValues }) {
     console.log("txt id", id);
     const [values, setValues] = useState("");
-    const property = properties;
+    const property = AttributesData;
+    properties.forEach((item) => {
+        switch (item.property_name) {
+            case "label":
+                property.label = item.property_value;
+                break;
+            case "required":
+                property.required = item.property_value;
+                break;
+            case "placeholder":
+                property.placeholder = item.property_value;
+                break;
+            case "options":
+                property.options = JSON.parse(item.property_value.replace(/([A-Za-z])/g, '"$1"'))
+                break;
+            case "fontsize":
+                property.textsize = item.property_value;
+                break;
+            case "height":
+                property.height = item.property_value;
+                break;
+            case "width":
+                property.width = item.property_value;
+                break;
+            default:
+                break;
+        }
+    });
     return (
         <div className='flex flex-col gap-2 w-full' style={{
             width: property.width + "px",
         }} >
             <Label style={{
-                color: property.color,
                 fontSize: property.fontsize + "px",
                 height: property.height + "px",
             }}>
@@ -168,46 +191,6 @@ export function SelectFieldsPage({ id, properties, submitValues }) {
     )
 }
 
-// export function SelectFieldsPage({ id, properties, submitValues }) {
-//     const [values, setValues] = useState(""); // Initialize the state for selected value
-//     const property = properties;
-//     const handleChange = (e) => {
-//         const value = e.target.value;
-//         setValues(e.target.value);
-//         if (submitValues) {
-//             submitValues(id, e.target.value);
-//         }
-//     };
-
-//     return (
-//         <div className='flex flex-col gap-2 w-full' style={{ width: property.width + "px" }}>
-//             <Label style={{
-//                 color: property.color,
-//                 fontSize: property.fontsize + "px",
-//                 height: property.height + "px",
-//             }}>
-//                 {property.label}
-//                 {property.required && <span className='text-red-600 font-bold'> *</span>}
-//             </Label>
-//             <Select
-//                 onChange={handleChange}
-//                 value={values} 
-//             >
-//                 <SelectTrigger>
-//                     <SelectValue placeholder={property.placeholder} />
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                     {property.options.map((item) => (
-//                         <SelectItem key={item} value={item}>
-//                             {item}
-//                         </SelectItem>
-//                     ))}
-//                 </SelectContent>
-//             </Select>
-//         </div>
-//     );
-// }
-
 
 export const SelectFieldFormElement = {
     type: "selectfield",
@@ -228,12 +211,11 @@ export function SelectFieldProperties({ id }) {
         defaultValues: {
             id: id,
             label: property.label,
-            labelposition:property.labelposition,
+            labelposition: property.labelposition,
             required: property.required,
             placeholder: property.placeholder,
             options: property.options,
             disable: property.disable,
-            color: property.color,
             fontsize: property.fontsize,
             height: property.height,
             width: property.width,
@@ -243,12 +225,11 @@ export function SelectFieldProperties({ id }) {
     useEffect(() => {  // Reset form values to default when the component mounts
         form.reset({
             label: property.label,
-            labelposition:property.labelposition,
+            labelposition: property.labelposition,
             required: property.required,
             placeholder: property.placeholder,
             options: property.options,
             disable: property.disable,
-            color: property.color,
             fontsize: property.fontsize,
             height: property.height,
             width: property.width,
@@ -361,9 +342,9 @@ export function SelectFieldProperties({ id }) {
                             <FormLabel>Disable</FormLabel>
                             <FormControl>
                                 <Select
-                                   value={field.value}
-                                   onValueChange={field.onChange}
-                                   >
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
                                     <SelectTrigger>
                                         <SelectValue placeholder="select expression">
                                             {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
@@ -438,26 +419,6 @@ export function SelectFieldProperties({ id }) {
                                     type="number"
                                     step="1"
                                     min="8"
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") e.currentTarget.blur();
-                                    }}
-                                />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-
-
-                <FormField
-                    control={form.control}
-                    name="color"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Colour</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="color"
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
                                     }}

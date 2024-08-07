@@ -15,7 +15,7 @@ const AttributesData = {
   fontcolor: "", // Default font color
   height: 50, // Default height
   width: 200, // Default width
-  disable:false,
+  disable: false,
   onclick: ""
 }
 
@@ -25,9 +25,9 @@ const Buttons = ({ id }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (!property || property.id !== id) {
-        dispatch(addprop({ id, ...property }));
+      dispatch(addprop({ id, ...property }));
     }
-  }, [ id, property]);
+  }, [id, property]);
 
   return (
     <div className='flex flex-col gap-2 w-full'>
@@ -85,7 +85,7 @@ export function ButtonsPreview({ id }) {
   };
 
   const disableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
-  const shouldDisable = evaluateConditions(disableConditions, attributePropData);  
+  const shouldDisable = evaluateConditions(disableConditions, attributePropData);
 
   return (
     <div className='flex flex-col gap-2 w-full'>
@@ -106,11 +106,39 @@ export function ButtonsPreview({ id }) {
   )
 }
 
-export function ButtonsPage({ id, properties }) {
-  const property = properties;
+export function ButtonsPage({ id, properties, submitValues }) {
+  const property = AttributesData;
   const alertFunc = () => {
     console.log("Button Clicked", property.onclick);
-    };
+  };
+  properties.forEach((item) => {
+    switch (item.property_name) {
+      case "label":
+        property.label = item.property_value;
+        break;
+      case "color":
+        property.color = item.property_value;
+        break;
+      case "fontcolor":
+        property.fontcolor = item.property_value;
+        break;
+      case "fontsize":
+        property.fontsize = item.property_value;
+        break;
+      case "height":
+        property.height = item.property_value;
+        break;
+      case "width":
+        property.width = item.property_value;
+        break;
+      case "onclick":
+        property.onclick = item.property_value;
+        break;
+      // Add more cases as needed for other properties
+      default:
+        break;
+    }
+  });
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Button onClick={alertFunc}
@@ -139,14 +167,14 @@ export function ButtonProperties({ id }) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const expressionData = useSelector((state) => state.expressiondata);
-  
+
   const form = useForm({
     mode: "onBlur",
     defaultValues: {
       id: id,
       label: property.label,
       color: property.color,
-      disable:property.disable,
+      disable: property.disable,
       fontsize: property.fontsize,
       fontcolor: property.fontcolor,
       height: property.height,
@@ -159,7 +187,7 @@ export function ButtonProperties({ id }) {
     form.reset({
       label: property.label,
       color: property.color,
-      disable:property.disable,
+      disable: property.disable,
       fontsize: property.fontsize,
       fontcolor: property.fontcolor,
       height: property.height,
@@ -171,7 +199,7 @@ export function ButtonProperties({ id }) {
   const handleReset = () => {
     form.reset(AttributesData);
     dispatch(updateprop({ id, ...AttributesData }));
-};
+  };
 
   const applyChanges = (formData) => {
     console.log("formdata", formData);
@@ -338,7 +366,7 @@ export function ButtonProperties({ id }) {
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name="onclick"
           render={({ field }) => (
@@ -357,14 +385,14 @@ export function ButtonProperties({ id }) {
           )}
         />
 
-                <div className="w-full flex justify-between">
-                    <Button type='submit' className='w-[40%]'>
-                        Save
-                    </Button>
-                    <Button type='button' className='w-[40%]' onClick={handleReset}>
-                        Reset
-                    </Button>
-                </div>
+        <div className="w-full flex justify-between">
+          <Button type='submit' className='w-[40%]'>
+            Save
+          </Button>
+          <Button type='button' className='w-[40%]' onClick={handleReset}>
+            Reset
+          </Button>
+        </div>
 
       </form>
     </Form>

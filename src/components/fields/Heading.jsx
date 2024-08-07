@@ -67,7 +67,7 @@ export function HeadingPage({ id, properties,submitValues }) {
         property.fontweight = item.property_value;
         break;
       case "fontcolor":
-        property.labelcolor = item.property_value;
+        property.fontcolor = item.property_value;
         break;
       // Add more cases as needed for other properties
       default:

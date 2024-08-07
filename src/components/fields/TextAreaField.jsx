@@ -25,9 +25,12 @@ const TextAreaField = ({id}) => {
   console.log("txt id", id);
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(addprop({ id, ...AttributesData }));
-  }, [dispatch, id]);
+    useEffect(() => {
+        if (!property || property.id !== id) {
+          dispatch(addprop({ id, ...AttributesData }));
+      }
+  }, [dispatch, id, property]);
+  
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label>
@@ -41,7 +44,8 @@ const TextAreaField = ({id}) => {
         fontSize: property.fontsize + "px",
         height: property.height + "px",
         width: property.width + "px",
-      }}/>
+      }} className='border-black'
+      />
       
     </div>
   )

@@ -3,7 +3,6 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
-import { Switch } from '../ui/switch';
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { RxDropdownMenu } from "react-icons/rx";
@@ -13,14 +12,16 @@ import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 
 const AttributesData = {
     label: "Select Field",
-    required: true,
-    placeholder: "value here...",
+    labelposition:false,
+    required: false,
+    placeholder: "Select",
     options: [],
-    expression: true,
+    disable: false,
+    value:"",
     color: "", // Default color
-    fontsize: 16, // Default font color
+    fontsize: "16px", // Default font color
     height: 20, // Default height
-    width: 500, // Default width
+    width: "200px", // Default width
 }
 
 
@@ -28,15 +29,18 @@ const SelectField = ({ id }) => {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(addprop({ id, ...AttributesData }));
-    }, [dispatch, id]);
+
+     useEffect(() => {
+        if (!property || property.id !== id) {
+            dispatch(addprop({ id, ...AttributesData }));
+        }
+     }, [dispatch, id, property]);
 
     return (
-        <div className='flex flex-col gap-2 w-full' style={{
+        <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full`} style={{
             width: property.width + "px",
         }} >
-            <Label style={{
+            <Label className='text-nowrap' style={{
                 color: property.color,
                 fontSize: property.fontsize + "px",
                 height: property.height + "px",
@@ -45,7 +49,7 @@ const SelectField = ({ id }) => {
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
             <Select>
-                <SelectTrigger>
+                <SelectTrigger className='border-black'>
                     <SelectValue placeholder={property.placeholder} />
                 </SelectTrigger>
             </Select>
@@ -56,11 +60,55 @@ const SelectField = ({ id }) => {
 export function SelectFieldsPreview({ id }) {
     console.log("txt id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+    const attributePropData = useSelector((state) => state.propertiesdata);
+    const dispatch = useDispatch();
+
+    console.log("disable prop value",property.disable);
+    console.log("disable json prop value",JSON.parse(property.disable));
+    console.log("attributePropData",attributePropData);
+    console.log("selected value preview",property.value);
+    
+
+    //const shouldDisable = property.disable!== "no" && property.disable === "1108";
+    const evaluateConditions = (conditions, data) => {
+        if (!conditions || !conditions.length) return false;
+
+        return conditions.reduce((result, condition) => {
+            const attributeData = data.find(item => item.id === condition.attribute);
+            if (!attributeData) return result;
+
+            let conditionResult;
+            switch (condition.operator) {
+                case '==':
+                    conditionResult = attributeData.value === condition.attvalues;
+                    break;
+                case '!=':
+                    conditionResult = attributeData.value !== condition.attvalues;
+                    break;
+                // Add more operators as needed
+                default:
+                    conditionResult = false;
+            }
+
+            if (condition.parentOperator === 'AND') {
+                return result && conditionResult;
+            } else if (condition.parentOperator === 'OR') {
+                return result || conditionResult;
+            } else {
+                return conditionResult;
+            }
+        }, true);
+    };
+
+    const disableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
+    const shouldDisable = evaluateConditions(disableConditions, attributePropData);
+
+    console.log("shouldDisable:",shouldDisable);
+    
+
     return (
-        <div className='flex flex-col gap-2 w-full' style={{
-            width: property.width + "px",
-        }} >
-            <Label style={{
+        <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full`} style={{width: property.width + "px",}}>
+            <Label className='text-nowrap' style={{
                 color: property.color,
                 fontSize: property.fontsize + "px",
                 height: property.height + "px",
@@ -68,13 +116,17 @@ export function SelectFieldsPreview({ id }) {
                 {property.label}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            <Select>
+            <Select 
+                 disabled={shouldDisable}
+                 value={property.value} 
+                 onValueChange={(value) => dispatch(updateprop({ id, value }))}
+            >
                 <SelectTrigger>
                     <SelectValue placeholder={property.placeholder} />
                 </SelectTrigger>
                 <SelectContent>
-                    {property.options.map((item) => (
-                        <SelectItem key={item} value={item}>
+                    {property.options.map((item,index) => (
+                        <SelectItem key={index} value={item}>
                             {item}
                         </SelectItem>
                     ))}
@@ -176,10 +228,11 @@ export function SelectFieldProperties({ id }) {
         defaultValues: {
             id: id,
             label: property.label,
+            labelposition:property.labelposition,
             required: property.required,
             placeholder: property.placeholder,
             options: property.options,
-            expression: property.expression,
+            disable: property.disable,
             color: property.color,
             fontsize: property.fontsize,
             height: property.height,
@@ -190,10 +243,11 @@ export function SelectFieldProperties({ id }) {
     useEffect(() => {  // Reset form values to default when the component mounts
         form.reset({
             label: property.label,
+            labelposition:property.labelposition,
             required: property.required,
             placeholder: property.placeholder,
             options: property.options,
-            expression: property.expression,
+            disable: property.disable,
             color: property.color,
             fontsize: property.fontsize,
             height: property.height,
@@ -241,6 +295,27 @@ export function SelectFieldProperties({ id }) {
 
                 <FormField
                     control={form.control}
+                    name="labelposition"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Label Position</FormLabel>
+                            <FormControl>
+                                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder={field.value ? 'Top' : 'Side'} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="true">Top</SelectItem>
+                                        <SelectItem value="false">Side</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
                     name="placeholder"
                     render={({ field }) => (
                         <FormItem>
@@ -261,12 +336,18 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="required"
                     render={({ field }) => (
-                        <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm ">
-                            <div className="space-y-0.5">
-                                <FormLabel>Required</FormLabel>
-                            </div>
+                        <FormItem>
+                            <FormLabel>Required</FormLabel>
                             <FormControl>
-                                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="true">Yes</SelectItem>
+                                        <SelectItem value="false">No</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                         </FormItem>
                     )}
@@ -274,18 +355,24 @@ export function SelectFieldProperties({ id }) {
 
                 <FormField
                     control={form.control}
-                    name="expression"
+                    name="disable"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Expressions</FormLabel>
+                            <FormLabel>Disable</FormLabel>
                             <FormControl>
-                                <Select>
+                                <Select
+                                   value={field.value}
+                                   onValueChange={field.onChange}
+                                   >
                                     <SelectTrigger>
-                                        <SelectValue placeholder={"select expression"} />
+                                        <SelectValue placeholder="select expression">
+                                            {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
+                                        </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value={"false".toString()}>No</SelectItem>
                                         {expressionData?.map((item) => (
-                                            <SelectItem key={item} value={item}>
+                                            <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
                                                 {item.expressionname}
                                             </SelectItem>
                                         ))}

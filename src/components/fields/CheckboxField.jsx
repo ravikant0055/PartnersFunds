@@ -28,8 +28,11 @@ const CheckboxFields = ({ id }) => {
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(addprop({ id, ...AttributesData }));
-      }, [dispatch, id]);
+        if (!property || property.id !== id) {
+            dispatch(addprop({ id, ...AttributesData }));
+        }
+    }, [dispatch, id, property]);
+    
     const cid = `checkbox-${id}`;
     console.log("cid", cid);
     return (

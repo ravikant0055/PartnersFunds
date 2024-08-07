@@ -8,8 +8,8 @@ const ExpressionSlice = createSlice({
      addexp: (state, action) => {
          state.push(action.payload);
      },
-     removeexp:(state,action) => {
-        return state.filter((item) => item.id !== action.payload);
+     removeexp: (state,action) => {
+        return state.filter((item) => item.expression_id !== action.payload);
      },
    }
 });

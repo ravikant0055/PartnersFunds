@@ -8,6 +8,8 @@ import { DndContext, MouseSensor, useSensor, useSensors } from '@dnd-kit/core';
 import DragOverlayWrapper from '../DragOverlayWrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import ExpressionBtn from '../PageHeader/ExpressionBtn';
+import ViewobjectBtn from '../PageHeader/ViewobjectBtn';
+import EntityobjectBtn from '../PageHeader/EntityobjectBtn';
 
 const FormBuilder = () => {
   const fetchedPageData = useSelector(state => state.page.fetchedPageData); // Selecting fetchedPageData from Redux state
@@ -30,6 +32,8 @@ const FormBuilder = () => {
               <span className='text-muted-foreground mr-2'>Page: {fetchedPageData?.page_name}</span>
           </h2>
             <div className='flex items-center gap-3'>
+              <ViewobjectBtn/>
+              <EntityobjectBtn/>
               <ExpressionBtn/>
               <PreviewDialogBtn/>
               <SaveFormBtn id={fetchedPageData?.page_id}/>

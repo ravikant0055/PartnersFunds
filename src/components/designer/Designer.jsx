@@ -20,6 +20,11 @@ import CheckboxFields from "../fields/CheckboxField";
 import SelectField from "../fields/SelectField";
 import ToggleField from "../fields/ToggleField";
 import RadioField from "../fields/RadioField";
+// import { deleteprop } from "src/store/AttributePropDataSlice";
+import Barchart from "../fields/BarChart";
+import Linechart from "../fields/LineChart";
+import Piechart from "../fields/PieChart";
+import Radarchart from "../fields/RadarChart";
 import Image from "../fields/Image";
 import Icon from "../fields/Icon";
 import { deleteprop } from "../../store/AttributePropDataSlice";
@@ -192,7 +197,11 @@ function DesignerElementWrapper({ element, onDelete }) {
     togglefield     : <ToggleField id={element.id}/>,
     radiofield      : <RadioField id={element.id} />,
     image           : <Image id={element.id} />,
-    icon            : <Icon id={element.id} />
+    icon            : <Icon id={element.id} />,
+    barchart        : <Barchart id={element.id}/>,
+    linechart       : <Linechart id={element.id}/>,
+    piechart        : <Piechart id={element.id}/>,
+    radarchart      : <Radarchart id={element.id}/>,
   };
 
   if(draggable.isDragging) return null;
@@ -245,7 +254,7 @@ function DesignerElementWrapper({ element, onDelete }) {
       {bottomHalf.isOver && <div className="absolute bottom-0 w-full rounded-md h-[7px] bg-primary rounded-t-none" />}
       <div
         className={cn(
-          "flex w-full py-4 h-fit items-center rounded-md bg-accent/40 px-4 pointer-events-none opacity-100",
+          "flex w-full py-4 h-fit items-center rounded-md px-4 pointer-events-none opacity-100",
           mouseIsOver && "opacity-30"
         )}
       >

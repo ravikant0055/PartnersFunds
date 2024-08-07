@@ -13,6 +13,7 @@ import CheckboxFields, { CheckboxFormElement } from './fields/CheckboxField';
 import SelectField, { SelectFieldFormElement } from './fields/SelectField';
 import ToggleField, { ToggleFieldFormElement } from './fields/ToggleField';
 import RadioField, { RadioFieldFormElement } from './fields/RadioField';
+import Image, { ImageFormElement } from './fields/Image';
 
 
 function DragOverlayWrapper() {
@@ -51,7 +52,8 @@ function DragOverlayWrapper() {
             "checkbox"       : CheckboxFormElement,
             "selectfield"    : SelectFieldFormElement,
             "togglefield"    : ToggleFieldFormElement,
-            "radiofield"     : RadioFieldFormElement
+            "radiofield"     : RadioFieldFormElement,
+            "image"          : ImageFormElement
 
         }
         node = <SideBarBtnElementDragOverlay formelement={formelement[type]}/>;
@@ -72,7 +74,8 @@ function DragOverlayWrapper() {
         "checkbox"          : <CheckboxFields/>,
         "selectfield"       : <SelectField />,
         "togglefield"       : <ToggleField/>,
-        "radiofield"        : <RadioField/>
+        "radiofield"        : <RadioField/>,
+        "image"             : <Image />
        }
 
        console.log("2ndtype",type);

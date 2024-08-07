@@ -14,6 +14,8 @@ import { CheckboxProperties } from '../fields/CheckboxField';
 import { SelectFieldProperties } from '../fields/SelectField';
 import { ToggleProperties } from '../fields/ToggleField';
 import { RadioFieldProperties } from '../fields/RadioField';
+import { ImageProperties } from '../fields/Image';
+import { IconProperties } from '../fields/Icon';
 
 const PropertiesSidebar = ({selectedElement}) => {
   const dispatch = useDispatch();
@@ -35,7 +37,9 @@ const PropertiesSidebar = ({selectedElement}) => {
       "checkbox"       : <CheckboxProperties id={id}/>,
       "selectfield"    : <SelectFieldProperties id={id}/>,
       "togglefield"    : <ToggleProperties id={id}/>,
-      "radiofield"     : <RadioFieldProperties id={id} />
+      "radiofield"     : <RadioFieldProperties id={id} />,
+      "image"          : <ImageProperties id={id} />,
+      "icon"           : <IconProperties id={id} />
   }
 
   return (

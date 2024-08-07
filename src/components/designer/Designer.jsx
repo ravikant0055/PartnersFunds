@@ -20,7 +20,8 @@ import CheckboxFields from "../fields/CheckboxField";
 import SelectField from "../fields/SelectField";
 import ToggleField from "../fields/ToggleField";
 import RadioField from "../fields/RadioField";
-import { deleteprop } from "../../store/AttributePropDataSlice";
+import Image from "../fields/Image";
+import Icon from "../fields/Icon";
 
 const Designer = () => {
 
@@ -188,7 +189,9 @@ function DesignerElementWrapper({ element, onDelete }) {
     checkbox        : <CheckboxFields id={element.id}/>,
     selectfield     : <SelectField id={element.id}/>,
     togglefield     : <ToggleField id={element.id}/>,
-    radiofield      : <RadioField id={element.id} />
+    radiofield      : <RadioField id={element.id} />,
+    image           : <Image id={element.id} />,
+    icon            : <Icon id={element.id} />
   };
 
   if(draggable.isDragging) return null;

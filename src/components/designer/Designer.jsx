@@ -22,6 +22,7 @@ import ToggleField from "../fields/ToggleField";
 import RadioField from "../fields/RadioField";
 import Image from "../fields/Image";
 import Icon from "../fields/Icon";
+import { deleteprop } from "../../store/AttributePropDataSlice";
 
 const Designer = () => {
 

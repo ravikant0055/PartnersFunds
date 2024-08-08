@@ -26,7 +26,7 @@ const FormBuilder = () => {
 
   return (
     <DndContext sensors={sensors}>
-      <main className='flex flex-col w-full'>
+      <main className='flex flex-col w-full h-full'>
         <nav className='flex justify-between border-b p-4 gap-3 items-center'>
           <h2 className='truncate font-medium'>
               <span className='text-muted-foreground mr-2'>Page: {fetchedPageData?.page_name}</span>

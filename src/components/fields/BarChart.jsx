@@ -13,7 +13,7 @@ const AttributesData = {
   label       : "Barchart",
   description : "Jan-Aug 2024",
   chartData   : [
-                  { month: "January", desktop: 186 },
+                  { month: "January", desktop: 183 },
                   { month: "February", desktop: 305 },
                   { month: "March", desktop: 237 },
                   { month: "April", desktop: 73 },

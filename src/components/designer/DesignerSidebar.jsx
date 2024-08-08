@@ -9,7 +9,7 @@ const DesignerSidebar = () => {
   console.log("isopen",isOpen);
   return (
     <aside className='w-[400px] max-w-[400px] flex flex-col flex-grow
-      gap-2 border-r p-4 bg-white overflow-y-auto h-full'>
+      gap-2 border-r p-4 bg-white overflow-y-auto h-full scrollbar-hidden-prop'>
         {!isOpen ? <FormElementsSidebar/> : <PropertiesSidebar selectedElement={selectedElement}/> }
     </aside>
   )

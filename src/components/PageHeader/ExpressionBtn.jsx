@@ -14,7 +14,6 @@ import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import { createExpression } from '../../store/PageDataSlice';
 import { useNavigate } from 'react-router-dom';
-import Nodatapage from '../builder/Nodatapage';
 
 const ExpressionBtn = () => {
   const [conditions, setConditions] = useState([{ attribute: '', operator: '', attvalues: '', parentOperator: null }]);
@@ -103,7 +102,7 @@ const ExpressionBtn = () => {
       <DialogContent>
         
         {
-        
+
         attributeData.length!==0 
         ? 
         ( <>

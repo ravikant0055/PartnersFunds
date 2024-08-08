@@ -22,6 +22,7 @@ const AttributesData = {
   width: 500, // Default width
   labelposition: false,
   disable: false,
+  hide:false,
   value: ""
 }
 
@@ -103,8 +104,11 @@ export function TextFieldsPreview({ id }) {
   const disableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
   const shouldDisable = evaluateConditions(disableConditions, attributePropData);
 
+  const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
+  const shouldHide = evaluateConditions(hideConditions, attributePropData);
+
   return (
-    <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full`}>
+    <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full ${shouldHide ? 'hidden' : ''}`}>
       <Label
         style={{
           color: property.labelcolor,
@@ -218,6 +222,7 @@ export function TextProperties({ id }) {
       labelposition: property.labelposition,
       required: property.required,
       disable: property.disable,
+      hide:property.hide,
       placeholder: property.placeholder,
       labelcolor: property.labelcolor,
       textsize: property.textsize,
@@ -234,6 +239,7 @@ export function TextProperties({ id }) {
       labelposition: property.labelposition,
       required: property.required,
       disable: property.disable,
+      hide:property.hide,
       placeholder: property.placeholder,
       labelcolor: property.labelcolor,
       textcolor: property.textcolor,
@@ -261,6 +267,7 @@ export function TextProperties({ id }) {
     }
     console.log("apply change");
   };
+
 
   return (
     <Form {...form}>
@@ -336,6 +343,36 @@ export function TextProperties({ id }) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Disable</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="select expression">
+                      {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    {expressionData?.map((item) => (
+                      <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
+                        {item.expressionname}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="hide"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Hide</FormLabel>
               <FormControl>
                 <Select
                   value={field.value}

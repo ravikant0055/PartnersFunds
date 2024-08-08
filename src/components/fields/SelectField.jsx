@@ -17,6 +17,7 @@ const AttributesData = {
     placeholder: "Select",
     options: [],
     disable: false,
+    hide:false,
     value:"",
     color: "", // Default color
     fontsize: "16px", // Default font color
@@ -103,11 +104,12 @@ export function SelectFieldsPreview({ id }) {
     const disableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
     const shouldDisable = evaluateConditions(disableConditions, attributePropData);
 
-    console.log("shouldDisable:",shouldDisable);
+    const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
+    const shouldHide = evaluateConditions(hideConditions, attributePropData);
     
 
     return (
-        <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full`} style={{width: property.width + "px",}}>
+        <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} ${shouldHide ? 'hidden' : ''} gap-2 w-full`} style={{width: property.width + "px",}}>
             <Label className='text-nowrap' style={{
                 color: property.color,
                 fontSize: property.fontsize + "px",
@@ -233,6 +235,7 @@ export function SelectFieldProperties({ id }) {
             placeholder: property.placeholder,
             options: property.options,
             disable: property.disable,
+            hide:property.hide,
             color: property.color,
             fontsize: property.fontsize,
             height: property.height,
@@ -248,6 +251,7 @@ export function SelectFieldProperties({ id }) {
             placeholder: property.placeholder,
             options: property.options,
             disable: property.disable,
+            hide:property.hide,
             color: property.color,
             fontsize: property.fontsize,
             height: property.height,
@@ -364,6 +368,36 @@ export function SelectFieldProperties({ id }) {
                                    value={field.value}
                                    onValueChange={field.onChange}
                                    >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="select expression">
+                                            {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value={"false".toString()}>No</SelectItem>
+                                        {expressionData?.map((item) => (
+                                            <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
+                                                {item.expressionname}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="hide"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Hide</FormLabel>
+                            <FormControl>
+                                <Select
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
                                     <SelectTrigger>
                                         <SelectValue placeholder="select expression">
                                             {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}

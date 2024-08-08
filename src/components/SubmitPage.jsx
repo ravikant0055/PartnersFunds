@@ -9,9 +9,8 @@ import SavedPageElement from './designer/SavedPageElement';
 import { HiCursorClick } from 'react-icons/hi';
 
 function SubmitPage() {
-    const savedpage = useSelector((state) => state.page.savedPageData);
-    console.log("SAved Page : ", savedpage);
-
+    const savedpage = useSelector((state) => state.page.savedPageData);    
+    
     //Api data
 
     console.log("")

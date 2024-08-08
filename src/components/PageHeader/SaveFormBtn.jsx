@@ -1,24 +1,21 @@
-import React, { useTransition } from 'react'
+import React, { useState } from 'react';
 import { HiSaveAs } from "react-icons/hi";
 import { Button } from '../ui/button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addpage, updatepage } from '../../store/SavePageSlice';
 import { toast } from '../ui/use-toast';
-import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { addPageAsync } from '../../store/PageDataSlice';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import Loading from '../builder/Loading';
 
 const SaveFormBtn = ({ id }) => {
   const dispatch = useDispatch();
-  const [loading, startTransition] = useTransition();
+     
   const myData = useSelector((state) => state.attribute);
   const property = useSelector((state) => state.propertiesdata);
-  console.log("Savebuttomnfile", property);
   const page = useSelector((state) => state.savepage);
-  console.log("page", page);
-  console.log("page", JSON.stringify(page));
-  console.log("myDATAAAAAAAAAAAAAAA",myData);
-
+  
+  const [loading, setLoading] = useState(false);  // Add loading state
 
   const mergedArray = myData.map(item => {
     const { id, ...propertyData } = property.find(prop => prop.id === item.id) || {};
@@ -32,31 +29,18 @@ const SaveFormBtn = ({ id }) => {
   const navigate = useNavigate();
 
   const formContent = async () => {
+    setLoading(true);  // Set loading to true when the request starts
     try {
-      console.log("json data mergedArray",mergedArray);
       const JsonElements = JSON.stringify(mergedArray);
-      console.log("json data",JsonElements);
-      // const existingPage = page.find(p => p.id === id);
-      const postdata ={
-        pageId:id,
+      const postdata = {
+        pageId: id,
         JsonElements: JsonElements
       }
-      dispatch(addPageAsync(postdata));
-      // if (existingPage) {
-      //   dispatch(updatepage({ id, mergedArray }));
-      //   toast({
-      //     title: "Success",
-      //     description: "Your page has been updated",
-      //   });
-      // } else {
-      //   dispatch(addpage({ id, mergedArray }));
-      //   toast({
-      //     title: "Success",
-      //     description: "New page has been added",
-      //   });
-      // }
-      navigate(`/`);
+      await dispatch(addPageAsync(postdata));  // Wait for the dispatch to complete
+      setLoading(false);  // Set loading to false after the request is complete
+      navigate(`/`);  // Navigate after data is saved
     } catch (error) {
+      setLoading(false);  // Set loading to false in case of an error
       toast({
         title: "Error",
         description: "Something went wrong",
@@ -66,13 +50,30 @@ const SaveFormBtn = ({ id }) => {
   };
   
   return (
-    <Button variant={"outline"} className="gap-2" disabled={loading} onClick={() => {
-      startTransition(formContent);
-    }}>
-      <HiSaveAs className="h-4 w-4 mr-1" />
-      Save
-      {loading && <FaSpinner className="animate-spin" />}
-    </Button>
+    <Dialog>
+      <DialogTrigger>
+        <div className='flex gap-10 justify-between items-center'>
+          <Button variant={"outline"} className="gap-2">
+            <HiSaveAs className="h-4 w-4 mr-1" />
+            Save
+          </Button>
+        </div>
+      </DialogTrigger>
+
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Are you sure you want to save this page?</DialogTitle>
+        </DialogHeader>
+
+        <DialogFooter>
+          {loading ? (  // Show the Loading component while loading
+            navigate(`/loading`)
+          ) : (
+            <Button onClick={formContent}>Yes</Button>
+          )}
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

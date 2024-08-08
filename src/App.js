@@ -7,6 +7,8 @@ import ErrorPage from './components/builder/ErrorPage';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import SubmitPage from './components/SubmitPage';
+import Loading from './components/builder/Loading';
+import Nodatapage from './components/builder/Nodatapage';
 
 
 function App() {
@@ -28,6 +30,14 @@ function App() {
         {
           path: "/submitPage",
           element: <SubmitPage/>,
+        },
+        {
+          path: "/loading",
+          element: <Loading/>,
+        },
+        {
+          path: "/nopage",
+          element: <Nodatapage/>,
         }
       ],
     },

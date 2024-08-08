@@ -5,17 +5,28 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import { Input } from "./ui/input";
 import { BsFileEarmarkPlus } from "react-icons/bs";
-import { toast } from "./ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { createPage, fetchPageById } from "../store/PageDataSlice";
+import { createPage, fetchPageById, validatePageName } from "../store/PageDataSlice";
 import { IoDocuments } from "react-icons/io5";
+import Nodatapage from "./builder/Nodatapage";
+import { useState } from "react";
+import { set } from "zod";
 
 const CreatePage = () => {
     const form = useForm();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const savedpage = useSelector((state) => state.page.savedPageData); 
+
+
+
+    const error = useSelector(state => state.page.validatename);
+
+
+    
+    console.log("saved page data:",savedpage);
+    
 
     const onSubmit = async (values) => {
 
@@ -37,8 +48,26 @@ const CreatePage = () => {
         }
     }
 
+    const handleBlur = async (event) => {
+        const pageName = event.target.value;
+            try {
+                await dispatch(validatePageName(pageName));
+            } catch (error) {
+                console.error('Error validating page name:', error);
+            }
+    }
+    
+    const savePage = () => {
+       if(savedpage===null){
+         navigate('/nopage')
+       }
+       else{
+          navigate('/submitPage')
+       }
+    }
+
     return (
-        <div className="flex flex-col items-center">
+    <div className="flex gap-5 items-center">
             <Dialog>
 
                 <DialogTrigger asChild>
@@ -69,8 +98,9 @@ const CreatePage = () => {
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input {...field} />
+                                            <Input {...field} onBlur={handleBlur} className={error ? 'border-red-600' : ''} />
                                         </FormControl>
+                                        {error && <p className="text-red-500 font-medium text-sm">{error}</p>}
                                     </FormItem>
                                 )}
                             />
@@ -92,7 +122,7 @@ const CreatePage = () => {
                     </Form>
 
                     <DialogFooter>
-                        <Button onClick={form.handleSubmit(onSubmit)} disabled={form.formState.isSubmitting} className="w-full mt-4">
+                        <Button onClick={form.handleSubmit(onSubmit)} disabled={form.formState.isSubmitting || error} className="w-full mt-4">
                             {!form.formState.isSubmitting ? <span>Save</span> : <ImSpinner2 className="animate-spin" />}
                         </Button>
                     </DialogFooter>
@@ -102,8 +132,8 @@ const CreatePage = () => {
 
             <Button
                 variant={"outline"}
-                className="group border border-primary/20 w-[350px] h-[190px] items-center justify-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4 mt-4"
-                onClick={() => navigate('/submitPage')}
+                className="group border border-primary/20 w-[350px] h-[190px] items-center justify-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4"
+                onClick={savePage}
             >
                 <IoDocuments className="h-10 w-10 text-muted-foreground group-hover:text-primary" />
                 <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">Saved Pages</p>

@@ -10,7 +10,8 @@ const initialState = {
   fetchPageError: null,
   savingPage:false,
   savedPageData:null,
-  savePageError:null
+  savePageError:null,
+  validatename:null
 };
 
 // Async thunk for creating a page
@@ -116,7 +117,7 @@ export const createExpression = createAsyncThunk('page/createExpression',
 )
 
 
-
+//save page api
 export const addPageAsync = createAsyncThunk('savepage/addPage',
   async (values, { rejectWithValue }) => {
     try {
@@ -136,6 +137,27 @@ export const addPageAsync = createAsyncThunk('savepage/addPage',
     }
   }
 );
+
+//pagename validation api
+export const validatePageName = createAsyncThunk('page/pageNameValidate',
+  async (values, { rejectWithValue }) => {
+    if (values === '') {
+      return rejectWithValue("*Page name can't be null");
+    } else {
+      try {
+        const response = await axios.post(`http://localhost:8080/page/pageNameValidation?pagename=${values}`);
+        if(response.data)
+        {
+          return rejectWithValue("*Page name already exists");
+        }
+      } catch (error) {
+        return rejectWithValue(error.message); // Return specific error message
+      }
+    }
+  }
+);
+
+
 
 // Create slice for handling page state
 const PageDataSlice = createSlice({
@@ -181,6 +203,17 @@ const PageDataSlice = createSlice({
       .addCase(addPageAsync.rejected, (state, action) => {
         state.savingPage = false;
         state.savePageError = action.payload;
+      })
+
+
+      .addCase(validatePageName.pending, (state) => {
+        state.validatename = null; // Reset validation message before making a new request
+      })
+      .addCase(validatePageName.fulfilled, (state, action) => {
+        state.validatename = null; // Clear validation message if the page name is valid
+      })
+      .addCase(validatePageName.rejected, (state, action) => {
+        state.validatename = action.payload; // Set validation error message
       });
   },
 });

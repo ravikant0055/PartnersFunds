@@ -29,7 +29,8 @@ const AttributesData = {
 const TextFields = ({ id }) => {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
-    useEffect(() => {
+  
+  useEffect(() => {
         if (!property || property.id !== id) {
           dispatch(addprop({ id, ...AttributesData }));
       }

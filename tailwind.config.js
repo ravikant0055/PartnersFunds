@@ -97,6 +97,17 @@ module.exports = {
           width: '0',
           height: '0',
         },
+
+        '.scrollbar-hidden-prop': {
+          'max-height': 'full',
+          'overflow-y': 'auto',
+          'scrollbar-width': 'none',
+          '-ms-overflow-style': 'none',
+        },
+        '.scrollbar-hidden-prop::-webkit-scrollbar': {
+          width: '0',
+          height: '0',
+        },
       }, ['responsive']);
     }
   ],

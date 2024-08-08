@@ -214,7 +214,10 @@ export function ButtonProperties({ id }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(applyChanges)}
+      <form onBlur={form.handleSubmit(applyChanges)}
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
         className="space-y-3"
       >
         <FormField
@@ -385,10 +388,7 @@ export function ButtonProperties({ id }) {
           )}
         />
 
-        <div className="w-full flex justify-between">
-          <Button type='submit' className='w-[40%]'>
-            Save
-          </Button>
+        <div className="w-full flex items-center justify-center">
           <Button type='button' className='w-[40%]' onClick={handleReset}>
             Reset
           </Button>

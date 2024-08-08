@@ -73,7 +73,7 @@ export function IconFieldPreview({ id }) {
           justifyContent: 'center',
         }}
       >
-        <Input type="file" id="iconUpload" name="icon" accept="image/*" placeholder={property.placeholder} 
+        <Input type="file" id="iconUpload" name="icon" accept="image/*" placeholder={property.placeholder}
           onChange={previewicon}
         />
         <span>No icon selected</span>
@@ -89,65 +89,65 @@ export function IconFieldPage({ id, properties, submitValues }) {
   const property = AttributesData;
 
   properties.forEach((item) => {
-      switch (item.property_name) {
-        case "label":
-          property.label = item.property_value;
-          break;
-        case "required":
-          property.required = item.property_value;
-          break;
-        case "placeholder":
-          property.placeholder = item.property_value;
-          break;
-        case "height":
-          property.height = item.property_value;
-          break;
-        case "width":
-          property.width = item.property_value;
-          break;
-        default:
-          break;
-      }
-    });
+    switch (item.property_name) {
+      case "label":
+        property.label = item.property_value;
+        break;
+      case "required":
+        property.required = item.property_value;
+        break;
+      case "placeholder":
+        property.placeholder = item.property_value;
+        break;
+      case "height":
+        property.height = item.property_value;
+        break;
+      case "width":
+        property.width = item.property_value;
+        break;
+      default:
+        break;
+    }
+  });
 
   const iconPreview = (e) => {
-      const previewIcon = document.getElementById('previewIcons');
-      previewIcon.innerHTML = ''; // Clear the current preview
-      const file = e.target.files[0];
-      if (file) {
-          const img = document.createElement('img');
-          img.src = URL.createObjectURL(file);
-          img.onload = () => URL.revokeObjectURL(img.src); // Clean up
-          previewIcon.appendChild(img);
-      } else {
-        previewIcon.innerHTML = '<span>No image selected</span>';
-      }
+    const previewIcon = document.getElementById('previewIcons');
+    previewIcon.innerHTML = ''; // Clear the current preview
+    const file = e.target.files[0];
+    if (file) {
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      img.onload = () => URL.revokeObjectURL(img.src); // Clean up
+      previewIcon.appendChild(img);
+    } else {
+      previewIcon.innerHTML = '<span>No image selected</span>';
+    }
   }
 
   return (
-      <div className='flex flex-col gap-2 w-full'>
-          <Label>
-              {property.label}
-              {property.required && <span className='text-red-600 font-bold'> *</span>}
-          </Label>
+    <div className='flex flex-col gap-2 w-full'>
+      <Label>
+        {property.label}
+        {property.required && <span className='text-red-600 font-bold'> *</span>}
+      </Label>
 
-          <div id="previewIcons"
-              style={{
-                  height: property.height + "px",
-                  width: property.width + "px",
-                  overflow: 'hidden', // Hide overflowing parts of the image
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: '#f5f5f5', // Add a background color to visualize the container
-              }}
-          >
-              <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder} 
-                  onChange={iconPreview}
-              />
-              <span>No image selected</span>
-          </div>
+      <div id="previewIcons"
+        style={{
+          height: property.height + "px",
+          width: property.width + "px",
+          overflow: 'hidden', // Hide overflowing parts of the image
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#f5f5f5', // Add a background color to visualize the container
+        }}
+      >
+        <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder}
+          onChange={iconPreview}
+        />
+        <span>No image selected</span>
       </div>
+    </div>
   )
 }
 
@@ -212,7 +212,10 @@ export function IconProperties({ id }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(applyChanges)}
+      <form onBlur={form.handleSubmit(applyChanges)}
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
         className="space-y-3">
 
         <FormField
@@ -314,10 +317,7 @@ export function IconProperties({ id }) {
           )}
         />
 
-        <div className="w-full flex justify-between">
-          <Button type='submit' className='w-[40%]'>
-            Save
-          </Button>
+        <div className="w-full flex items-center justify-center">
           <Button type='button' className='w-[40%]' onClick={handleReset}>
             Reset
           </Button>

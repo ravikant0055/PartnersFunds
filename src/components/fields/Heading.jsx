@@ -12,25 +12,27 @@ const AttributesData = {
   label: "Heading",
   fontsize: 16,
   fontweight: 500,
-  fontcolor:""
+  fontcolor: ""
 }
 
 const Heading = ({ id }) => {
   console.log("txt id", id);
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
-    useEffect(() => {
-        if (!property || property.id !== id) {
-          dispatch(addprop({ id, ...AttributesData }));
-      }
+  useEffect(() => {
+    if (!property || property.id !== id) {
+      dispatch(addprop({ id, ...AttributesData }));
+    }
   }, [dispatch, id, property]);
-  
+
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Label style={{ fontSize: property.fontsize + "px", 
-                      fontWeight: property.fontweight, 
-                      color:property.fontcolor }}>
-              {property.label}
+      <Label style={{
+        fontSize: property.fontsize + "px",
+        fontWeight: property.fontweight,
+        color: property.fontcolor
+      }}>
+        {property.label}
       </Label>
     </div>
   )
@@ -40,20 +42,22 @@ export function HeadingPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Label style={{ fontSize: property.fontsize + "px", 
-                      fontWeight: property.fontweight, 
-                      color:property.fontcolor }}>
-              {property.label}
+      <Label style={{
+        fontSize: property.fontsize + "px",
+        fontWeight: property.fontweight,
+        color: property.fontcolor
+      }}>
+        {property.label}
       </Label>
     </div>
   )
 }
 
-export function HeadingPage({ id, properties,submitValues }) {
+export function HeadingPage({ id, properties, submitValues }) {
   // const property = properties;
   const [values, setValues] = useState("");
   const property = AttributesData;
-  
+
   properties.forEach((item) => {
     switch (item.property_name) {
       case "label":
@@ -75,13 +79,15 @@ export function HeadingPage({ id, properties,submitValues }) {
     }
   });
   console.log("property.fontsize", property.fontsize);
-  
+
   return (
     <div className='flex flex-col gap-2 w-full'>
-      <Label style={{ fontSize: property.fontsize + "px", 
-                      fontWeight: property.fontweight, 
-                      color:property.fontcolor }}>
-              {property.label}
+      <Label style={{
+        fontSize: property.fontsize + "px",
+        fontWeight: property.fontweight,
+        color: property.fontcolor
+      }}>
+        {property.label}
       </Label>
     </div>
   )
@@ -103,7 +109,7 @@ export function HeadingProperties({ id }) {
       label: property.label,
       fontsize: property.fontsize,
       fontweight: property.fontweight,
-      fontcolor:property.fontcolor
+      fontcolor: property.fontcolor
     },
   });
 
@@ -112,14 +118,14 @@ export function HeadingProperties({ id }) {
       label: property.label,
       fontsize: property.fontsize,
       fontweight: property.fontweight,
-      fontcolor:property.fontcolor
+      fontcolor: property.fontcolor
     });
   }, [form, property]);
 
   const handleReset = () => {
     form.reset(AttributesData);
     dispatch(updateprop({ id, ...AttributesData }));
-};
+  };
 
   const applyChanges = (formData) => {
     console.log("formdata", formData);
@@ -134,7 +140,10 @@ export function HeadingProperties({ id }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(applyChanges)}
+      <form onBlur={form.handleSubmit(applyChanges)}
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
         className="space-y-3"
       >
         <FormField
@@ -177,7 +186,7 @@ export function HeadingProperties({ id }) {
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name="fontcolor"
           render={({ field }) => (
@@ -219,14 +228,11 @@ export function HeadingProperties({ id }) {
         />
 
         {/* ======================================== */}
-        <div className="w-full flex justify-between">
-                    <Button type='submit' className='w-[40%]'>
-                        Save
-                    </Button>
-                    <Button type='button' className='w-[40%]' onClick={handleReset}>
-                        Reset
-                    </Button>
-                </div>
+        <div className="w-full flex items-center justify-center">
+          <Button type='button' className='w-[40%]' onClick={handleReset}>
+            Reset
+          </Button>
+        </div>
 
       </form>
     </Form>

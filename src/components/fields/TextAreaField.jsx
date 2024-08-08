@@ -8,6 +8,7 @@ import { BsTextareaResize } from "react-icons/bs";
 import { Textarea } from '../ui/textarea';
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
+import { Button } from '../ui/button';
 
 const AttributesData = {
   label: "Text Area",
@@ -162,6 +163,11 @@ export function TextAreaProperties({ id }) {
       width: property.width,
     });
   }, [form, property]);
+
+  const handleReset = () => {
+    form.reset(AttributesData);
+    dispatch(updateprop({ id, ...AttributesData }));
+  };
 
   const applyChanges = (formData) => {
     console.log("formdata", formData);
@@ -319,6 +325,11 @@ export function TextAreaProperties({ id }) {
             </FormItem>
           )}
         />
+        <div className="w-full flex items-center justify-center">
+          <Button type='button' className='w-[40%]' onClick={handleReset}>
+            Reset 
+          </Button>
+        </div>
       </form>
     </Form>
   );

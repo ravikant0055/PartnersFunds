@@ -168,19 +168,19 @@ export function CheckboxPage({ id, properties, submitValues }) {
                 <div key={index} className="flex items-center space-x-2">
                     <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`}
                         style={{
-                        //     color: property.fontcolor,
-                        //     fontSize: property.fontsize + "px",
-                        //     height: property.height + "px",
-                        //     width: property.width + "px",
+                            //     color: property.fontcolor,
+                            //     fontSize: property.fontsize + "px",
+                            //     height: property.height + "px",
+                            //     width: property.width + "px",
                             fontWeight: property.fontweight
-                        }} 
-                        />
+                        }}
+                    />
                     <Label htmlFor={`checkbox-${id}-${index}`}
                         style={{
-                        //     color: property.fontcolor,
-                        //     fontSize: property.fontsize + "px",
-                        //     height: property.height + "px",
-                        //     width: property.width + "px",
+                            //     color: property.fontcolor,
+                            //     fontSize: property.fontsize + "px",
+                            //     height: property.height + "px",
+                            //     width: property.width + "px",
                             fontWeight: property.fontweight
                         }}
                     >{option}</Label>
@@ -233,6 +233,10 @@ export function CheckboxProperties({ id }) {
         });
     }, [form, property]);
 
+    const handleReset = () => {
+        form.reset(AttributesData);
+        dispatch(updateprop({ id, ...AttributesData }));
+    };
 
     const applyChanges = (formData) => {
         console.log("formdata", formData);
@@ -347,49 +351,6 @@ export function CheckboxProperties({ id }) {
                     )}
                 />
 
-                {/* ======================== */}
-
-                {/* <FormField
-                    control={form.control}
-                    name="width"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Check Box width (px)</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="number"
-                                    step="1"
-                                    min="10"
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") e.currentTarget.blur();
-                                    }}
-                                />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                /> */}
-
-                {/* <FormField
-                    control={form.control}
-                    name="height"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Check Box height (px)</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="number"
-                                    step="1"
-                                    min="10"
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") e.currentTarget.blur();
-                                    }}
-                                />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                /> */}
 
 
                 <FormField
@@ -452,9 +413,11 @@ export function CheckboxProperties({ id }) {
                 />
                 {/* ======================== */}
 
-                <Button className="w-full" type='submit'>
-                    save
-                </Button>
+                <div className="w-full flex items-center justify-center">
+                    <Button type='button' className='w-[40%]' onClick={handleReset}>
+                        Reset
+                    </Button>
+                </div>
             </form>
         </Form>
     );

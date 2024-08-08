@@ -77,7 +77,7 @@ export function ImageFieldPreview({ id }) {
                     backgroundColor: '#f5f5f5', // Add a background color to visualize the container
                 }}
             >
-                <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder} 
+                <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder}
                     onChange={previewImage}
                 />
                 <span>No image selected</span>
@@ -94,25 +94,25 @@ export function ImageFieldPage({ id, properties, submitValues }) {
 
     properties.forEach((item) => {
         switch (item.property_name) {
-          case "label":
-            property.label = item.property_value;
-            break;
-          case "required":
-            property.required = item.property_value;
-            break;
-          case "placeholder":
-            property.placeholder = item.property_value;
-            break;
-          case "height":
-            property.height = item.property_value;
-            break;
-          case "width":
-            property.width = item.property_value;
-            break;
-          default:
-            break;
+            case "label":
+                property.label = item.property_value;
+                break;
+            case "required":
+                property.required = item.property_value;
+                break;
+            case "placeholder":
+                property.placeholder = item.property_value;
+                break;
+            case "height":
+                property.height = item.property_value;
+                break;
+            case "width":
+                property.width = item.property_value;
+                break;
+            default:
+                break;
         }
-      });
+    });
 
     const previewImage = (e) => {
         const imagePreview = document.getElementById('imagePreview');
@@ -146,7 +146,7 @@ export function ImageFieldPage({ id, properties, submitValues }) {
                     backgroundColor: '#f5f5f5', // Add a background color to visualize the container
                 }}
             >
-                <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder} 
+                <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder}
                     onChange={previewImage}
                 />
                 <span>No image selected</span>
@@ -216,7 +216,10 @@ export function ImageProperties({ id }) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(applyChanges)}
+            <form onBlur={form.handleSubmit(applyChanges)}
+                onSubmit={(e) => {
+                    e.preventDefault();
+                }}
                 className="space-y-3">
 
                 <FormField
@@ -318,10 +321,7 @@ export function ImageProperties({ id }) {
                     )}
                 />
 
-                <div className="w-full flex justify-between">
-                    <Button type='submit' className='w-[40%]'>
-                        Save
-                    </Button>
+                <div className="w-full flex items-center justify-center">
                     <Button type='button' className='w-[40%]' onClick={handleReset}>
                         Reset
                     </Button>

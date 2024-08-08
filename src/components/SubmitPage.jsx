@@ -9,14 +9,14 @@ import SavedPageElement from './designer/SavedPageElement';
 import { HiCursorClick } from 'react-icons/hi';
 
 function SubmitPage() {
-    const savedpage = useSelector((state) => state.page.savedPageData);    
-    console.log("SAved Page : " ,savedpage)    ;
-    
+    const savedpage = useSelector((state) => state.page.savedPageData);
+    console.log("SAved Page : ", savedpage);
+
     //Api data
 
     console.log("")
     console.log("pageContentID", savedpage.page_id);
-    
+
 
     // Submit form
 
@@ -36,17 +36,30 @@ function SubmitPage() {
     return (
 
 
-        <div>
+        <div >
             <Dialog>
                 <DialogTrigger>
                     <Button
                         variant={"outline"}
-                        className="group border border-primary/20 w-[350px] h-[190px] items-center justify-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4 mt-4"
+                        className=" group border border-primary/20 w-[350px] h-[190px] items-center justify-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4 mt-4  p-0"
                     >
                         {/* <BsFileEarmarkPlus className="h-8 w-8 text-muted-foreground group-hover:text-primary" /> */}
-                        <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">{
+                        <div className='flex flex-col w-full h-full justify-between py-4 px-2'>
+                        <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">Page Name : {
                             savedpage.page_name
                         }</p>
+                        <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">File Name : {
+                            savedpage.page_file_name
+                        }</p>
+                        <div className='flex justify-between w-full '>
+                            <p className="font-medium text-[12px] text-muted-foreground group-hover:text-primary">Last Updated by<br/> {
+                                savedpage.last_updated_by
+                            }</p>
+                            <p className="font-medium text-[12px] text-muted-foreground group-hover:text-primary">Last Updation Date<br/>{
+                                savedpage.last_update_date
+                            }</p>
+                        </div>
+                        </div>
                     </Button>
                 </DialogTrigger>
 

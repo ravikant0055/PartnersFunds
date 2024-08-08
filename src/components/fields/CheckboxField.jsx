@@ -15,7 +15,7 @@ const AttributesData = {
     labelHeader: "Header Name",
     label: "Checkbox",
     required: true,
-    options: ['Checkbox'],
+    options: [],
     fontsize: "16px", // Default font size
     fontcolor: "", // Default font color
     height: "50px", // Default height
@@ -128,7 +128,7 @@ export function CheckboxPage({ id, properties, submitValues }) {
                 property.required = item.property_value;
                 break;
             case "options":
-                property.options = item.property_value;
+                property.options = item.property_value.slice(1, -1).split(',').map(item => item.trim());;
                 break;
             case "fontsize":
                 property.textsize = item.property_value;

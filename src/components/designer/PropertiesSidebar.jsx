@@ -19,7 +19,7 @@ import { LinechartProperties } from '../fields/LineChart';
 import { PiechartProperties } from '../fields/PieChart';
 import { RadarchartProperties } from '../fields/RadarChart';
 import { ImageProperties } from '../fields/Image';
-import { IconProperties } from '../fields/Icon';
+import { IconProperties } from '../fields/Icons';
 
 const PropertiesSidebar = ({selectedElement}) => {
   const dispatch = useDispatch();

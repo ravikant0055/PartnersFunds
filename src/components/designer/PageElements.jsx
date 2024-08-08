@@ -15,7 +15,7 @@ import { LinechartPreview } from '../fields/LineChart'
 import { PiechartPreview } from '../fields/PieChart'
 import { RadarchartPreview } from '../fields/RadarChart'
 import { ImageFieldPreview } from '../fields/Image'
-import { IconFieldPreview } from '../fields/Icon'
+import { IconFieldPreview } from '../fields/Icons'
 
 const PageElements = ({element}) => {
   console.log("page element:",element.type);

@@ -18,6 +18,7 @@ import Linechart, { LinechartFormElement } from './fields/LineChart';
 import Piechart, { PiechartFormElement } from './fields/PieChart';
 import Radarchart, { RadarchartFormElement } from './fields/RadarChart';
 import Image, { ImageFormElement } from './fields/Image';
+import Icons, { IconFormElement } from './fields/Icons';
 
 
 function DragOverlayWrapper() {
@@ -58,6 +59,7 @@ function DragOverlayWrapper() {
             "togglefield"    : ToggleFieldFormElement,
             "radiofield"     : RadioFieldFormElement,
             "image"          : ImageFormElement,
+            "icon"           : IconFormElement,
             "barchart"       : BarchartFormElement,
             "linechart"      : LinechartFormElement,
             "piechart"       : PiechartFormElement,
@@ -84,6 +86,7 @@ function DragOverlayWrapper() {
         "togglefield"       : <ToggleField/>,
         "radiofield"        : <RadioField/>,
         "image"             : <Image />,
+        "icon"              : <Icons />,
         "barchart"          : <Barchart/>,
         "linechart"         : <Linechart/>,
         "piechart"          : <Piechart/>,

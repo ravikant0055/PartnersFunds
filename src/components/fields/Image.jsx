@@ -15,9 +15,6 @@ const AttributesData = {
     label: "Image",
     required: true,
     placeholder: "value here...",
-    color: "", // Default color
-    fontsize: 16, // Default font size
-    fontcolor: "", // Default font color
     height: 50, // Default height
     width: 200, // Default width
 }
@@ -38,9 +35,6 @@ const Image = ({ id }) => {
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
             <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder} style={{
-                color: property.color,
-                fontcolor: property.fontcolor,
-                fontSize: property.fontsize + "px",
                 height: property.height + "px",
                 width: property.width + "px",
             }} />
@@ -74,10 +68,8 @@ export function ImageFieldPreview({ id }) {
 
             <div id="imagePreview"
                 style={{
-                    border: '1px solid #ddd',
-                    padding: '10px',
-                    width: '300px',
-                    height: '100px',
+                    height: property.height + "px",
+                    width: property.width + "px",
                     overflow: 'hidden', // Hide overflowing parts of the image
                     display: 'flex',
                     alignItems: 'center',
@@ -85,14 +77,7 @@ export function ImageFieldPreview({ id }) {
                     backgroundColor: '#f5f5f5', // Add a background color to visualize the container
                 }}
             >
-                <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder} style={{
-                    color: property.color,
-                    fontcolor: property.fontcolor,
-                    fontSize: property.fontsize + "px",
-                    height: property.height + "px",
-                    width: property.width + "px",
-
-                }}
+                <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder} 
                     onChange={previewImage}
                 />
                 <span>No image selected</span>
@@ -101,6 +86,74 @@ export function ImageFieldPreview({ id }) {
     )
 }
 
+// image save 
+
+export function ImageFieldPage({ id, properties, submitValues }) {
+
+    const property = AttributesData;
+
+    properties.forEach((item) => {
+        switch (item.property_name) {
+          case "label":
+            property.label = item.property_value;
+            break;
+          case "required":
+            property.required = item.property_value;
+            break;
+          case "placeholder":
+            property.placeholder = item.property_value;
+            break;
+          case "height":
+            property.height = item.property_value;
+            break;
+          case "width":
+            property.width = item.property_value;
+            break;
+          default:
+            break;
+        }
+      });
+
+    const previewImage = (e) => {
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.innerHTML = ''; // Clear the current preview
+        const file = e.target.files[0];
+        if (file) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.onload = () => URL.revokeObjectURL(img.src); // Clean up
+            imagePreview.appendChild(img);
+        } else {
+            imagePreview.innerHTML = '<span>No image selected</span>';
+        }
+    }
+
+    return (
+        <div className='flex flex-col gap-2 w-full'>
+            <Label>
+                {property.label}
+                {property.required && <span className='text-red-600 font-bold'> *</span>}
+            </Label>
+
+            <div id="imagePreview"
+                style={{
+                    height: property.height + "px",
+                    width: property.width + "px",
+                    overflow: 'hidden', // Hide overflowing parts of the image
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#f5f5f5', // Add a background color to visualize the container
+                }}
+            >
+                <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder} 
+                    onChange={previewImage}
+                />
+                <span>No image selected</span>
+            </div>
+        </div>
+    )
+}
 
 export const ImageFormElement = {
     type: "image",

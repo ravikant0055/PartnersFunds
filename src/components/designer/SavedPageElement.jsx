@@ -10,6 +10,8 @@ import { CheckboxPage } from '../fields/CheckboxField'
 import { SelectFieldsPage } from '../fields/SelectField'
 import { ToggleFieldsPage } from '../fields/ToggleField'
 import { RadioFieldsPage } from '../fields/RadioField'
+import { IconFieldPage } from '../fields/Icons'
+import { ImageFieldPage } from '../fields/Image'
 
 const SavedPageElement = ({element, submitValues}) => {
     console.log("Merger  : => ",element);
@@ -25,7 +27,9 @@ const SavedPageElement = ({element, submitValues}) => {
     "checkbox"       : <CheckboxPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
     "selectfield"    : <SelectFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
     "togglefield"    : <ToggleFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
-    "radiofield"     : <RadioFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>
+    "radiofield"     : <RadioFieldsPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "image"          : <ImageFieldPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+    "icon"           : <IconFieldPage id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
   }
 
   

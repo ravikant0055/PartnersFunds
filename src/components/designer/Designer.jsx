@@ -26,7 +26,7 @@ import Linechart from "../fields/LineChart";
 import Piechart from "../fields/PieChart";
 import Radarchart from "../fields/RadarChart";
 import Image from "../fields/Image";
-import Icon from "../fields/Icon";
+import Icons from "../fields/Icons";
 import { deleteprop } from "../../store/AttributePropDataSlice";
 
 const Designer = () => {
@@ -197,7 +197,7 @@ function DesignerElementWrapper({ element, onDelete }) {
     togglefield     : <ToggleField id={element.id}/>,
     radiofield      : <RadioField id={element.id} />,
     image           : <Image id={element.id} />,
-    icon            : <Icon id={element.id} />,
+    icon            : <Icons id={element.id} />,
     barchart        : <Barchart id={element.id}/>,
     linechart       : <Linechart id={element.id}/>,
     piechart        : <Piechart id={element.id}/>,

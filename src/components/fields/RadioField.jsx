@@ -15,7 +15,7 @@ const AttributesData = {
     labelHeader: "Header Name",
     label: "Radio Field",
     required: true,
-    options: ['Radio Button'],
+    options: [],
     fontsize: 16, // Default font size
     headercolor: "",
     radiocolor: "", // Default font color
@@ -116,7 +116,10 @@ export function RadioFieldsPage({ id, properties, submitValues }) {
                 property.radiocolor = item.property_value;
                 break;
             case "options":
-                property.options = item.property_value;
+                property.options = item.property_value.slice(1, -1).split(',').map(item => item.trim());;
+                console.log("property.options",property.options);
+                
+                
                 break;
             case "fontsize":
                 property.textsize = item.property_value;

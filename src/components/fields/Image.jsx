@@ -15,8 +15,8 @@ const AttributesData = {
     label: "Image",
     required: true,
     placeholder: "value here...",
-    height: 50, // Default height
-    width: 200, // Default width
+    height: 150, // Default height
+    width: 150, // Default width
 }
 
 
@@ -66,21 +66,32 @@ export function ImageFieldPreview({ id }) {
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
 
-            <div id="imagePreview"
-                style={{
-                    height: property.height + "px",
-                    width: property.width + "px",
-                    overflow: 'hidden', // Hide overflowing parts of the image
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#f5f5f5', // Add a background color to visualize the container
-                }}
-            >
-                <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder}
+            <div style={{ position: 'relative', width: property.width + 'px', height: property.height + 'px' }}>
+                <div id="imagePreview"
+                    style={{
+                        height: '100%',
+                        width: '100%',
+                        overflow: 'hidden', // Hide overflowing parts of the image
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#f5f5f5', // Add a background color to visualize the container
+                    }}
+                >
+                    <span>No image selected</span>
+                </div>
+                <Input type="file" id="imageUpload" name="image" accept="image/*"
                     onChange={previewImage}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        opacity: 0,
+                        cursor: 'pointer'
+                    }}
                 />
-                <span>No image selected</span>
             </div>
         </div>
     )
@@ -135,21 +146,32 @@ export function ImageFieldPage({ id, properties, submitValues }) {
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
 
-            <div id="imagePreview"
-                style={{
-                    height: property.height + "px",
-                    width: property.width + "px",
-                    overflow: 'hidden', // Hide overflowing parts of the image
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#f5f5f5', // Add a background color to visualize the container
-                }}
-            >
-                <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder}
+            <div style={{ position: 'relative', width: property.width + 'px', height: property.height + 'px' }}>
+                <div id="imagePreview"
+                    style={{
+                        height: '100%',
+                        width: '100%',
+                        overflow: 'hidden', // Hide overflowing parts of the image
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#f5f5f5', // Add a background color to visualize the container
+                    }}
+                >
+                    <span>No image selected</span>
+                </div>
+                <Input type="file" id="imageUpload" name="image" accept="image/*"
                     onChange={previewImage}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        opacity: 0,
+                        cursor: 'pointer'
+                    }}
                 />
-                <span>No image selected</span>
             </div>
         </div>
     )

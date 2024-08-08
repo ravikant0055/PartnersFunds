@@ -47,8 +47,8 @@ function SubmitPage() {
                         <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">Page Name : {
                             savedpage.page_name
                         }</p>
-                        <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">File Name : {
-                            savedpage.page_file_name
+                        <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">Page Title : {
+                            savedpage.page_title
                         }</p>
                         <div className='flex justify-between w-full '>
                             <p className="font-medium text-[12px] text-muted-foreground group-hover:text-primary">Last Updated by<br/> {

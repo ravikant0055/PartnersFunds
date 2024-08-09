@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { propOff, propOn } from "../../store/PropertiesSlice";
 import TextAreaField from "../fields/TextAreaField";
 import { addElement, deleteElement, reorderElements } from "../../store/AttributeDataSlice";
-import { createAttribute } from "../../store/PageDataSlice";
+import { createAttribute, removeAttributebyId } from "../../store/PageDataSlice";
 import DateField from "../fields/DateField";
 import SeparatorField from "../fields/SaparatorField";
 import SpacerFields from "../fields/SpacerField";
@@ -37,6 +37,7 @@ const Designer = () => {
   const dispatch = useDispatch();
 
   const handleDeleteElement = (id) => {
+    dispatch(removeAttributebyId(id));
     dispatch(deleteElement(id));
     dispatch(deleteprop(id));
   };

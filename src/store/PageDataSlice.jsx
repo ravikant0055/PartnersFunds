@@ -77,8 +77,20 @@ export const createAttribute = createAsyncThunk('page/createAttribute',
   }
 )
 
+export const removeAttributebyId = createAsyncThunk('page/removeAttr',
+  async (attId, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`http://localhost:8080/page/deletedAttribute?removedAttrId=${attId}`);
+      return response.data; // Return data from successful API call
 
-//create aexpression by name and value to generate expression id 
+    } catch (error) {
+      return rejectWithValue(error.message); // Return error message
+    }
+  }
+);
+
+
+//create a expression by name and value to generate expression id 
 export const createExpression = createAsyncThunk('page/createExpression',
   async (values, { rejectWithValue }) => {
     console.log("exp value",values);
@@ -115,6 +127,30 @@ export const createExpression = createAsyncThunk('page/createExpression',
     }
   }
 )
+
+//create a entity by name and value to generate entity id 
+export const createEntity = createAsyncThunk('page/createEntity',
+  async (values, { rejectWithValue }) => {
+    console.log("entity value",values);
+    try {
+      const currentDate = new Date().toISOString().split('T')[0];
+      const { entityname, eotablename } = values;
+      const response = await axios.post('http://localhost:8080/page/saveEntityObject', {
+            entity_object_name: entityname,
+            entity_table_name: eotablename,
+            created_by: "praveen",
+            creation_date: currentDate,
+            last_updated_by: "praveen",
+            last_update_date: currentDate
+      });
+      return response.data;
+
+    } catch (error) {
+      return rejectWithValue(error.message); // Return error message
+    }
+  }
+)
+
 
 
 //save page api

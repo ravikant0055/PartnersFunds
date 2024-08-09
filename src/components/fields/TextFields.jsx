@@ -22,18 +22,22 @@ const AttributesData = {
   width: 500, // Default width
   labelposition: false,
   disable: false,
-  hide:false,
-  value: ""
+  hide: false,
+  value: "",
+  entityobject: "",
+  entityattribute: "",
+  viewobject: "",
+  viewattribute: "",
 }
 
 const TextFields = ({ id }) => {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
-        if (!property || property.id !== id) {
-          dispatch(addprop({ id, ...AttributesData }));
-      }
+    if (!property || property.id !== id) {
+      dispatch(addprop({ id, ...AttributesData }));
+    }
   }, [dispatch, id, property]);
 
   return (
@@ -108,7 +112,7 @@ export function TextFieldsPreview({ id }) {
   const shouldHide = evaluateConditions(hideConditions, attributePropData);
 
   return (
-    <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} gap-2 w-full ${shouldHide ? 'hidden' : ''}`}>
+    <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full ${shouldHide ? 'hidden' : ''}`}>
       <Label
         style={{
           color: property.labelcolor,
@@ -134,8 +138,15 @@ export function TextFieldsPreview({ id }) {
 }
 
 export function TextFieldsPage({ properties, id, submitValues }) {
-  const [values, setValues] = useState("");
   console.log("txt id", id);
+
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    setInputValue(newValue); // Update state to trigger re-render
+    if (submitValues) {
+      submitValues(id, newValue); // Update formValues
+    }
+  };
   const property = AttributesData;
 
   properties.forEach((item) => {
@@ -167,10 +178,15 @@ export function TextFieldsPage({ properties, id, submitValues }) {
       case "width":
         property.width = item.property_value;
         break;
+      case "value":
+        property.value = item.property_value;
+        break;
       default:
         break;
     }
   });
+
+  const [inputValue, setInputValue] = useState(property.value);
   // const property = properties;
   return (
     <div className='flex flex-col gap-2 w-full'>
@@ -189,12 +205,9 @@ export function TextFieldsPage({ properties, id, submitValues }) {
         height: property.height + "px",
         width: property.width + "px",
       }}
-        onChange={(e) => setValues(e.target.value)}
-        onBlur={(e) => {
-          if (!submitValues) return;
-          submitValues(id, e.target.value)
-        }}
-        value={values}
+        value={inputValue} // Bind to state
+        onChange={handleChange}
+
       />
     </div>
   )
@@ -212,6 +225,9 @@ export function TextProperties({ id }) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const expressionData = useSelector((state) => state.expressiondata);
+  const entityData = useSelector((state) => state.entitydata);
+  const viewData = useSelector((state) => state.viewdata);
+
   console.log("property data", property);
 
   const form = useForm({
@@ -222,7 +238,7 @@ export function TextProperties({ id }) {
       labelposition: property.labelposition,
       required: property.required,
       disable: property.disable,
-      hide:property.hide,
+      hide: property.hide,
       placeholder: property.placeholder,
       labelcolor: property.labelcolor,
       textsize: property.textsize,
@@ -230,6 +246,10 @@ export function TextProperties({ id }) {
       textcolor: property.textcolor,
       height: property.height,
       width: property.width,
+      entityobject: property.entityobject,
+      entityattribute: property.entityattribute,
+      viewobject: property.viewobject,
+      viewattribute: property.viewattribute
     },
   });
 
@@ -239,14 +259,18 @@ export function TextProperties({ id }) {
       labelposition: property.labelposition,
       required: property.required,
       disable: property.disable,
-      hide:property.hide,
+      hide: property.hide,
       placeholder: property.placeholder,
       labelcolor: property.labelcolor,
       textcolor: property.textcolor,
       textsize: property.textsize,
       labelsize: property.labelsize,
       height: property.height,
-      width: property.width
+      width: property.width,
+      entityobject: property.entityobject,
+      entityattribute: property.entityattribute,
+      viewobject: property.viewobject,
+      viewattribute: property.viewattribute
     });
   }, [form, property]);
 
@@ -272,10 +296,28 @@ export function TextProperties({ id }) {
   return (
     <Form {...form}>
       <form onBlur={form.handleSubmit(applyChanges)}
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
         className="space-y-3">
+
+        <FormField
+          control={form.control}
+          name="placeholder"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>PlaceHolder</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -399,10 +441,40 @@ export function TextProperties({ id }) {
 
         <FormField
           control={form.control}
-          name="placeholder"
+          name="entityobject"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>PlaceHolder</FormLabel>
+              <FormLabel>Entity Object Name</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="select enity object">
+                      {field.value === false ? "No" : JSON.stringify(field.value)?.entityname}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    {entityData?.map((item, index) => (
+                      <SelectItem key={index} value={JSON.stringify(item.entityname)}>
+                        {item.entityname}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="entityattribute"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Entity Object Attribute</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -414,6 +486,56 @@ export function TextProperties({ id }) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="viewobject"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>View Object Name</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="select view object">
+                      {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    {viewData?.map((item, index) => (
+                      <SelectItem key={index} value={JSON.stringify(item.viewname)}>
+                        {item.viewname}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="viewattribute"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>View Object Attribute</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+
 
         {/* ====================================== */}
         <FormField

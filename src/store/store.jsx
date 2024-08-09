@@ -5,6 +5,8 @@ import AttributeDataSlice from "./AttributeDataSlice";
 import AttributePropDataSlice from "./AttributePropDataSlice";
 import ExpressionSlice from "./ExpressionSlice";
 import SavePageSlice from "./SavePageSlice";
+import EntittyObjectSlice from "./EntittyObjectSlice";
+import ViewObjectSlice from "./ViewObjectSlice";
 
 const store = configureStore({
     reducer: {
@@ -13,7 +15,9 @@ const store = configureStore({
       attribute: AttributeDataSlice,
       propertiesdata : AttributePropDataSlice,
       expressiondata : ExpressionSlice,
-      savepage: SavePageSlice
+      savepage: SavePageSlice,
+      entitydata : EntittyObjectSlice,
+      viewdata : ViewObjectSlice
     },
   });
   

@@ -12,7 +12,11 @@ const SaveFormBtn = ({ id }) => {
   const dispatch = useDispatch();
      
   const myData = useSelector((state) => state.attribute);
+  console.log("myData", myData);
+  
   const property = useSelector((state) => state.propertiesdata);
+  console.log("property", property);
+  
   const page = useSelector((state) => state.savepage);
   
   const [loading, setLoading] = useState(false);  // Add loading state

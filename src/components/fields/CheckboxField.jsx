@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
@@ -10,9 +10,10 @@ import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { Checkbox } from '../ui/checkbox';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 import { Button } from '../ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const AttributesData = {
-    labelHeader: "Header Name",
+    labelHeader: "Checkbox Header Name",
     label: "Checkbox",
     required: true,
     options: [],
@@ -20,7 +21,17 @@ const AttributesData = {
     fontcolor: "", // Default font color
     height: "50px", // Default height
     width: "200px", // Default width
-    fontweight: "200" //Default font weight
+    fontweight: "200", //Default font weight
+    eovo: {
+        EO: {
+          entityobject: "",
+          entityattribute: ""
+        },
+        VO: {
+          viewobject: "",
+          viewattribute: ""
+        }
+      },
 }
 
 const CheckboxFields = ({ id }) => {
@@ -51,7 +62,7 @@ const CheckboxFields = ({ id }) => {
             </Label>
             {property.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
-                    <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`} style={{
+                    <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`} name={option} style={{
                         color: property.fontcolor,
                         fontSize: property.fontsize + "px",
                         height: property.height + "px",
@@ -116,6 +127,7 @@ export function CheckboxPreview({ id }) {
 export function CheckboxPage({ id, properties, submitValues }) {
     const property = AttributesData;
     console.log("txt id", id);
+    // const [checkedItems, setCheckedItems] = useState([]);
     properties.forEach((item) => {
         switch (item.property_name) {
             case "labelHeader":
@@ -150,6 +162,24 @@ export function CheckboxPage({ id, properties, submitValues }) {
                 break;
         }
     });
+    const [checkedItems, setCheckedItems] = useState([]);
+    const handleCheckboxChange = (event, option) => {
+        console.log("option",event,option);
+        
+        setCheckedItems(prevCheckedItems => {
+            const newCheckedItems = event
+                ? [...prevCheckedItems, option]
+                : prevCheckedItems.filter(item => item !== option);
+
+            // Log the new state and values
+            console.log("Checked Items:", newCheckedItems);
+
+            if (submitValues) {
+                submitValues(id, newCheckedItems); // Pass the updated checkedItems to submitValues
+            }
+        });
+    };
+
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label
@@ -166,21 +196,14 @@ export function CheckboxPage({ id, properties, submitValues }) {
             </Label>
             {property.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
-                    <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`}
+                    <Checkbox  id={`checkbox-${id}-${index}`}
+                        onCheckedChange={(event) => handleCheckboxChange(event, option)}
                         style={{
-                            //     color: property.fontcolor,
-                            //     fontSize: property.fontsize + "px",
-                            //     height: property.height + "px",
-                            //     width: property.width + "px",
                             fontWeight: property.fontweight
                         }}
                     />
                     <Label htmlFor={`checkbox-${id}-${index}`}
                         style={{
-                            //     color: property.fontcolor,
-                            //     fontSize: property.fontsize + "px",
-                            //     height: property.height + "px",
-                            //     width: property.width + "px",
                             fontWeight: property.fontweight
                         }}
                     >{option}</Label>
@@ -200,6 +223,8 @@ export const CheckboxFormElement = {
 export function CheckboxProperties({ id }) {
     const dispatch = useDispatch();
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+    const entityData = useSelector((state) => state.entitydata);
+    const viewData = useSelector((state) => state.viewdata);
     console.log("property data", property);
 
     const form = useForm({
@@ -214,7 +239,17 @@ export function CheckboxProperties({ id }) {
             fontsize: property.fontsize,
             height: property.height,
             width: property.width,
-            fontweight: property.fontweight
+            fontweight: property.fontweight,
+            eovo: {
+                EO: {
+                  entityobject: property.eovo.EO.entityobject,
+                  entityattribute: property.eovo.EO.entityattribute,
+                },
+                VO: {
+                  viewobject: property.eovo.VO.viewobject,
+                  viewattribute: property.eovo.VO.viewattribute,
+                }
+              },
         },
     });
 
@@ -229,7 +264,17 @@ export function CheckboxProperties({ id }) {
             fontsize: property.fontsize,
             height: property.height,
             width: property.width,
-            fontweight: property.fontweight
+            fontweight: property.fontweight,
+            eovo: {
+                EO: {
+                  entityobject: property.eovo.EO.entityobject,
+                  entityattribute: property.eovo.EO.entityattribute,
+                },
+                VO: {
+                  viewobject: property.eovo.VO.viewobject,
+                  viewattribute: property.eovo.VO.viewattribute,
+                }
+              },
         });
     }, [form, property]);
 
@@ -292,6 +337,102 @@ export function CheckboxProperties({ id }) {
                         </FormItem>
                     )}
                 />
+
+<FormField
+          control={form.control}
+          name="eovo.EO.entityobject"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Entity Object Name</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="select enity object">
+                      {field.value === false ? "No" : JSON.stringify(field.value)?.entityname}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    {entityData?.map((item, index) => (
+                      <SelectItem key={index} value={JSON.stringify(item.entityname)}>
+                        {item.entityname}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="eovo.EO.entityattribute"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Entity Object Attribute</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="eovo.VO.viewobject"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>View Object Name</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="select view object">
+                      {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    {viewData?.map((item, index) => (
+                      <SelectItem key={index} value={JSON.stringify(item.viewname)}>
+                        {item.viewname}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="eovo.VO.viewattribute"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>View Object Attribute</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
 
                 <FormField
                     control={form.control}

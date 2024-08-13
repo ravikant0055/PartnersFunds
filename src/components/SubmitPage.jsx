@@ -14,7 +14,7 @@ function SubmitPage() {
 
     //Api data
 
-    console.log("")
+    console.log("savedpage",savedpage)
     console.log("pageContentID", savedpage.page_id);
 
 

@@ -17,12 +17,22 @@ const AttributesData = {
     placeholder: "Select",
     options: [],
     disable: false,
-    hide:false,
-    value:"",
+    hide: false,
+    value: "",
     color: "", // Default color
     fontsize: "16px", // Default font color
     height: 20, // Default height
     width: "200px", // Default width
+    eovo: {
+        EO: {
+            entityobject: "",
+            entityattribute: ""
+        },
+        VO: {
+            viewobject: "",
+            viewattribute: ""
+        }
+    },
 }
 
 
@@ -105,10 +115,10 @@ export function SelectFieldsPreview({ id }) {
 
     const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
     const shouldHide = evaluateConditions(hideConditions, attributePropData);
-    
+
 
     return (
-        <div className={`${property.labelposition?'flex flex-col': 'flex items-center'} ${shouldHide ? 'hidden' : ''} gap-2 w-full`} style={{width: property.width + "px",}}>
+        <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} ${shouldHide ? 'hidden' : ''} gap-2 w-full`} style={{ width: property.width + "px", }}>
             <Label className='text-nowrap' style={{
                 fontSize: property.fontsize + "px",
                 height: property.height + "px",
@@ -138,8 +148,14 @@ export function SelectFieldsPreview({ id }) {
 
 export function SelectFieldsPage({ id, properties, submitValues }) {
     console.log("txt id", id);
-    const [values, setValues] = useState("");
+    // const [values, setValues] = useState("");
     const property = AttributesData;
+    const handleChange = (newValue) => {
+        setInputValue(newValue); // Update state to trigger re-render
+        if (submitValues) {
+            submitValues(id, newValue); // Update formValues
+        }
+    };
     properties.forEach((item) => {
         switch (item.property_name) {
             case "label":
@@ -163,10 +179,14 @@ export function SelectFieldsPage({ id, properties, submitValues }) {
             case "width":
                 property.width = item.property_value;
                 break;
+            case "value":
+                property.value = item.property_value;
+                break;
             default:
                 break;
         }
     });
+    const [inputValue, setInputValue] = useState(property.value);
     return (
         <div className='flex flex-col gap-2 w-full' style={{
             width: property.width + "px",
@@ -178,7 +198,10 @@ export function SelectFieldsPage({ id, properties, submitValues }) {
                 {property.label}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            <Select>
+            <Select
+                value={inputValue}
+                onValueChange={handleChange}
+            >
                 <SelectTrigger>
                     <SelectValue placeholder={property.placeholder} />
                 </SelectTrigger>
@@ -206,6 +229,8 @@ export function SelectFieldProperties({ id }) {
     const dispatch = useDispatch();
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const expressionData = useSelector((state) => state.expressiondata);
+    const entityData = useSelector((state) => state.entitydata);
+    const viewData = useSelector((state) => state.viewdata);
     console.log("expData", expressionData.length);
     console.log("property data", property);
 
@@ -219,11 +244,21 @@ export function SelectFieldProperties({ id }) {
             placeholder: property.placeholder,
             options: property.options,
             disable: property.disable,
-            hide:property.hide,
+            hide: property.hide,
             color: property.color,
             fontsize: property.fontsize,
             height: property.height,
             width: property.width,
+            eovo: {
+                EO: {
+                    entityobject: property.eovo.EO.entityobject,
+                    entityattribute: property.eovo.EO.entityattribute,
+                },
+                VO: {
+                    viewobject: property.eovo.VO.viewobject,
+                    viewattribute: property.eovo.VO.viewattribute,
+                }
+            },
         },
     });
 
@@ -235,11 +270,21 @@ export function SelectFieldProperties({ id }) {
             placeholder: property.placeholder,
             options: property.options,
             disable: property.disable,
-            hide:property.hide,
+            hide: property.hide,
             color: property.color,
             fontsize: property.fontsize,
             height: property.height,
             width: property.width,
+            eovo: {
+                EO: {
+                    entityobject: property.eovo.EO.entityobject,
+                    entityattribute: property.eovo.EO.entityattribute,
+                },
+                VO: {
+                    viewobject: property.eovo.VO.viewobject,
+                    viewattribute: property.eovo.VO.viewattribute,
+                }
+            },
         });
     }, [form, property]);
 
@@ -325,6 +370,103 @@ export function SelectFieldProperties({ id }) {
 
                 <FormField
                     control={form.control}
+                    name="eovo.EO.entityobject"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Entity Object Name</FormLabel>
+                            <FormControl>
+                                <Select
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="select enity object">
+                                            {field.value === false ? "No" : JSON.stringify(field.value)?.entityname}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value={"false".toString()}>No</SelectItem>
+                                        {entityData?.map((item, index) => (
+                                            <SelectItem key={index} value={JSON.stringify(item.entityname)}>
+                                                {item.entityname}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="eovo.EO.entityattribute"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Entity Object Attribute</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="eovo.VO.viewobject"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>View Object Name</FormLabel>
+                            <FormControl>
+                                <Select
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="select view object">
+                                            {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value={"false".toString()}>No</SelectItem>
+                                        {viewData?.map((item, index) => (
+                                            <SelectItem key={index} value={JSON.stringify(item.viewname)}>
+                                                {item.viewname}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="eovo.VO.viewattribute"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>View Object Attribute</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+
+
+                <FormField
+                    control={form.control}
                     name="required"
                     render={({ field }) => (
                         <FormItem>
@@ -352,9 +494,9 @@ export function SelectFieldProperties({ id }) {
                             <FormLabel>Disable</FormLabel>
                             <FormControl>
                                 <Select
-                                   value={field.value}
-                                   onValueChange={field.onChange}
-                                   >
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
                                     <SelectTrigger>
                                         <SelectValue placeholder="select expression">
                                             {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}

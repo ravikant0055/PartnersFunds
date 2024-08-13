@@ -143,7 +143,9 @@ export const createEntity = createAsyncThunk('page/createEntity',
             last_updated_by: "praveen",
             last_update_date: currentDate
       });
+      console.log("response.data",response.data);
       return response.data;
+      
 
     } catch (error) {
       return rejectWithValue(error.message); // Return error message

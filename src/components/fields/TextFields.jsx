@@ -24,10 +24,17 @@ const AttributesData = {
   disable: false,
   hide: false,
   value: "",
-  entityobject: "",
-  entityattribute: "",
-  viewobject: "",
-  viewattribute: "",
+  eovo: {
+    EO: {
+      entityobject: "",
+      entityattribute: ""
+    },
+    VO: {
+      viewobject: "",
+      viewattribute: ""
+    }
+  },
+
 }
 
 const TextFields = ({ id }) => {
@@ -228,6 +235,9 @@ export function TextProperties({ id }) {
   const entityData = useSelector((state) => state.entitydata);
   const viewData = useSelector((state) => state.viewdata);
 
+  console.log("entityData",entityData);
+  
+
   console.log("property data", property);
 
   const form = useForm({
@@ -246,10 +256,16 @@ export function TextProperties({ id }) {
       textcolor: property.textcolor,
       height: property.height,
       width: property.width,
-      entityobject: property.entityobject,
-      entityattribute: property.entityattribute,
-      viewobject: property.viewobject,
-      viewattribute: property.viewattribute
+      eovo: {
+        EO: {
+          entityobject: property.eovo.EO.entityobject,
+          entityattribute: property.eovo.EO.entityattribute,
+        },
+        VO: {
+          viewobject: property.eovo.VO.viewobject,
+          viewattribute: property.eovo.VO.viewattribute,
+        }
+      },
     },
   });
 
@@ -267,10 +283,16 @@ export function TextProperties({ id }) {
       labelsize: property.labelsize,
       height: property.height,
       width: property.width,
-      entityobject: property.entityobject,
-      entityattribute: property.entityattribute,
-      viewobject: property.viewobject,
-      viewattribute: property.viewattribute
+      eovo: {
+        EO: {
+          entityobject: property.eovo.EO.entityobject,
+          entityattribute: property.eovo.EO.entityattribute,
+        },
+        VO: {
+          viewobject: property.eovo.VO.viewobject,
+          viewattribute: property.eovo.VO.viewattribute,
+        }
+      },
     });
   }, [form, property]);
 
@@ -439,9 +461,11 @@ export function TextProperties({ id }) {
           )}
         />
 
+
+
         <FormField
           control={form.control}
-          name="entityobject"
+          name="eovo.EO.entityobject"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Entity Object Name</FormLabel>
@@ -468,10 +492,9 @@ export function TextProperties({ id }) {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
-          name="entityattribute"
+          name="eovo.EO.entityattribute"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Entity Object Attribute</FormLabel>
@@ -489,7 +512,7 @@ export function TextProperties({ id }) {
 
         <FormField
           control={form.control}
-          name="viewobject"
+          name="eovo.VO.viewobject"
           render={({ field }) => (
             <FormItem>
               <FormLabel>View Object Name</FormLabel>
@@ -519,7 +542,7 @@ export function TextProperties({ id }) {
 
         <FormField
           control={form.control}
-          name="viewattribute"
+          name="eovo.VO.viewattribute"
           render={({ field }) => (
             <FormItem>
               <FormLabel>View Object Attribute</FormLabel>

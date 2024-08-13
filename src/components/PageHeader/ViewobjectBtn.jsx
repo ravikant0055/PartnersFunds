@@ -11,6 +11,7 @@ import { addentity } from 'src/store/EntittyObjectSlice';
 import { CiEdit } from 'react-icons/ci';
 import { MdDelete } from 'react-icons/md';
 import { addview } from 'src/store/ViewObjectSlice';
+import { Textarea } from '../ui/textarea';
 
 const ViewobjectBtn = () => {
    
@@ -87,7 +88,7 @@ const ViewobjectBtn = () => {
                 <FormItem>
                   <FormLabel>Enter Query</FormLabel>
                   <FormControl>
-                    <Input {...field} onKeyDown={(e) => {
+                    <Textarea {...field} onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
                   }}/>
                   </FormControl>

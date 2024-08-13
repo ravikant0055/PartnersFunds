@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
@@ -135,6 +135,23 @@ export function RadioFieldsPage({ id, properties, submitValues }) {
                 break;
         }
     });
+    const [checkedItems, setCheckedItems] = useState();
+    const handleCheckboxChange = (value, option) => {
+        console.log("option",value,option);
+        
+        setCheckedItems(prevCheckedItems => {
+            const newCheckedItems = value
+                ? [...prevCheckedItems, option]
+                : prevCheckedItems.filter(item => item !== option);
+
+            // Log the new state and values
+            console.log("Checked Items:", newCheckedItems);
+
+            if (submitValues) {
+                submitValues(id, newCheckedItems); // Pass the updated checkedItems to submitValues
+            }
+        });
+    };
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label
@@ -154,7 +171,8 @@ export function RadioFieldsPage({ id, properties, submitValues }) {
             }}>
                 {property.options.map((option, index) => (
                     <div key={index} className="flex items-center space-x-2">
-                        <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
+                        <RadioGroupItem value={option}
+                        onValueChange={handleCheckboxChange} id={`radio-${id}-${index}`} />
                         <Label htmlFor={`radio-${id}-${index}`}
                         >{option}</Label>
                     </div>

@@ -24,14 +24,14 @@ const AttributesData = {
     fontweight: "200", //Default font weight
     eovo: {
         EO: {
-          entityobject: "",
-          entityattribute: ""
+            entityobject: "",
+            entityattribute: ""
         },
         VO: {
-          viewobject: "",
-          viewattribute: ""
+            viewobject: "",
+            viewattribute: ""
         }
-      },
+    },
 }
 
 const CheckboxFields = ({ id }) => {
@@ -164,8 +164,8 @@ export function CheckboxPage({ id, properties, submitValues }) {
     });
     const [checkedItems, setCheckedItems] = useState([]);
     const handleCheckboxChange = (event, option) => {
-        console.log("option",event,option);
-        
+        console.log("option", event, option);
+
         setCheckedItems(prevCheckedItems => {
             const newCheckedItems = event
                 ? [...prevCheckedItems, option]
@@ -196,7 +196,7 @@ export function CheckboxPage({ id, properties, submitValues }) {
             </Label>
             {property.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
-                    <Checkbox  id={`checkbox-${id}-${index}`}
+                    <Checkbox id={`checkbox-${id}-${index}`}
                         onCheckedChange={(event) => handleCheckboxChange(event, option)}
                         style={{
                             fontWeight: property.fontweight
@@ -242,14 +242,14 @@ export function CheckboxProperties({ id }) {
             fontweight: property.fontweight,
             eovo: {
                 EO: {
-                  entityobject: property.eovo.EO.entityobject,
-                  entityattribute: property.eovo.EO.entityattribute,
+                    entityobject: property.eovo.EO.entityobject,
+                    entityattribute: property.eovo.EO.entityattribute,
                 },
                 VO: {
-                  viewobject: property.eovo.VO.viewobject,
-                  viewattribute: property.eovo.VO.viewattribute,
+                    viewobject: property.eovo.VO.viewobject,
+                    viewattribute: property.eovo.VO.viewattribute,
                 }
-              },
+            },
         },
     });
 
@@ -267,14 +267,14 @@ export function CheckboxProperties({ id }) {
             fontweight: property.fontweight,
             eovo: {
                 EO: {
-                  entityobject: property.eovo.EO.entityobject,
-                  entityattribute: property.eovo.EO.entityattribute,
+                    entityobject: property.eovo.EO.entityobject,
+                    entityattribute: property.eovo.EO.entityattribute,
                 },
                 VO: {
-                  viewobject: property.eovo.VO.viewobject,
-                  viewattribute: property.eovo.VO.viewattribute,
+                    viewobject: property.eovo.VO.viewobject,
+                    viewattribute: property.eovo.VO.viewattribute,
                 }
-              },
+            },
         });
     }, [form, property]);
 
@@ -338,100 +338,100 @@ export function CheckboxProperties({ id }) {
                     )}
                 />
 
-<FormField
-          control={form.control}
-          name="eovo.EO.entityobject"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Entity Object Name</FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value}
-                  onValueChange={field.onChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="select enity object">
-                      {field.value === false ? "No" : JSON.stringify(field.value)?.entityname}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={"false".toString()}>No</SelectItem>
-                    {entityData?.map((item, index) => (
-                      <SelectItem key={index} value={JSON.stringify(item.entityname)}>
-                        {item.entityname}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="eovo.EO.entityattribute"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Entity Object Attribute</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
+                <FormField
+                    control={form.control}
+                    name="eovo.EO.entityobject"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Entity Object Name</FormLabel>
+                            <FormControl>
+                                <Select
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="select enity object">
+                                            {field.value === false ? "No" : JSON.stringify(field.value)?.entityname}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value={"false".toString()}>No</SelectItem>
+                                        {entityData?.map((item, index) => (
+                                            <SelectItem key={index} value={JSON.stringify(item.entityname)}>
+                                                {item.entityname}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                        </FormItem>
+                    )}
                 />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="eovo.VO.viewobject"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>View Object Name</FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value}
-                  onValueChange={field.onChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="select view object">
-                      {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={"false".toString()}>No</SelectItem>
-                    {viewData?.map((item, index) => (
-                      <SelectItem key={index} value={JSON.stringify(item.viewname)}>
-                        {item.viewname}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="eovo.VO.viewattribute"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>View Object Attribute</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
+                <FormField
+                    control={form.control}
+                    name="eovo.EO.entityattribute"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Entity Object Attribute</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
                 />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+
+                <FormField
+                    control={form.control}
+                    name="eovo.VO.viewobject"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>View Object Name</FormLabel>
+                            <FormControl>
+                                <Select
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="select view object">
+                                            {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value={"false".toString()}>No</SelectItem>
+                                        {viewData?.map((item, index) => (
+                                            <SelectItem key={index} value={JSON.stringify(item.viewname)}>
+                                                {item.viewname}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="eovo.VO.viewattribute"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>View Object Attribute</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
 
 
                 <FormField

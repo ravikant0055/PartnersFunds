@@ -16,7 +16,6 @@ import { LinechartFormElement } from '../fields/LineChart'
 import { PiechartFormElement } from '../fields/PieChart'
 import { RadarchartFormElement } from '../fields/RadarChart'
 import { ImageFormElement } from '../fields/Image'
-import { IconFormElement } from '../fields/Icons'
 
 const FormElementsSidebar = () => {
   return (
@@ -37,7 +36,6 @@ const FormElementsSidebar = () => {
           <SideBarBtnElement formelement={ToggleFieldFormElement}/>
           <SideBarBtnElement formelement={RadioFieldFormElement}/>
           <SideBarBtnElement formelement={ImageFormElement} />
-          <SideBarBtnElement formelement={IconFormElement} />
 
           <p className='text-sm text-muted-foreground col-span-2 place-self-start my-2'>Graphs Elements </p>
           <SideBarBtnElement formelement={BarchartFormElement}/>

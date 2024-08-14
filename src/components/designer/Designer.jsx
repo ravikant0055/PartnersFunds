@@ -6,7 +6,6 @@ import TextFields from "../fields/TextFields";
 import Buttons from "../fields/Buttons";
 import { Button } from '../ui/button';
 import { BiSolidTrash } from "react-icons/bi";
-//import { idGenerator } from 'src/lib/idGenerator';
 import Heading from "../fields/Heading";
 import { useDispatch, useSelector } from "react-redux";
 import { propOff, propOn } from "../../store/PropertiesSlice";
@@ -20,13 +19,11 @@ import CheckboxFields from "../fields/CheckboxField";
 import SelectField from "../fields/SelectField";
 import ToggleField from "../fields/ToggleField";
 import RadioField from "../fields/RadioField";
-// import { deleteprop } from "src/store/AttributePropDataSlice";
 import Barchart from "../fields/BarChart";
 import Linechart from "../fields/LineChart";
 import Piechart from "../fields/PieChart";
 import Radarchart from "../fields/RadarChart";
 import Image from "../fields/Image";
-import Icons from "../fields/Icons";
 import { deleteprop } from "../../store/AttributePropDataSlice";
 
 const Designer = () => {
@@ -198,7 +195,6 @@ function DesignerElementWrapper({ element, onDelete }) {
     togglefield     : <ToggleField id={element.id}/>,
     radiofield      : <RadioField id={element.id} />,
     image           : <Image id={element.id} />,
-    icon            : <Icons id={element.id} />,
     barchart        : <Barchart id={element.id}/>,
     linechart       : <Linechart id={element.id}/>,
     piechart        : <Piechart id={element.id}/>,

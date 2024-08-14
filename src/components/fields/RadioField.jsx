@@ -10,16 +10,27 @@ import { Button } from '../ui/button';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 import { IoIosRadioButtonOn } from "react-icons/io";
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const AttributesData = {
-    labelHeader: "Header Name",
+    labelHeader: "Radio Header Name",
     label: "Radio Field",
     required: true,
     options: [],
     fontsize: 16, // Default font size
     headercolor: "",
     radiocolor: "", // Default font color
-    fontweight: 200 //Default font weight
+    fontweight: 200, //Default font weight
+    eovo: {
+        EO: {
+          entityobject: "",
+          entityattribute: ""
+        },
+        VO: {
+          viewobject: "",
+          viewattribute: ""
+        }
+      },
 }
 
 const RadioField = ({ id }) => {
@@ -31,8 +42,6 @@ const RadioField = ({ id }) => {
             dispatch(addprop({ id, ...AttributesData }));
         }
     }, [dispatch, id, property]);
-
-    const rid = `radio-${id}`;
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label
@@ -135,22 +144,14 @@ export function RadioFieldsPage({ id, properties, submitValues }) {
                 break;
         }
     });
-    const [checkedItems, setCheckedItems] = useState();
-    const handleCheckboxChange = (value, option) => {
-        console.log("option",value,option);
+    const [checkedItems, setCheckedItems] = useState(property.options);
+    const handleRadioChange = (newValue) => {
+        console.log("option",newValue);
+        setCheckedItems(newValue); // Update state to trigger re-render
+        if (submitValues) {
+            submitValues(id, newValue); // Update formValues
+        }
         
-        setCheckedItems(prevCheckedItems => {
-            const newCheckedItems = value
-                ? [...prevCheckedItems, option]
-                : prevCheckedItems.filter(item => item !== option);
-
-            // Log the new state and values
-            console.log("Checked Items:", newCheckedItems);
-
-            if (submitValues) {
-                submitValues(id, newCheckedItems); // Pass the updated checkedItems to submitValues
-            }
-        });
     };
     return (
         <div className='flex flex-col gap-2 w-full'>
@@ -164,7 +165,9 @@ export function RadioFieldsPage({ id, properties, submitValues }) {
                 {property.labelHeader}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            <RadioGroup defaultValue="option-one" style={{
+            <RadioGroup defaultValue="option-one" 
+            onValueChange={handleRadioChange}
+            style={{
                 color: property.radiocolor,
                 fontSize: property.fontsize + "px",
                 fontWeight: property.fontweight
@@ -172,7 +175,7 @@ export function RadioFieldsPage({ id, properties, submitValues }) {
                 {property.options.map((option, index) => (
                     <div key={index} className="flex items-center space-x-2">
                         <RadioGroupItem value={option}
-                        onValueChange={handleCheckboxChange} id={`radio-${id}-${index}`} />
+                         id={`radio-${id}-${index}`} />
                         <Label htmlFor={`radio-${id}-${index}`}
                         >{option}</Label>
                     </div>
@@ -192,6 +195,8 @@ export const RadioFieldFormElement = {
 export function RadioFieldProperties({ id }) {
     const dispatch = useDispatch();
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+    const entityData = useSelector((state) => state.entitydata);
+    const viewData = useSelector((state) => state.viewdata);
     console.log("property data", property);
 
     const form = useForm({
@@ -205,7 +210,17 @@ export function RadioFieldProperties({ id }) {
             headercolor: property.headercolor,
             radiocolor: property.radiocolor,
             fontsize: property.fontsize,
-            fontweight: property.fontweight
+            fontweight: property.fontweight,
+            eovo: {
+                EO: {
+                  entityobject: property.eovo.EO.entityobject,
+                  entityattribute: property.eovo.EO.entityattribute,
+                },
+                VO: {
+                  viewobject: property.eovo.VO.viewobject,
+                  viewattribute: property.eovo.VO.viewattribute,
+                }
+              },
         },
     });
 
@@ -219,7 +234,17 @@ export function RadioFieldProperties({ id }) {
             headercolor: property.headercolor,
             radiocolor: property.radiocolor,
             fontsize: property.fontsize,
-            fontweight: property.fontweight
+            fontweight: property.fontweight,
+            eovo: {
+                EO: {
+                  entityobject: property.eovo.EO.entityobject,
+                  entityattribute: property.eovo.EO.entityattribute,
+                },
+                VO: {
+                  viewobject: property.eovo.VO.viewobject,
+                  viewattribute: property.eovo.VO.viewattribute,
+                }
+              },
         });
     }, [form, property]);
 
@@ -270,6 +295,101 @@ export function RadioFieldProperties({ id }) {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Label</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+<FormField
+                    control={form.control}
+                    name="eovo.EO.entityobject"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Entity Object Name</FormLabel>
+                            <FormControl>
+                                <Select
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="select enity object">
+                                            {field.value === false ? "No" : JSON.stringify(field.value)?.entityname}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value={"false".toString()}>No</SelectItem>
+                                        {entityData?.map((item, index) => (
+                                            <SelectItem key={index} value={JSON.stringify(item.entityname)}>
+                                                {item.entityname}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="eovo.EO.entityattribute"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Entity Object Attribute</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="eovo.VO.viewobject"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>View Object Name</FormLabel>
+                            <FormControl>
+                                <Select
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="select view object">
+                                            {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value={"false".toString()}>No</SelectItem>
+                                        {viewData?.map((item, index) => (
+                                            <SelectItem key={index} value={JSON.stringify(item.viewname)}>
+                                                {item.viewname}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="eovo.VO.viewattribute"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>View Object Attribute</FormLabel>
                             <FormControl>
                                 <Input
                                     {...field}

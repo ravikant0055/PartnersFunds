@@ -1,9 +1,7 @@
 import React, { useCallback, useRef } from 'react'
-import { BsFileEarmarkPlus } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { Button } from './ui/button';
-import PageElements from './designer/PageElements';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from './ui/dialog';
 import paperSvg from '../assests/paper.svg';
 import SavedPageElement from './designer/SavedPageElement';
 import { HiCursorClick } from 'react-icons/hi';
@@ -21,12 +19,9 @@ function SubmitPage() {
     // Submit form
 
     const formValues = useRef({});
-    console.log("23", formValues);
 
 
     const submitValues = useCallback((key, value) => {
-        console.log("27", formValues);
-        console.log("28", formValues.current);
         formValues.current[key] = value;
     }, []);
 

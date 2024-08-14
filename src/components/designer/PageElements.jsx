@@ -15,7 +15,6 @@ import { LinechartPreview } from '../fields/LineChart'
 import { PiechartPreview } from '../fields/PieChart'
 import { RadarchartPreview } from '../fields/RadarChart'
 import { ImageFieldPreview } from '../fields/Image'
-import { IconFieldPreview } from '../fields/Icons'
 
 const PageElements = ({element}) => {
   console.log("page element:",element.type);
@@ -38,7 +37,6 @@ const PageElements = ({element}) => {
     "piechart"       : <PiechartPreview id={element.id}/>,
     "radarchart"     : <RadarchartPreview id={element.id}/>,
     "image"          : <ImageFieldPreview id={element.id} />,
-    "icon"           : <IconFieldPreview id={element.id} />
   }
 
   

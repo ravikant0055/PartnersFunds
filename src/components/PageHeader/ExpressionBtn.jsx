@@ -15,16 +15,19 @@ import { MdDelete } from "react-icons/md";
 import { createExpression } from '../../store/PageDataSlice';
 import { useNavigate } from 'react-router-dom';
 
+
+
 const ExpressionBtn = () => {
   const [conditions, setConditions] = useState([{ attribute: '', operator: '', attvalues: '', parentOperator: null }]);
   const [isExplist, SetIsExplist] = useState(false);
   const expressionData = useSelector((state) => state.expressiondata);
   const attributeData = useSelector((state) => state.propertiesdata);
-  console.log("attributeData:", attributeData);
 
-  const operator=["*","is","is not","==","!=","<",">"];
 
-  const navigate = useNavigate();
+ console.log("expresion data :",expressionData);
+ 
+  const operator = ["*", "is", "is not", "==", "!=", "<", ">"];
+
   const dispatch = useDispatch();
 
   const form = useForm({
@@ -35,27 +38,57 @@ const ExpressionBtn = () => {
   });
 
   const removeExpression = (expId) => {
-       console.log("exp del id" ,expId);
-       dispatch(removeexp(expId));
+    console.log("exp del id" ,expId);
+    dispatch(removeexp(expId));
   }
 
+  const handleConditionChange = (index, field, value) => {
+    const updatedConditions = conditions.map((condition, i) =>
+      i === index ? { ...condition, [field]: value } : condition
+    );
+
+    setConditions(updatedConditions);
+    form.setValue('conditions', updatedConditions); // Update form's condition state
+  };
+
+  const addCondition = (index, parentOperator) => {
+    const newCondition = { attribute: '', operator: '', attvalues: '', parentOperator };
+    const updatedConditions = [
+      ...conditions.slice(0, index + 1),
+      newCondition,
+      ...conditions.slice(index + 1),
+    ];
+
+    setConditions(updatedConditions);
+    form.setValue('conditions', updatedConditions); // Update form's condition state
+  };
+
+  const removeCondition = (index) => {
+    const updatedConditions = conditions.filter((_, i) => i !== index);
+
+    setConditions(updatedConditions);
+    form.setValue('conditions', updatedConditions); // Update form's condition state
+  };
+
   const applyChanges = async (formdata) => {
-    const updatedFormData = {
-      ...formdata,
-      conditions: conditions.map((item) => ({ ...item })),
-    };
-    console.log("form data", updatedFormData);
+    console.log("form data", formdata);
 
     try {
-      const res = await dispatch(createExpression(updatedFormData));
-      console.log("my expression api response",res);
+      const res = await dispatch(createExpression(formdata));
+      console.log("my expression api response", res);
       const expID = res.payload.expression_ID;
+
+      console.log("epxres api resp",res);
+      console.log("epxres api resp exp id",expID);
+      
+
       const updatedFormDataWithID = {
-        ...updatedFormData,
+        ...formdata,
         expression_id: expID,
       };
+      console.log("MY EXP FORM", updatedFormDataWithID);
       dispatch(addexp(updatedFormDataWithID));
-    }catch (error) {
+    } catch (error) {
       console.error("Error creating attribute:", error);
     }
 
@@ -64,28 +97,6 @@ const ExpressionBtn = () => {
       conditions: [{ attribute: '', operator: '', attvalues: '', parentOperator: null }],
     });
     setConditions([{ attribute: '', operator: '', attvalues: '', parentOperator: null }]);
-  };
-  
-  const handleConditionChange = (index, field, value) => {
-    setConditions((prevConditions) =>
-      prevConditions.map((condition, i) =>
-        i === index ? { ...condition, [field]: value } : condition
-      )
-    );
-  };
-
-  const addCondition = (index, parentOperator) => {
-    setConditions((prevConditions) => [
-      ...prevConditions.slice(0, index + 1),
-      { attribute: '', operator: '', attvalues: '', parentOperator },
-      ...prevConditions.slice(index + 1),
-    ]);
-  };
-
-  const removeCondition = (index) => {
-    setConditions((prevConditions) =>
-      prevConditions.filter((_, i) => i !== index)
-    );
   };
 
   return (
@@ -103,14 +114,14 @@ const ExpressionBtn = () => {
         
         {
 
-        attributeData.length!==0 
+        attributeData.length !== 0 
         ? 
         ( <>
           <DialogHeader>
             <DialogTitle>Element Expression</DialogTitle>
             <div className='flex justify-between items-center'>
               <DialogDescription>{!isExplist ? "Create expression for your elements" : "Total Expression List" }</DialogDescription>
-              <Button onClick={()=>SetIsExplist((prev)=>!prev)} variant={"white"} className='py-0 text-blue-600'>{!isExplist?"view list":"add exp"}</Button>
+              <Button onClick={()=>SetIsExplist((prev)=>!prev)} variant={"white"} className='py-0 text-blue-600'>{!isExplist ? "view list" : "add exp"}</Button>
             </div>
           </DialogHeader>
           {!isExplist ? (
@@ -192,7 +203,10 @@ const ExpressionBtn = () => {
                           <FormItem>
                             <FormLabel>Values</FormLabel>
                             <FormControl>
-                              <Input {...field} />
+                              <Input {...field} onChange={(e) => {
+                                field.onChange(e);
+                                handleConditionChange(index, 'attvalues', e.target.value);
+                              }} />
                             </FormControl>
                           </FormItem>
                         )}

@@ -12,6 +12,7 @@ import { CiEdit } from 'react-icons/ci';
 import { MdDelete } from 'react-icons/md';
 import { addview } from 'src/store/ViewObjectSlice';
 import { Textarea } from '../ui/textarea';
+import { createView } from 'src/store/PageDataSlice';
 
 const ViewobjectBtn = () => {
    
@@ -29,11 +30,22 @@ const ViewobjectBtn = () => {
 
   const onSubmit = async (values) => {
     try {
-      console.log('Submitted values:', values);
-      dispatch(addview(values));
+      // console.log('Submitted values:', values);
+      // dispatch(addview(values));
+      const res = await dispatch(createView(values));
+      const viewID = res.payload.view_object_id;
+      const updatedFormDataWithID = {
+        ...values,
+        view_id: viewID,
+      };
+      dispatch(addview(updatedFormDataWithID));
     } catch (error) {
       console.error('Error:', error);
     }
+    form.reset({
+      viewname: '',
+      voquery : '',
+    });
   };
 
   const removeView = (e) => {

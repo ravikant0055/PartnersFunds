@@ -1,13 +1,15 @@
 import React, { useCallback, useRef } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from './ui/dialog';
 import paperSvg from '../assests/paper.svg';
 import SavedPageElement from './designer/SavedPageElement';
 import { HiCursorClick } from 'react-icons/hi';
 import { DialogTitle } from '@radix-ui/react-dialog';
+import { saveEntityData } from '../store/PageDataSlice';
 
 function SubmitPage() {
+    const dispatch = useDispatch();
     const savedpage = useSelector((state) => state.page.savedPageData);
 
     //Api data
@@ -32,6 +34,7 @@ function SubmitPage() {
                 value: formValues.current[key]
             };
         });
+        dispatch(saveEntityData(formData));
         console.log("Form Data:", JSON.stringify(formData));
         console.log("Form Data:", formData);
     };

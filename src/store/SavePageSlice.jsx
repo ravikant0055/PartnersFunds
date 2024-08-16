@@ -9,12 +9,6 @@ const SavePageSlice = createSlice({
          state.push(action.payload);
      },
      updatepage: (state, action) => {
-        // const { id, ...updatedPage } = action.payload;
-        // const index = state.findIndex((item) => item.id === id);
-        // if (index !== -1) {
-        //   state[index] = { ...state[index], ...updatedPage };
-        // }
-        // return state;
         const { id, mergedArray } = action.payload;
         const index = state.findIndex((item) => item.id === id);
         if (index !== -1) {

@@ -5,9 +5,13 @@ import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import paperSvg from '../../assests/paper.svg'
 import { useSelector } from 'react-redux';
 import PageElements from '../designer/PageElements';
+import { v4 as uuidv4 } from 'uuid';
 
 
 const PreviewDialogBtn = () => {
+      const uniqueId = uuidv4();
+      const shareUrl = `${window.location.origin}/submit/${uniqueId}`;
+      console.log("shareUrl", shareUrl);
   const myData = useSelector((state) => state.attribute);
 
   console.log("data ji",myData);

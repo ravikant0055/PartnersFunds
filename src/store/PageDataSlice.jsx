@@ -153,6 +153,48 @@ export const createEntity = createAsyncThunk('page/createEntity',
   }
 )
 
+export const saveEntityData = createAsyncThunk('page/saveEntityData',
+  async (values, { rejectWithValue }) => {
+    console.log("entity value",values);
+    try {
+      // const currentDate = new Date().toISOString().split('T')[0];
+      // const { entityname, eotablename } = values;
+      const response = await axios.post('http://localhost:8080/page/saveEOData', values);
+      console.log("response.data",response.data);
+      return response.data;
+      
+
+    } catch (error) {
+      return rejectWithValue(error.message); // Return error message
+    }
+  }
+)
+
+export const createView = createAsyncThunk('page/createView',
+  async (values, { rejectWithValue }) => {
+    console.log("entity value",values);
+    try {
+      const currentDate = new Date().toISOString().split('T')[0];
+      const { viewname, voquery } = values;
+      const response = await axios.post('http://localhost:8080/page/saveViewObject', {
+            view_object_name: viewname,
+            view_object_sql_query: voquery,
+            event_type: "abcd",
+            created_by: "praveen",
+            creation_date: currentDate,
+            last_updated_by: "praveen",
+            last_update_date: currentDate
+      });
+      console.log("response.data",response.data);
+      return response.data;
+      
+
+    } catch (error) {
+      return rejectWithValue(error.message); // Return error message
+    }
+  }
+)
+
 
 
 //save page api

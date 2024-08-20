@@ -3,24 +3,183 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
-import { MdTextFields } from 'react-icons/md';
+import { BsTable } from "react-icons/bs";
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { toast } from '../ui/use-toast';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
+import { Checkbox } from '../ui/checkbox';
+import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+
+const data = [
+    {
+      id: "m5gr84i9",
+      amount: 316,
+      status: "success",
+      email: "ken99@yahoo.com",
+    },
+    {
+      id: "3u1reuv4",
+      amount: 242,
+      status: "success",
+      email: "Abe45@gmail.com",
+    },
+    {
+      id: "derv1ws0",
+      amount: 837,
+      status: "processing",
+      email: "Monserrat44@gmail.com",
+    },
+    {
+      id: "5kma53ae",
+      amount: 874,
+      status: "success",
+      email: "Silas22@gmail.com",
+    },
+    {
+      id: "bhqecj4p",
+      amount: 721,
+      status: "failed",
+      email: "carmella@hotmail.com",
+    },
+    {
+        id: "5kma53a1",
+        amount: 374,
+        status: "success",
+        email: "Sila22@gmail.com",
+      },
+      {
+        id: "bhqecj41",
+        amount: 891,
+        status: "processing",
+        email: "carmellayadav@hotmail.com",
+      },
+  ];
+  
+  export const columns = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("status")}</div>
+      ),
+    },
+    {
+      accessorKey: "email",
+      header: ({ column }) => {
+        return ( 
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Email
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("email")}</div>
+      ),
+    },
+    {
+      accessorKey: "amount",
+      //header: () => <div className="text-right bg-red-300">Amount</div>,
+      header: ({ column }) => {
+        return (
+          <div className="text-right">
+            <Button
+                 
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                Amount
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        const amount = parseFloat(row.getValue("amount"));
+  
+        // Format the amount as a dollar amount
+        const formatted = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(amount);
+  
+        return <div className="text-right font-medium">{formatted}</div>;
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const payment = row.original;
+  
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <DotsHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(payment.id)}
+              >
+                Copy payment ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View customer</DropdownMenuItem>
+              <DropdownMenuItem>View payment details</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
 
 const AttributesData = {
-  label: "Text field",
+  label: "Table Name",
   required: true,
-  placeholder: "value here...",
   labelcolor: "", // Default color
   labelsize: 16, // Default font size
   textsize: 16,
+  filter: true,
+  sort:true,
+  pagination: 5,
   textcolor: "", // Default font color
   height: 50, // Default height
   width: 500, // Default width
-  labelposition: false,
+  labelposition: true,
   disable: false,
   hide: false,
   value: "",
@@ -38,9 +197,46 @@ const AttributesData = {
 }
 
 
-const TextFields = ({ id }) => {
+const TableFields = ({ id }) => {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
+
+
+
+
+//    ''''''''''''Table code''''''''''''''
+const [sorting, setSorting] = useState([]);
+const [columnFilters, setColumnFilters] = useState([]);
+const [columnVisibility, setColumnVisibility] = useState({});
+const [rowSelection, setRowSelection] = useState({});
+const [pagination, setPagination] = useState({});
+
+const table = useReactTable({
+  data,
+  columns,
+  onSortingChange: setSorting,
+  onColumnFiltersChange: setColumnFilters,
+  getCoreRowModel: getCoreRowModel(),
+  getPaginationRowModel: getPaginationRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+  getFilteredRowModel: getFilteredRowModel(),
+  onColumnVisibilityChange: setColumnVisibility,
+  onRowSelectionChange: setRowSelection,
+  state: {
+    sorting,
+    columnFilters,
+    columnVisibility,
+    rowSelection,
+    pagination: {
+        ...pagination,
+        pageIndex: pagination.pageIndex ?? 0, // Default pageIndex to 0
+        pageSize: pagination.pageSize ?? property.pagination, // Default pageSize to 5
+      },
+  },
+  onPaginationChange: setPagination,
+});
+//    ''''''''''''''''''''''''''
+
 
   useEffect(() => {
     if (!property || property.id !== id) {
@@ -54,29 +250,158 @@ const TextFields = ({ id }) => {
         style={{
           color: property.labelcolor,
           fontSize: property.labelsize + "px"
-        }}
-      >
+        }}>
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
-      <Input readOnly disabled placeholder={property.placeholder} style={{
-        fontSize: property.textsize + "px",
-        color: property.textcolor,
-        height: property.height + "px",
-        width: property.width + "px",
-      }} className='border-black' />
+
+          <div className="w-full">
+
+              <div className={`flex items-center py-4 ${!property.filter ? 'hidden' : ''}`}>
+                  <Input
+                      placeholder="Filter emails..."
+                      value={(table.getColumn("email")?.getFilterValue() ) ?? ""}
+                      onChange={(event) =>
+                          table.getColumn("email")?.setFilterValue(event.target.value)
+                      }
+                      className="max-w-sm"
+                  />
+                  <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                          <Button variant="outline" className="ml-auto">
+                              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
+                          </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                          {table
+                              .getAllColumns()
+                              .filter((column) => column.getCanHide())
+                              .map((column) => {
+                                  return (
+                                      <DropdownMenuCheckboxItem
+                                          key={column.id}
+                                          className="capitalize"
+                                          checked={column.getIsVisible()}
+                                          onCheckedChange={(value) =>
+                                              column.toggleVisibility(!!value)
+                                          }
+                                      >
+                                          {column.id}
+                                      </DropdownMenuCheckboxItem>
+                                  )
+                              })}
+                      </DropdownMenuContent>
+                  </DropdownMenu>
+              </div>
+
+              <div className={`rounded-md border ${!property.filter ? 'mt-3' : ''} `}>
+                  <Table>
+                      <TableHeader>
+                          {table.getHeaderGroups().map((headerGroup) => (
+                              <TableRow key={headerGroup.id}>
+                                  {headerGroup.headers.map((header) => (
+                                      <TableHead key={header.id}>
+                                          {header.isPlaceholder
+                                              ? null
+                                              : flexRender(
+                                                  header.column.columnDef.header,
+                                                  header.getContext()
+                                              )}
+                                      </TableHead>
+                                  ))}
+                              </TableRow>
+                          ))}
+                      </TableHeader>
+                      <TableBody>
+                          {table.getRowModel().rows.map((row) => (
+                              <TableRow key={row.id}>
+                                  {row.getVisibleCells().map((cell) => (
+                                      <TableCell key={cell.id}>
+                                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                      </TableCell>
+                                  ))}
+                              </TableRow>
+                          ))}
+                      </TableBody>
+                  </Table>
+              </div>
+
+                <div className="flex items-center justify-end space-x-2 py-4">
+                  <div className="flex-1 text-sm text-muted-foreground">
+                      {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                      {table.getFilteredRowModel().rows.length} row(s) selected.
+                  </div>
+                  <div className="space-x-2">
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => table.previousPage()}
+                          disabled={!table.getCanPreviousPage()}
+                      >
+                          Previous
+                      </Button>
+                        <span className="text-sm">
+                            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                        </span>
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => table.nextPage()}
+                          disabled={!table.getCanNextPage()}
+                      >
+                          Next
+                      </Button>
+                  </div>
+              </div>
+          </div>
+
     </div>
   )
 }
 
-export function TextFieldsPreview({ id }) {
+export function TableFieldsPreview({ id }) {
   console.log("txt id", id);
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const attributePropData = useSelector((state) => state.propertiesdata);
   const dispatch = useDispatch();
 
-  console.log("property.disable : ", property.disable);
-  console.log("Attribute prop data : ", attributePropData);
+
+
+  //    ''''''''''''Table code''''''''''''''
+const initialPagination = {
+   pageIndex: 0,
+   pageSize: property.pagination || 5, 
+};
+
+const [sorting, setSorting] = useState([]);
+const [columnFilters, setColumnFilters] = useState([]);
+const [columnVisibility, setColumnVisibility] = useState({});
+const [rowSelection, setRowSelection] = useState({});
+const [pagination, setPagination] = useState(initialPagination);
+
+const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      pagination
+    },
+    onPaginationChange: setPagination,
+  });
+//    ''''''''''''''''''''''''''
+
+
 
 
   const evaluateConditions = (conditions, data) => {
@@ -117,10 +442,11 @@ export function TextFieldsPreview({ id }) {
 
   const disableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
   const shouldDisable = evaluateConditions(disableConditions, attributePropData);
-  
+
   const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
   const shouldHide = evaluateConditions(hideConditions, attributePropData);
-  
+
+
 
   return (
     <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full ${shouldHide ? 'hidden' : ''}`}>
@@ -133,22 +459,110 @@ export function TextFieldsPreview({ id }) {
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
-      <Input disabled={shouldDisable} placeholder={property.placeholder}
-        value={property.value}
-        onChange={(e) => dispatch(updateprop({ id, value: e.target.value }))}
-        style={{
-          color: property.color,
-          fontcolor: property.fontcolor,
-          fontSize: property.fontsize + "px",
-          height: property.height + "px",
-          width: property.width + "px",
-        }}
-      />
+          <div className="w-full">
+
+              <div className={`flex items-center py-4 ${!property.filter ? 'hidden' : ''}`}>
+                  <Input
+                      placeholder="Filter emails..."
+                      value={(table.getColumn("email")?.getFilterValue()) ?? ""}
+                      onChange={(event) =>
+                          table.getColumn("email")?.setFilterValue(event.target.value)
+                      }
+                      className="max-w-sm"
+                  />
+                  <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                          <Button variant="outline" className="ml-auto">
+                              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
+                          </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                          {table
+                              .getAllColumns()
+                              .filter((column) => column.getCanHide())
+                              .map((column) => {
+                                  return (
+                                      <DropdownMenuCheckboxItem
+                                          key={column.id}
+                                          className="capitalize"
+                                          checked={column.getIsVisible()}
+                                          onCheckedChange={(value) =>
+                                              column.toggleVisibility(!!value)
+                                          }
+                                      >
+                                          {column.id}
+                                      </DropdownMenuCheckboxItem>
+                                  )
+                              })}
+                      </DropdownMenuContent>
+                  </DropdownMenu>
+              </div>
+
+              <div className={`rounded-md border ${!property.filter ? 'mt-3' : ''} `}>
+                  <Table>
+                      <TableHeader>
+                          {table.getHeaderGroups().map((headerGroup) => (
+                              <TableRow key={headerGroup.id}>
+                                  {headerGroup.headers.map((header) => (
+                                      <TableHead key={header.id}>
+                                          {header.isPlaceholder
+                                              ? null
+                                              : flexRender(
+                                                  header.column.columnDef.header,
+                                                  header.getContext()
+                                              )}
+                                      </TableHead>
+                                  ))}
+                              </TableRow>
+                          ))}
+                      </TableHeader>
+                      <TableBody>
+                          {table.getRowModel().rows.map((row) => (
+                              <TableRow key={row.id}>
+                                  {row.getVisibleCells().map((cell) => (
+                                      <TableCell key={cell.id}>
+                                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                      </TableCell>
+                                  ))}
+                              </TableRow>
+                          ))}
+                      </TableBody>
+                  </Table>
+              </div>
+
+              <div className="flex items-center justify-end space-x-2 py-4">
+                  <div className="flex-1 text-sm text-muted-foreground">
+                      {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                      {table.getFilteredRowModel().rows.length} row(s) selected.
+                  </div>
+                  <div className="space-x-2">
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => table.previousPage()}
+                          disabled={!table.getCanPreviousPage()}
+                      >
+                          Previous
+                      </Button>
+                      <span className="text-sm">
+                          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                      </span>
+                      <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => table.nextPage()}
+                          disabled={!table.getCanNextPage()}
+                      >
+                          Next
+                      </Button>
+                  </div>
+              </div>
+          </div>
     </div>
   )
 }
 
-export function TextFieldsPage({ properties, id, submitValues }) {
+export function TableFieldsPage({ properties, id, submitValues }) {
   const attributePropData = useSelector((state) => state.propertiesdata);
   const property = AttributesData;
 
@@ -235,15 +649,14 @@ export function TextFieldsPage({ properties, id, submitValues }) {
   )
 }
 
-
-export const TextFieldFormElement = {
-  type: "textfield",
-  icon: MdTextFields,
-  label: "Text Field"
+export const TableFieldFormElement = {
+  type: "tablefield",
+  icon: BsTable,
+  label: "Table Fields"
 }
 
 
-export function TextProperties({ id }) {
+export function TableProperties({ id }) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const expressionData = useSelector((state) => state.expressiondata);
@@ -264,7 +677,9 @@ export function TextProperties({ id }) {
       required: property.required,
       disable: property.disable,
       hide: property.hide,
-      placeholder: property.placeholder,
+      filter:property.filter,
+      sort:property.sort,
+      pagination:property.pagination,
       labelcolor: property.labelcolor,
       textsize: property.textsize,
       labelsize: property.labelsize,
@@ -291,7 +706,9 @@ export function TextProperties({ id }) {
       required: property.required,
       disable: property.disable,
       hide: property.hide,
-      placeholder: property.placeholder,
+      filter:property.filter,
+      sort:property.sort,
+      pagination:property.pagination,
       labelcolor: property.labelcolor,
       textcolor: property.textcolor,
       textsize: property.textsize,
@@ -338,23 +755,6 @@ export function TextProperties({ id }) {
         }}
         className="space-y-3">
 
-        <FormField
-          control={form.control}
-          name="placeholder"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>PlaceHolder</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
 
         <FormField
           control={form.control}
@@ -390,6 +790,66 @@ export function TextProperties({ id }) {
                     <SelectItem value="false">Side</SelectItem>
                   </SelectContent>
                 </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="filter"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Filters</FormLabel>
+              <FormControl>
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Yes</SelectItem>
+                    <SelectItem value="false">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="sort"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sort</FormLabel>
+              <FormControl>
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Yes</SelectItem>
+                    <SelectItem value="false">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="pagination"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Pagination ( No. of line per page ) </FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -433,7 +893,7 @@ export function TextProperties({ id }) {
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={"false"}>No</SelectItem>
+                    <SelectItem value={"false".toString()}>No</SelectItem>
                     {expressionData?.map((item) => (
                       <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
                         {item.expressionname}
@@ -699,9 +1159,6 @@ export function TextProperties({ id }) {
           )}
         />
 
-        {/* ====================================== */}
-
-
 
         <div className="w-full flex items-center justify-center">
           <Button type='button' className='w-[40%]' onClick={handleReset}>
@@ -713,4 +1170,4 @@ export function TextProperties({ id }) {
   );
 }
 
-export default TextFields;
+export default TableFields;

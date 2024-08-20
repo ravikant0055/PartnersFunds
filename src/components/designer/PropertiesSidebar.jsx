@@ -19,6 +19,7 @@ import { LinechartProperties } from '../fields/LineChart';
 import { PiechartProperties } from '../fields/PieChart';
 import { RadarchartProperties } from '../fields/RadarChart';
 import { ImageProperties } from '../fields/Image';
+import { TableProperties } from '../fields/Table';
 
 const PropertiesSidebar = ({selectedElement}) => {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ const PropertiesSidebar = ({selectedElement}) => {
       "piechart"       : <PiechartProperties id={id}/>,
       "radarchart"     : <RadarchartProperties id={id}/>,
       "image"          : <ImageProperties id={id} />,
+      "tablefield"     : <TableProperties id={id} />
   }
 
   return (

@@ -89,7 +89,7 @@ export function TextFieldsPreview({ id }) {
       let conditionResult;
       switch (condition.operator) {
         case '==':
-          conditionResult = attributeData.value === condition.attvalues;
+          conditionResult = !(attributeData.value === condition.attvalues);
           break;
         case '!=':
           conditionResult = attributeData.value !== condition.attvalues;
@@ -104,7 +104,6 @@ export function TextFieldsPreview({ id }) {
         default:
           conditionResult = false;
       }
-
       if (condition.parentOperator === 'AND') {
         return result && conditionResult;
       } else if (condition.parentOperator === 'OR') {

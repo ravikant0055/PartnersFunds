@@ -6,9 +6,10 @@ import { toast } from '../ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { addPageAsync } from '../../store/PageDataSlice';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import Loading from '../builder/Loading';
+import { addgenpage} from 'src/store/GenratedPageSlice';
 
 const SaveFormBtn = ({ id }) => {
+
   const dispatch = useDispatch();
      
   const myData = useSelector((state) => state.attribute);
@@ -40,7 +41,15 @@ const SaveFormBtn = ({ id }) => {
         pageId: id,
         JsonElements: JsonElements
       }
-      await dispatch(addPageAsync(postdata));  // Wait for the dispatch to complete
+      const result = await dispatch(addPageAsync(postdata));  // Wait for the dispatch to complete
+
+      console.log("mycodeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",result.payload.generatedPageCode);
+      const pagecode = result.payload.generatedPageCode
+      if (pagecode) {
+           dispatch(addgenpage(pagecode));
+          //  exec('node createFile.js');
+      };
+           
       setLoading(false);  // Set loading to false after the request is complete
       navigate(`/`);  // Navigate after data is saved
     } catch (error) {
@@ -51,7 +60,7 @@ const SaveFormBtn = ({ id }) => {
         variant: "destructive",
       });
     }
-  };
+  }; 
   
   return (
     <Dialog>

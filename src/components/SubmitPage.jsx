@@ -8,18 +8,17 @@ import { HiCursorClick } from 'react-icons/hi';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import { saveEntityData } from '../store/PageDataSlice';
 
+
 function SubmitPage() {
     const dispatch = useDispatch();
     const savedpage = useSelector((state) => state.page.savedPageData);
 
     //Api data
-
     console.log("savedpage",savedpage)
-    console.log("pageContentID", savedpage.page_id);
-
+    console.log("page code" ,savedpage.generatedPageCode);
+    
 
     // Submit form
-
     const formValues = useRef({});
 
 
@@ -40,7 +39,6 @@ function SubmitPage() {
     };
 
 
-
     return (
 
 
@@ -54,17 +52,17 @@ function SubmitPage() {
                         {/* <BsFileEarmarkPlus className="h-8 w-8 text-muted-foreground group-hover:text-primary" /> */}
                         <div className='flex flex-col w-full h-full justify-between py-4 px-2'>
                             <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">Page Name : {
-                                savedpage.page_name
+                                savedpage.PageEntity.page_name
                             }</p>
                             <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">Page Title : {
-                                savedpage.page_title
+                                savedpage.PageEntity.page_title
                             }</p>
                             <div className='flex justify-between w-full '>
                                 <p className="font-medium text-[12px] text-muted-foreground group-hover:text-primary">Last Updated by<br /> {
-                                    savedpage.last_updated_by
+                                    savedpage.PageEntity.last_updated_by
                                 }</p>
                                 <p className="font-medium text-[12px] text-muted-foreground group-hover:text-primary">Last Updation Date<br />{
-                                    savedpage.last_update_date
+                                    savedpage.PageEntity.last_update_date
                                 }</p>
                             </div>
                         </div>
@@ -74,7 +72,7 @@ function SubmitPage() {
                 <DialogContent className="w-screen h-screen max-h-screen max-w-full flex flex-col flex-grow p-0 gap-0">
                     <DialogHeader>
                         <DialogTitle className='flex items-center py-1.5 px-6 justify-between'>
-                            <p>Page Name : {savedpage.page_name}</p>
+                            <p>Page Name : {savedpage.PageEntity.page_name}</p>
                             <Button
                                 className='mr-9'
                                 onClick={() => {
@@ -89,7 +87,7 @@ function SubmitPage() {
 
                     <div className='bg-accent flex flex-col flex-grow items-center justify-center p-4 overflow-y-auto' style={{ backgroundImage: `url(${paperSvg})` }}>
                         <div className='max-w-[620px] flex flex-col  gap-4 flex-grow bg-background h-full w-full rounded-2xl p-8 overflow-y-auto'>{
-                            savedpage.pageAttributes.map((page) => {
+                            savedpage.PageEntity.pageAttributes.map((page) => {
                                 return <SavedPageElement key={page.attribute_id} element={page}
                                     submitValues={submitValues}
                                 />
@@ -98,7 +96,6 @@ function SubmitPage() {
                     </div>
 
                 </DialogContent>
-
 
 
             </Dialog>

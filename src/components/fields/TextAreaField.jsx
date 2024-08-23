@@ -14,6 +14,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 const AttributesData = {
   label: "Text Area",
   require: true,
+  disable:false,
+  hide:false,
   placeholder: "value here...",
   rows: 3,
   fontsize: "16px", // Default font size
@@ -157,6 +159,7 @@ export function TextAreaProperties({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const entityData = useSelector((state) => state.entitydata);
   const viewData = useSelector((state) => state.viewdata);
+  const expressionData = useSelector((state) => state.expressiondata);
   const form = useForm({
     mode: "onBlur",
     defaultValues: {
@@ -165,6 +168,8 @@ export function TextAreaProperties({ id }) {
       required: property.required,
       placeholder: property.placeholder,
       rows: property.rows,
+      disable : property.disable,
+      hide : property.hide,
       fontcolor: property.fontcolor,
       fontsize: property.fontsize,
       height: property.height,
@@ -188,6 +193,8 @@ export function TextAreaProperties({ id }) {
       required: property.required,
       placeholder: property.placeholder,
       rows: property.rows,
+      disable : property.disable,
+      hide : property.hide,
       fontcolor: property.fontcolor,
       fontsize: property.fontsize,
       height: property.height,
@@ -265,7 +272,37 @@ export function TextAreaProperties({ id }) {
           )}
         />
 
-<FormField
+        <FormField
+          control={form.control}
+          name="disable"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Disable</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="select expression">
+                      {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={"false"}>No</SelectItem>
+                    {expressionData?.map((item) => (
+                      <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
+                        {item.expressionname}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
           control={form.control}
           name="eovo.EO.entityobject"
           render={({ field }) => (
@@ -294,6 +331,7 @@ export function TextAreaProperties({ id }) {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="eovo.EO.entityattribute"

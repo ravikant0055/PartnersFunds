@@ -13,9 +13,6 @@ import { addexp, removeexp } from '../../store/ExpressionSlice';
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import { createExpression } from '../../store/PageDataSlice';
-import { useNavigate } from 'react-router-dom';
-
-
 
 const ExpressionBtn = () => {
   const [conditions, setConditions] = useState([{ attribute: '', operator: '', attvalues: '', parentOperator: null }]);
@@ -110,7 +107,7 @@ const ExpressionBtn = () => {
         </div>
       </DialogTrigger>
     
-      <DialogContent>
+      <DialogContent className='w-[550px]'>
         
         {
 
@@ -145,9 +142,12 @@ const ExpressionBtn = () => {
                 {conditions.map((condition, index) => (
                   <div key={index} className="space-y-2">
                     {index > 0 && (
-                      <p className="text-center text-blue-600">{condition.parentOperator}</p>
+                      <div  className='flex justify-center gap-5 items-center'>
+                        <p className="text-center text-blue-600">{condition.parentOperator}</p>
+                      </div>
                     )}
-                    <div className='flex gap-5  items-center'>
+                    <div className='flex gap-5 items-center'>
+
                       <FormField
                         control={form.control}
                         name={`conditions[${index}].attribute`}
@@ -221,6 +221,12 @@ const ExpressionBtn = () => {
                           OR
                         </Button>
 
+                        <Button type="button"  variant={"outline"} className="py-2 px-2 h-fit">&#x2768;</Button>
+
+                        <Button type="button"  variant={"outline"} className="py-2 px-2 h-fit">
+                          &#x2769;
+                        </Button>
+
                         {index > 0 && (
                           <Button type="button" onClick={() => removeCondition(index)} variant={"white"} className="py-2 px-2 h-fit">
                             <IoClose className='text-red-600 text-xl' />
@@ -230,6 +236,7 @@ const ExpressionBtn = () => {
                     </div>
                   </div>
                 ))}
+
               </div>
               <DialogFooter>
                 <DialogTrigger asChild>

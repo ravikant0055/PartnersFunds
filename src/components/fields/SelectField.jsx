@@ -79,42 +79,43 @@ export function SelectFieldsPreview({ id }) {
     console.log("selected value preview", property.value);
 
 
-    //const shouldDisable = property.disable!== "no" && property.disable === "1108";
-    const evaluateConditions = (conditions, data) => {
-        if (!conditions || !conditions.length) return false;
-
-        return conditions.reduce((result, condition) => {
-            const attributeData = data.find(item => item.id === condition.attribute);
-            if (!attributeData) return result;
-
-            let conditionResult;
-            switch (condition.operator) {
-                case '==':
-                    conditionResult = attributeData.value === condition.attvalues;
-                    break;
-                case '!=':
-                    conditionResult = attributeData.value !== condition.attvalues;
-                    break;
-                // Add more operators as needed
-                default:
-                    conditionResult = false;
-            }
-
-            if (condition.parentOperator === 'AND') {
-                return result && conditionResult;
-            } else if (condition.parentOperator === 'OR') {
-                return result || conditionResult;
-            } else {
-                return conditionResult;
-            }
-        }, true);
-    };
-
-    const disableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
-    const shouldDisable = evaluateConditions(disableConditions, attributePropData);
-
+    function evaluateConditions(enableConditions, attributePropData) {
+        return enableConditions.every((condition, index) => {
+          const { attribute, operator, attvalues, parentOperator } = condition;
+          const attrData = attributePropData.find(attr => attr.id === attribute);
+      
+          if (!attrData) return false; // Attribute not found in data, return false
+      
+          const attrValue = attrData.value;
+      
+          let conditionResult = false;
+          switch (operator) {
+            case "==":
+              conditionResult = attrValue === attvalues;
+              break;
+            case "!=":
+              conditionResult = attrValue !== attvalues;
+              break;
+            // Add other operators if needed
+            default:
+              return false; // Unknown operator
+          }
+      
+          if (index > 0 && parentOperator === "AND") {
+            return evaluateConditions(enableConditions.slice(0, index), attributePropData) && conditionResult;
+          } else if (index > 0 && parentOperator === "OR") {
+            return evaluateConditions(enableConditions.slice(0, index), attributePropData) || conditionResult;
+          }
+      
+          return conditionResult;
+        });
+      }
+      
+    const enableConditions  = property.disable !== false ? JSON.parse(property.disable) : []; 
+    const shouldDisable = enableConditions.length > 0 && !evaluateConditions(enableConditions, attributePropData);
+      
     const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
-    const shouldHide = evaluateConditions(hideConditions, attributePropData);
+    const shouldHide = enableConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
 
 
     return (

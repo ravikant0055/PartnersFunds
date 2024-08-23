@@ -62,7 +62,7 @@ const EntityobjectBtn = () => {
         </div>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className='w-[500px]'>
         <DialogHeader>
           <DialogTitle>Entity Object</DialogTitle>
           <div className='flex justify-between items-center'>

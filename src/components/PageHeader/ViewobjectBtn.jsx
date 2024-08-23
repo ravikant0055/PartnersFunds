@@ -63,7 +63,7 @@ const ViewobjectBtn = () => {
         </div>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className='w-[500px]'>
         <DialogHeader>
           <DialogTitle>View Object</DialogTitle>
           <div className='flex justify-between items-center'>

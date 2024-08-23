@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { toast } from '../ui/use-toast';
 
 const AttributesData = {
   label: "Text field",
@@ -78,49 +77,44 @@ export function TextFieldsPreview({ id }) {
   console.log("property.disable : ", property.disable);
   console.log("Attribute prop data : ", attributePropData);
 
-
-  const evaluateConditions = (conditions, data) => {
-    if (!conditions || !conditions.length) return false;
-
-    return conditions.reduce((result, condition) => {
-      const attributeData = data.find(item => item.id === condition.attribute);
-      if (!attributeData) return result;
-
-      let conditionResult;
-      switch (condition.operator) {
-        case '==':
-          conditionResult = !(attributeData.value === condition.attvalues);
+  function evaluateConditions(enableConditions, attributePropData) {
+    return enableConditions.every((condition, index) => {
+      const { attribute, operator, attvalues, parentOperator } = condition;
+      const attrData = attributePropData.find(attr => attr.id === attribute);
+  
+      if (!attrData) return false; // Attribute not found in data, return false
+  
+      const attrValue = attrData.value;
+  
+      let conditionResult = false;
+      switch (operator) {
+        case "==":
+          conditionResult = attrValue === attvalues;
           break;
-        case '!=':
-          conditionResult = attributeData.value !== condition.attvalues;
+        case "!=":
+          conditionResult = attrValue !== attvalues;
           break;
-        case '>':
-          conditionResult = attributeData.value > condition.attvalues;
-          break;
-        case '<':
-          conditionResult = attributeData.value < condition.attvalues;
-          break;
-        // Add more operators as needed
+        // Add other operators if needed
         default:
-          conditionResult = false;
+          return false; // Unknown operator
       }
-      if (condition.parentOperator === 'AND') {
-        return result && conditionResult;
-      } else if (condition.parentOperator === 'OR') {
-        return result || conditionResult;
-      } else {
-        return conditionResult;
+  
+      if (index > 0 && parentOperator === "AND") {
+        return evaluateConditions(enableConditions.slice(0, index), attributePropData) && conditionResult;
+      } else if (index > 0 && parentOperator === "OR") {
+        return evaluateConditions(enableConditions.slice(0, index), attributePropData) || conditionResult;
       }
-    }, true);
-  };
-
-  const disableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
-  const shouldDisable = evaluateConditions(disableConditions, attributePropData);
+  
+      return conditionResult;
+    });
+  }
+  
+  const enableConditions  = property.disable !== false ? JSON.parse(property.disable) : []; 
+  const shouldDisable = enableConditions.length > 0 && !evaluateConditions(enableConditions, attributePropData);
   
   const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
-  const shouldHide = evaluateConditions(hideConditions, attributePropData);
+  const shouldHide = enableConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
   
-
   return (
     <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full ${shouldHide ? 'hidden' : ''}`}>
       <Label
@@ -148,7 +142,6 @@ export function TextFieldsPreview({ id }) {
 }
 
 export function TextFieldsPage({ properties, id, submitValues }) {
-  const attributePropData = useSelector((state) => state.propertiesdata);
   const property = AttributesData;
 
   console.log("txt id", id);

@@ -7,8 +7,6 @@ import ExpressionSlice from "./ExpressionSlice";
 import SavePageSlice from "./SavePageSlice";
 import EntittyObjectSlice from "./EntittyObjectSlice";
 import ViewObjectSlice from "./ViewObjectSlice";
-import GenratedPageSlice from "./GenratedPageSlice";
-import { thunk } from "redux-thunk";
 
 const store = configureStore({
     reducer: {
@@ -20,10 +18,7 @@ const store = configureStore({
       savepage: SavePageSlice,
       entitydata : EntittyObjectSlice,
       viewdata : ViewObjectSlice,
-      genratedpage :GenratedPageSlice
     },
-
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
   });
   
   export default store;

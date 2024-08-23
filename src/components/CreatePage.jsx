@@ -81,7 +81,7 @@ const CreatePage = () => {
                 </DialogTrigger>
 
 
-                <DialogContent>
+                <DialogContent className='w-[500px]'>
 
                     <DialogHeader>
                         <DialogTitle>Create Page</DialogTitle>

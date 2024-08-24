@@ -12,6 +12,7 @@ import { ToggleFieldsPage } from '../fields/ToggleField'
 import { RadioFieldsPage } from '../fields/RadioField'
 import { ImageFieldPage } from '../fields/Image'
 import { TableFieldsPage } from '../fields/Table'
+import { MultiSelectsPage } from '../fields/MultiSelect'
 
 const SavedPageElement = ({element, submitValues}) => {
     console.log("Merger  : => ",element);
@@ -30,6 +31,7 @@ const SavedPageElement = ({element, submitValues}) => {
       "radiofield"     : <RadioFieldsPage     id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
       "image"          : <ImageFieldPage      id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
       "tablefield"     : <TableFieldsPage     id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
+      "multiselect"    : <MultiSelectsPage    id={element.attribute_id} properties={element.pageAttrPropertiesEntity} submitValues={submitValues}/>,
     }
 
   return (

@@ -7,6 +7,7 @@ import { Switch } from '../ui/switch';
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { IoToggleSharp } from "react-icons/io5";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const AttributesData = {
   label:"Toggle field",
@@ -142,20 +143,27 @@ export function ToggleProperties({id}) {
           )}
         />
        
-        <FormField
+       <FormField
           control={form.control}
           name="required"
           render={({ field }) => (
-            <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm ">
-              <div className="space-y-0.5">
-                <FormLabel>Required</FormLabel>
-              </div>
+            <FormItem>
+              <FormLabel>Required</FormLabel>
               <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Yes</SelectItem>
+                    <SelectItem value="false">No</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
             </FormItem>
           )}
         />
+
       </form>  
     </Form>
   );

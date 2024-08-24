@@ -19,9 +19,15 @@ const AttributesData = {
   textcolor: "", // Default font color
   height: 50, // Default height
   width: 500, // Default width
+  type: "text",
+  maxlength: 20,
+  minlength: 0,
+  pattern:"",
   labelposition: false,
   disable: false,
   hide: false,
+  readonly: false,
+  autofocus:false,
   value: "",
   eovo: {
     EO: {
@@ -81,11 +87,11 @@ export function TextFieldsPreview({ id }) {
     return enableConditions.every((condition, index) => {
       const { attribute, operator, attvalues, parentOperator } = condition;
       const attrData = attributePropData.find(attr => attr.id === attribute);
-  
+
       if (!attrData) return false; // Attribute not found in data, return false
-  
+
       const attrValue = attrData.value;
-  
+
       let conditionResult = false;
       switch (operator) {
         case "==":
@@ -98,36 +104,56 @@ export function TextFieldsPreview({ id }) {
         default:
           return false; // Unknown operator
       }
-  
+
       if (index > 0 && parentOperator === "AND") {
         return evaluateConditions(enableConditions.slice(0, index), attributePropData) && conditionResult;
       } else if (index > 0 && parentOperator === "OR") {
         return evaluateConditions(enableConditions.slice(0, index), attributePropData) || conditionResult;
       }
-  
+
       return conditionResult;
     });
   }
-  
-  const enableConditions  = property.disable !== false ? JSON.parse(property.disable) : []; 
-  const shouldDisable = enableConditions.length > 0 && !evaluateConditions(enableConditions, attributePropData);
-  
-  const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
-  const shouldHide = enableConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
-  
+ 
+  if(property.disable === "true"){
+       var shouldYesdisable = true;
+  }else{  
+    const enableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
+    var shouldDisable = enableConditions.length > 0 && !evaluateConditions(enableConditions, attributePropData);
+  }
+
+
+  if(property.hide === "true"){
+    var shouldYeshide = true;
+  }else{
+    const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
+    var shouldHide = hideConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
+  }
+  console.log("readonly:", property.readonly);
+
+
   return (
-    <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full ${shouldHide ? 'hidden' : ''}`}>
+    <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full ${shouldHide || shouldYeshide ? 'hidden' : ''}`}>
       <Label
         style={{
           color: property.labelcolor,
           fontSize: property.labelsize + "px"
         }}
+        className="flex text-nowrap"
       >
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
-      <Input disabled={shouldDisable} placeholder={property.placeholder}
+      <Input
+        pattern={property.pattern}
+        autoFocus={property.autofocus}
+        type={property.type}
+        maxLength={property.maxlength}
+        minLength={property.minlength}
+        disabled={shouldDisable || shouldYesdisable}
+        placeholder={property.placeholder}
         value={property.value}
+        readOnly={property.readonly}
         onChange={(e) => dispatch(updateprop({ id, value: e.target.value }))}
         style={{
           color: property.color,
@@ -153,7 +179,7 @@ export function TextFieldsPage({ properties, id, submitValues }) {
       submitValues(id, newValue); // Update formValues
     }
   };
-  
+
 
   properties.forEach((item) => {
     switch (item.property_name) {
@@ -188,11 +214,11 @@ export function TextFieldsPage({ properties, id, submitValues }) {
         property.value = item.property_value;
         break;
       case "disable":
-          property.disable = item.property_value;
-          break; 
+        property.disable = item.property_value;
+        break;
       case "hide":
-          property.hide = item.property_value;
-          break;     
+        property.hide = item.property_value;
+        break;
       default:
         break;
     }
@@ -242,8 +268,8 @@ export function TextProperties({ id }) {
   const entityData = useSelector((state) => state.entitydata);
   const viewData = useSelector((state) => state.viewdata);
 
-  console.log("entityData",entityData);
-  
+  console.log("entityData", entityData);
+
 
   console.log("property data", property);
 
@@ -256,7 +282,13 @@ export function TextProperties({ id }) {
       required: property.required,
       disable: property.disable,
       hide: property.hide,
+      readonly: property.readonly,
+      autofocus:property.autofocus,
       placeholder: property.placeholder,
+      type: property.type,
+      pattern:property.pattern,
+      maxlength: property.maxlength,
+      minlength: property.minlength,
       labelcolor: property.labelcolor,
       textsize: property.textsize,
       labelsize: property.labelsize,
@@ -283,6 +315,12 @@ export function TextProperties({ id }) {
       required: property.required,
       disable: property.disable,
       hide: property.hide,
+      readonly: property.readonly,
+      autofocus:property.autofocus,
+      type: property.type,
+      pattern:property.pattern,
+      maxlength: property.maxlength,
+      minlength: property.minlength,
       placeholder: property.placeholder,
       labelcolor: property.labelcolor,
       textcolor: property.textcolor,
@@ -368,6 +406,24 @@ export function TextProperties({ id }) {
 
         <FormField
           control={form.control}
+          name="pattern"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Pattern</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="labelposition"
           render={({ field }) => (
             <FormItem>
@@ -389,10 +445,52 @@ export function TextProperties({ id }) {
 
         <FormField
           control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Input Type</FormLabel>
+              <FormControl>
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Text' : 'Number'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="text">Text</SelectItem>
+                    <SelectItem value="number">Number</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="required"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Required</FormLabel>
+              <FormControl>
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Yes</SelectItem>
+                    <SelectItem value="false">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="readonly"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Read Only</FormLabel>
               <FormControl>
                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
                   <SelectTrigger>
@@ -425,6 +523,7 @@ export function TextProperties({ id }) {
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value={"true"}>Yes</SelectItem>
                     <SelectItem value={"false"}>No</SelectItem>
                     {expressionData?.map((item) => (
                       <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
@@ -455,7 +554,8 @@ export function TextProperties({ id }) {
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    <SelectItem value={"true"}>Yes</SelectItem>
+                    <SelectItem value={"false"}>No</SelectItem>
                     {expressionData?.map((item) => (
                       <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
                         {item.expressionname}
@@ -568,6 +668,70 @@ export function TextProperties({ id }) {
 
 
         {/* ====================================== */}
+
+        <FormField
+          control={form.control}
+          name="autofocus"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Auto Focus</FormLabel>
+              <FormControl>
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Yes</SelectItem>
+                    <SelectItem value="false">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="maxlength"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Max Length</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="1"
+                  min="8"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="minlength"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Min Length</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="1"
+                  min="8"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="labelsize"

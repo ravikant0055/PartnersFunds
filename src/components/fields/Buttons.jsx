@@ -7,6 +7,7 @@ import { RxButton } from "react-icons/rx";
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { type } from '@testing-library/user-event/dist/type';
 
 const AttributesData = {
   label: "Button",
@@ -17,6 +18,7 @@ const AttributesData = {
   width: 200, // Default width
   disable:false,
   hide:false,
+  type:"",
   onclick: ""
 }
 
@@ -52,8 +54,32 @@ export function ButtonsPreview({ id }) {
   const attributePropData = useSelector((state) => state.propertiesdata);
 
   const alertFunc = () => {
-    console.log("Button Clicked", property.onclick);
+    console.log("onclick Clicked", property.onclick);
   };
+
+  const submitbtn = () => {
+    console.log("Submit Button Clicked");
+  };
+  const resetbtn = () => {
+    console.log("Rest Button Clicked");
+  };
+  const buttonbtn = () => {
+    console.log("My Button Clicked");
+  };
+
+
+
+  switch(property.type)
+  {
+    case "button" : buttonbtn();
+                    break;
+    case "submit" : submitbtn();
+                    break;
+    case "reset" : resetbtn();
+                    break;
+    default : <h1>please select type</h1>                                                                  
+  }
+
 
   function evaluateConditions(enableConditions, attributePropData) {
     return enableConditions.every((condition, index) => {
@@ -98,6 +124,7 @@ export function ButtonsPreview({ id }) {
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Button
+        type={property.type}
         disabled={shouldDisable}
         onClick={alertFunc}
         className={`${shouldHide ? 'hidden' : ''}`}
@@ -261,6 +288,28 @@ export function ButtonProperties({ id }) {
                     if (e.key === "Enter") e.currentTarget.blur();
                   }}
                 />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Button Type</FormLabel>
+              <FormControl>
+                <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={!field.value ? "select type" : field.value} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="button">button</SelectItem>
+                    <SelectItem value="submit">submit</SelectItem>
+                    <SelectItem value="reset">reset</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
             </FormItem>
           )}
@@ -503,7 +552,7 @@ export function ButtonProperties({ id }) {
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name="onclick"
           render={({ field }) => (

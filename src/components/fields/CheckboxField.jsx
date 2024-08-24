@@ -16,6 +16,7 @@ const AttributesData = {
     labelHeader: "Checkbox Header Name",
     label: "Checkbox",
     required: true,
+    readonly: false,
     options: [],
     fontsize: "16px", // Default font size
     fontcolor: "", // Default font color
@@ -236,6 +237,7 @@ export function CheckboxProperties({ id }) {
             required: property.required,
             options: property.options,
             fontcolor: property.fontcolor,
+            readonly: property.readonly,
             fontsize: property.fontsize,
             height: property.height,
             width: property.width,
@@ -260,7 +262,8 @@ export function CheckboxProperties({ id }) {
             required: property.required,
             placeholder: property.placeholder,
             options: property.options,
-            fontcolor: property.fontcolor,
+            fontcolor: property.fontcolor, 
+            readonly: property.readonly,
             fontsize: property.fontsize,
             height: property.height,
             width: property.width,
@@ -336,6 +339,27 @@ export function CheckboxProperties({ id }) {
                             </FormControl>
                         </FormItem>
                     )}
+                />
+
+                <FormField
+                control={form.control}
+                name="readonly"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Read Only</FormLabel>
+                    <FormControl>
+                        <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                        <SelectTrigger>
+                            <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="true">Yes</SelectItem>
+                            <SelectItem value="false">No</SelectItem>
+                        </SelectContent>
+                        </Select>
+                    </FormControl>
+                    </FormItem>
+                )}
                 />
 
                 <FormField
@@ -435,18 +459,24 @@ export function CheckboxProperties({ id }) {
 
 
                 <FormField
-                    control={form.control}
-                    name="required"
-                    render={({ field }) => (
-                        <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm ">
-                            <div className="space-y-0.5">
-                                <FormLabel>Required</FormLabel>
-                            </div>
-                            <FormControl>
-                                <Switch checked={field.value} onCheckedChange={field.onChange} />
-                            </FormControl>
-                        </FormItem>
-                    )}
+                control={form.control}
+                name="required"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Required</FormLabel>
+                    <FormControl>
+                        <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                        <SelectTrigger>
+                            <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="true">Yes</SelectItem>
+                            <SelectItem value="false">No</SelectItem>
+                        </SelectContent>
+                        </Select>
+                    </FormControl>
+                    </FormItem>
+                )}
                 />
 
                 <FormField

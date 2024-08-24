@@ -17,6 +17,7 @@ import { PiechartFormElement } from '../fields/PieChart'
 import { RadarchartFormElement } from '../fields/RadarChart'
 import { ImageFormElement } from '../fields/Image'
 import { TableFieldFormElement } from '../fields/Table'
+import { MultiSelectsFormElement } from '../fields/MultiSelect'
 
 const FormElementsSidebar = () => {
   return (
@@ -34,6 +35,7 @@ const FormElementsSidebar = () => {
           <SideBarBtnElement formelement={DateFieldFormElement}/>
           <SideBarBtnElement formelement={CheckboxFormElement}/>
           <SideBarBtnElement formelement={SelectFieldFormElement}/>
+          <SideBarBtnElement formelement={MultiSelectsFormElement}/>
           <SideBarBtnElement formelement={ToggleFieldFormElement}/>
           <SideBarBtnElement formelement={RadioFieldFormElement}/>
           <SideBarBtnElement formelement={TableFieldFormElement}/>

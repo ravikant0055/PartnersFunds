@@ -14,16 +14,14 @@ import '../../index.css'
 const AttributesData = {
     label: "Image",
     required: true,
-    placeholder: "value here...",
-    height: 150, // Default height
-    width: 150, // Default width
+    src: "",
+    alt:"image",
+    tooltip:"image",
+    height: 85, // Default height
+    width: 85, // Default width
 }
 
-
-
-
 const Image = ({ id }) => {
-
 
     console.log("img id", id);
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
@@ -34,65 +32,21 @@ const Image = ({ id }) => {
                 {property.label}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
-            <Input type="file" id="imageUpload" name="image" accept="image/*" placeholder={property.placeholder} style={{
-                height: property.height + "px",
-                width: property.width + "px",
-            }} />
+            <img src={"/assets/"+property.src} alt={property.alt} title={property.tooltip} style={{width:property.width+"px", height:property.height+"px"}}/>
         </div>
     )
 }
 export function ImageFieldPreview({ id }) {
-
-    const previewImage = (e) => {
-        const imagePreview = document.getElementById('imagePreview');
-        imagePreview.innerHTML = ''; // Clear the current preview
-        const file = e.target.files[0];
-        if (file) {
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            img.onload = () => URL.revokeObjectURL(img.src); // Clean up
-            imagePreview.appendChild(img);
-        } else {
-            imagePreview.innerHTML = '<span>No image selected</span>';
-        }
-    }
-
-
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     return (
-        <div className='flex flex-col gap-2 w-full'>
+        <div title={property.tooltip} className='flex flex-col gap-2 w-full'>
             <Label>
                 {property.label}
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
 
-            <div style={{ position: 'relative', width: property.width + 'px', height: property.height + 'px' }}>
-                <div id="imagePreview"
-                    style={{
-                        height: '100%',
-                        width: '100%',
-                        overflow: 'hidden', // Hide overflowing parts of the image
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: '#f5f5f5', // Add a background color to visualize the container
-                    }}
-                >
-                    <span>No image selected</span>
-                </div>
-                <Input type="file" id="imageUpload" name="image" accept="image/*"
-                    onChange={previewImage}
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        opacity: 0,
-                        cursor: 'pointer'
-                    }}
-                />
-            </div>
+            <img src={"/assets/"+property.src} alt={property.alt} title={property.tooltip} style={{width:property.width+"px", height:property.height+"px"}} />
+
         </div>
     )
 }
@@ -195,8 +149,10 @@ export function ImageProperties({ id }) {
             id: id,
             label: property.label,
             required: property.required,
-            placeholder: property.placeholder,
             color: property.color,
+            src:property.src,
+            alt:property.alt,
+            tooltip:property.tooltip,
             fontsize: property.fontsize,
             fontcolor: property.color,
             height: property.height,
@@ -208,8 +164,10 @@ export function ImageProperties({ id }) {
         form.reset({
             label: property.label,
             required: property.required,
-            placeholder: property.placeholder,
             color: property.color,
+            src:property.src,
+            alt:property.alt,
+            ttooltip:property.tooltip,
             fontcolor: property.fontcolor,
             fontSize: property.fontsize,
             height: property.height,
@@ -264,10 +222,46 @@ export function ImageProperties({ id }) {
 
                 <FormField
                     control={form.control}
-                    name="placeholder"
+                    name="tooltip"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>PlaceHolder</FormLabel>
+                            <FormLabel>Tooltip</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="src"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Src</FormLabel>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="alt"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Alt</FormLabel>
                             <FormControl>
                                 <Input
                                     {...field}

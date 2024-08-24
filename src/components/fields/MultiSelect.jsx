@@ -3,24 +3,33 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
-import { LuHeading1 } from "react-icons/lu";
+import { GoMultiSelect } from "react-icons/go";
 import { useDispatch, useSelector } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { MultiSelect } from 'primereact/multiselect';
 
 const AttributesData = {
-  label: "Heading",
+  label: "Multi Select",
   fontsize: 16,
   fontweight: 500,
   fontcolor: "",
   hide:false,
   tooltip:"",
+  cities : [
+    { name: 'New York', code: 'NY' },
+    { name: 'Rome', code: 'RM' },
+    { name: 'London', code: 'LDN' },
+    { name: 'Istanbul', code: 'IST' },
+    { name: 'Paris', code: 'PRS' }
+  ]
 }
 
-const Heading = ({ id }) => {
+const MultiSelects = ({ id }) => {
   console.log("txt id", id);
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const [selectedCities, setSelectedCities] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
     if (!property || property.id !== id) {
@@ -37,13 +46,24 @@ const Heading = ({ id }) => {
       }}>
         {property.label}
       </Label>
+      <MultiSelect 
+            value={selectedCities} 
+            onChange={(e) => setSelectedCities(e.value)} 
+            options={property.cities} 
+            optionLabel="name" 
+            display="chip" 
+            placeholder="Select Cities" 
+            maxSelectedLabels={3} 
+            className="w-full md:w-20rem" 
+      />
     </div>
   )
 }
 
-export function HeadingPreview({ id }) {
+export function MultiSelectPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const attributePropData = useSelector((state) => state.propertiesdata);
+  const [selectedCities, setSelectedCities] = useState(null);
   function evaluateConditions(enableConditions, attributePropData) {
     return enableConditions.every((condition, index) => {
       const { attribute, operator, attvalues, parentOperator } = condition;
@@ -76,18 +96,14 @@ export function HeadingPreview({ id }) {
     });
   }
   
-  if(property.hide === "true"){
-    var shouldYeshide = true;
-  }else{
-    const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
-    var shouldHide = hideConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
-  }
+  const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
+  const shouldHide = hideConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
 
   return (
     <div className='flex flex-col gap-2 w-full'>
       <Label 
         title={property.tooltip}
-        className={`${shouldHide || shouldYeshide ? 'hidden' : ''}`}
+        className={`${shouldHide ? 'hidden' : ''}`}
         style={{
         fontSize: property.fontsize + "px",
         fontWeight: property.fontweight,
@@ -95,11 +111,21 @@ export function HeadingPreview({ id }) {
       }}>
         {property.label}
       </Label>
+      <MultiSelect 
+            value={selectedCities} 
+            onChange={(e) => setSelectedCities(e.value)} 
+            options={property.cities} 
+            optionLabel="name" 
+            display="chip" 
+            placeholder="Select Cities" 
+            maxSelectedLabels={3} 
+            className="w-full md:w-20rem" 
+      />
     </div>
   )
 }
 
-export function HeadingPage({ id, properties, submitValues }) {
+export function MultiSelectsPage({ id, properties, submitValues }) {
   // const property = properties;
   const [values, setValues] = useState("");
   const property = AttributesData;
@@ -139,17 +165,19 @@ export function HeadingPage({ id, properties, submitValues }) {
   )
 }
 
-export const HeadingFormElement = {
-  type: "heading",
-  icon: LuHeading1,
-  label: "Heading"
+export const MultiSelectsFormElement = {
+  type: "multiselect",
+  icon: GoMultiSelect,
+  label: "Multi Select"
 }
 
 
-export function HeadingProperties({ id }) {
+export function MultiSelectsProperties({ id }) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const entityData = useSelector((state) => state.entitydata);
   const expressionData = useSelector((state) => state.expressiondata);
+  const viewData = useSelector((state) => state.viewdata);
 
   const form = useForm({
     mode: "onBlur",
@@ -251,7 +279,6 @@ export function HeadingProperties({ id }) {
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={"true".toString()}>Yes</SelectItem>
                     <SelectItem value={"false".toString()}>No</SelectItem>
                     {expressionData?.map((item) => (
                       <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
@@ -341,4 +368,4 @@ export function HeadingProperties({ id }) {
   );
 }
 
-export default Heading
+export default MultiSelects;

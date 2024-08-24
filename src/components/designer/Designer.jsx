@@ -26,6 +26,7 @@ import Radarchart from "../fields/RadarChart";
 import Image from "../fields/Image";
 import { deleteprop } from "../../store/AttributePropDataSlice";
 import TableFields from "../fields/Table";
+import MultiSelects from "../fields/MultiSelect";
 
 const Designer = () => {
 
@@ -200,7 +201,8 @@ function DesignerElementWrapper({ element, onDelete }) {
     linechart       : <Linechart id={element.id}/>,
     piechart        : <Piechart id={element.id}/>,
     radarchart      : <Radarchart id={element.id}/>,
-    tablefield      : <TableFields id={element.id}/>
+    tablefield      : <TableFields id={element.id}/>,
+    multiselect      : <MultiSelects id={element.id}/>
   };
 
   if(draggable.isDragging) return null;

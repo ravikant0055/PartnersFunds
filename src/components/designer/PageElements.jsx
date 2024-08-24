@@ -16,6 +16,7 @@ import { PiechartPreview } from '../fields/PieChart'
 import { RadarchartPreview } from '../fields/RadarChart'
 import { ImageFieldPreview } from '../fields/Image'
 import { TableFieldsPreview } from '../fields/Table'
+import { MultiSelectPreview } from '../fields/MultiSelect'
 
 const PageElements = ({element}) => {
   console.log("page element:",element.type);
@@ -38,10 +39,10 @@ const PageElements = ({element}) => {
     "piechart"       : <PiechartPreview id={element.id}/>,
     "radarchart"     : <RadarchartPreview id={element.id}/>,
     "image"          : <ImageFieldPreview id={element.id} />,
-    "tablefield"     : <TableFieldsPreview id={element.id}/>
+    "tablefield"     : <TableFieldsPreview id={element.id}/>,
+    "multiselect"    : <MultiSelectPreview id={element.id}/>
   }
 
-  
 
   return (
     <div>{pageData[element.type]}</div>

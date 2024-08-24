@@ -19,6 +19,7 @@ import Piechart, { PiechartFormElement } from './fields/PieChart';
 import Radarchart, { RadarchartFormElement } from './fields/RadarChart';
 import Image, { ImageFormElement } from './fields/Image';
 import TableFields, { TableFieldFormElement } from './fields/Table';
+import MultiSelects, { MultiSelectsFormElement } from './fields/MultiSelect';
 
 
 function DragOverlayWrapper() {
@@ -63,7 +64,8 @@ function DragOverlayWrapper() {
             "linechart"      : LinechartFormElement,
             "piechart"       : PiechartFormElement,
             "radarchart"     : RadarchartFormElement,
-            "tablefield"     : TableFieldFormElement
+            "tablefield"     : TableFieldFormElement,
+            "multiselect"    : MultiSelectsFormElement
 
         }
         node = <SideBarBtnElementDragOverlay formelement={formelement[type]}/>;
@@ -90,7 +92,8 @@ function DragOverlayWrapper() {
         "linechart"         : <Linechart/>,
         "piechart"          : <Piechart/>,
         "radarhart"         : <Radarchart/>,
-        "tablefield"        : <TableFields/>
+        "tablefield"        : <TableFields/>,
+        "multiselect"       : <MultiSelects/>
        }
 
        console.log("2ndtype",type);

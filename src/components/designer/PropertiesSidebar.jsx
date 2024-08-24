@@ -20,6 +20,7 @@ import { PiechartProperties } from '../fields/PieChart';
 import { RadarchartProperties } from '../fields/RadarChart';
 import { ImageProperties } from '../fields/Image';
 import { TableProperties } from '../fields/Table';
+import { MultiSelectsProperties } from '../fields/MultiSelect';
 
 const PropertiesSidebar = ({selectedElement}) => {
   const dispatch = useDispatch();
@@ -47,7 +48,8 @@ const PropertiesSidebar = ({selectedElement}) => {
       "piechart"       : <PiechartProperties id={id}/>,
       "radarchart"     : <RadarchartProperties id={id}/>,
       "image"          : <ImageProperties id={id} />,
-      "tablefield"     : <TableProperties id={id} />
+      "tablefield"     : <TableProperties id={id} />,
+      "multiselect"    : <MultiSelectsProperties id={id} />,
   }
 
   return (

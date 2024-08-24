@@ -3,7 +3,6 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
-import { Switch } from '../ui/switch';
 import { BsTextareaResize } from "react-icons/bs";
 import { Textarea } from '../ui/textarea';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,11 +12,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 const AttributesData = {
   label: "Text Area",
+  labelposition: false,
   require: true,
   disable:false,
   hide:false,
+  readonly: false,
+  autofocus:false,
   placeholder: "value here...",
   rows: 3,
+  cols: 3,
+  maxlength : 20,
+  minlength : 0,
   fontsize: "16px", // Default font size
   fontcolor: "", // Default font color
   height: "50px", // Default height
@@ -66,18 +71,74 @@ const TextAreaField = ({ id }) => {
 
 export function TextAreaFieldPreview({ id }) {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+  const attributePropData = useSelector((state) => state.propertiesdata);
+  const [inputValue, setInputValue] = useState(property.value);
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    setInputValue(newValue); // Update state to trigger re-render
+  };
+
+  function evaluateConditions(enableConditions, attributePropData) {
+    return enableConditions.every((condition, index) => {
+      const { attribute, operator, attvalues, parentOperator } = condition;
+      const attrData = attributePropData.find(attr => attr.id === attribute);
+
+      if (!attrData) return false; // Attribute not found in data, return false
+
+      const attrValue = attrData.value;
+
+      let conditionResult = false;
+      switch (operator) {
+        case "==":
+          conditionResult = attrValue === attvalues;
+          break;
+        case "!=":
+          conditionResult = attrValue !== attvalues;
+          break;
+        // Add other operators if needed
+        default:
+          return false; // Unknown operator
+      }
+
+      if (index > 0 && parentOperator === "AND") {
+        return evaluateConditions(enableConditions.slice(0, index), attributePropData) && conditionResult;
+      } else if (index > 0 && parentOperator === "OR") {
+        return evaluateConditions(enableConditions.slice(0, index), attributePropData) || conditionResult;
+      }
+
+      return conditionResult;
+    });
+  }
+
+  if (property.disable === "true") {
+    var shouldYesdisable = true;
+  } else {
+    const enableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
+    var shouldDisable = enableConditions.length > 0 && !evaluateConditions(enableConditions, attributePropData);
+  }
+
+
+  if (property.hide === "true") {
+    var shouldYeshide = true;
+  } else {
+    const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
+    var shouldHide = hideConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
+  }
   return (
-    <div className='flex flex-col gap-2 w-full'>
-      <Label>
+    <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full ${shouldHide || shouldYeshide ? 'hidden' : ''}`}>
+      <Label className="flex text-nowrap">
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
-      <Textarea placeholder={property.placeholder} rows={property.rows} value={property.value} style={{
+      <Textarea disabled={shouldDisable || shouldYesdisable} autoFocus={property.autofocus} maxLength={property.maxlength} minLength={property.minlength} readOnly={property.readonly} placeholder={property.placeholder} cols={property.cols} rows={property.rows} style={{
         fontcolor: property.fontcolor,
         fontSize: property.fontsize + "px",
         height: property.height + "px",
         width: property.width + "px",
-      }} />
+      }}
+      value={inputValue}
+      onChange={handleChange}
+      />
     </div>
   )
 }
@@ -165,11 +226,17 @@ export function TextAreaProperties({ id }) {
     defaultValues: {
       id: id,
       label: property.label,
+      labelposition: property.labelposition,
       required: property.required,
       placeholder: property.placeholder,
       rows: property.rows,
+      cols:property.cols,
       disable : property.disable,
+      autofocus:property.autofocus,
       hide : property.hide,
+      maxlength:property.maxlength,
+      minlength:property.minlength,
+      readonly: property.readonly,
       fontcolor: property.fontcolor,
       fontsize: property.fontsize,
       height: property.height,
@@ -190,11 +257,17 @@ export function TextAreaProperties({ id }) {
   useEffect(() => {  // Reset form values to default when the component mounts
     form.reset({
       label: property.label,
+      labelposition: property.labelposition,
       required: property.required,
       placeholder: property.placeholder,
       rows: property.rows,
       disable : property.disable,
       hide : property.hide,
+      maxlength:property.maxlength,
+      autofocus:property.autofocus,
+      cols:property.cols,
+      minlength:property.minlength,
+      readonly: property.readonly,
       fontcolor: property.fontcolor,
       fontsize: property.fontsize,
       height: property.height,
@@ -256,6 +329,27 @@ export function TextAreaProperties({ id }) {
 
         <FormField
           control={form.control}
+          name="labelposition"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Label Position</FormLabel>
+              <FormControl>
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Top' : 'Side'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Top</SelectItem>
+                    <SelectItem value="false">Side</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="placeholder"
           render={({ field }) => (
             <FormItem>
@@ -267,6 +361,48 @@ export function TextAreaProperties({ id }) {
                     if (e.key === "Enter") e.currentTarget.blur();
                   }}
                 />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="readonly"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Read Only</FormLabel>
+              <FormControl>
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Yes</SelectItem>
+                    <SelectItem value="false">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="autofocus"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Auto Focus</FormLabel>
+              <FormControl>
+                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Yes</SelectItem>
+                    <SelectItem value="false">No</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
             </FormItem>
           )}
@@ -289,6 +425,7 @@ export function TextAreaProperties({ id }) {
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value={"true"}>Yes</SelectItem>
                     <SelectItem value={"false"}>No</SelectItem>
                     {expressionData?.map((item) => (
                       <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
@@ -424,6 +561,48 @@ export function TextAreaProperties({ id }) {
 
         <FormField
           control={form.control}
+          name="maxlength"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Max Length</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="1"
+                  min="8"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="minlength"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Min Length</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="1"
+                  min="8"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="width"
           render={({ field }) => (
             <FormItem>
@@ -484,22 +663,50 @@ export function TextAreaProperties({ id }) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="cols"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cols</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="1"
+                  min="10"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         {/* ==================================== */}
 
         <FormField
           control={form.control}
           name="required"
           render={({ field }) => (
-            <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm ">
-              <div className="space-y-0.5">
-                <FormLabel>Required</FormLabel>
-              </div>
+            <FormItem>
+              <FormLabel>Required</FormLabel>
               <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                <Select value={field.value} onValueChange={(value) => field.onChange(value === 'true')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Yes</SelectItem>
+                    <SelectItem value="false">No</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
             </FormItem>
           )}
         />
+
         <div className="w-full flex items-center justify-center">
           <Button type='button' className='w-[40%]' onClick={handleReset}>
             Reset 

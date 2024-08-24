@@ -18,6 +18,7 @@ const AttributesData = {
     options: [],
     disable: false,
     hide: false,
+    autofocus:false,
     value: "",
     color: "", // Default color
     fontsize: "16px", // Default font color
@@ -111,16 +112,25 @@ export function SelectFieldsPreview({ id }) {
         });
       }
       
-    const enableConditions  = property.disable !== false ? JSON.parse(property.disable) : []; 
-    const shouldDisable = enableConditions.length > 0 && !evaluateConditions(enableConditions, attributePropData);
-      
-    const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
-    const shouldHide = enableConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
+        if (property.disable === "true") {
+            var shouldYesdisable = true;
+        } else {
+            const enableConditions = property.disable !== false ? JSON.parse(property.disable) : [];
+            var shouldDisable = enableConditions.length > 0 && !evaluateConditions(enableConditions, attributePropData);
+        }
+
+
+        if (property.hide === "true") {
+            var shouldYeshide = true;
+        } else {
+            const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
+            var shouldHide = hideConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
+        }
 
 
     return (
-        <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} ${shouldHide ? 'hidden' : ''} gap-2 w-full`} style={{ width: property.width + "px", }}>
-            <Label className='text-nowrap' style={{
+        <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} ${shouldHide || shouldYeshide ? 'hidden' : ''} gap-2 w-full`} style={{ width: property.width + "px", }}>
+            <Label className='text-nowrap flex' style={{
                 fontSize: property.fontsize + "px",
                 height: property.height + "px",
             }}>
@@ -128,11 +138,11 @@ export function SelectFieldsPreview({ id }) {
                 {property.required && <span className='text-red-600 font-bold'> *</span>}
             </Label>
             <Select
-                disabled={shouldDisable}
+                disabled={shouldDisable || shouldYesdisable}
                 value={property.value}
                 onValueChange={(value) => dispatch(updateprop({ id, value }))}
             >
-                <SelectTrigger>
+                <SelectTrigger autoFocus={property.autofocus}>
                     <SelectValue placeholder={property.placeholder} />
                 </SelectTrigger>
                 <SelectContent>
@@ -246,6 +256,7 @@ export function SelectFieldProperties({ id }) {
             options: property.options,
             disable: property.disable,
             hide: property.hide,
+            autofocus:property.autofocus,
             color: property.color,
             fontsize: property.fontsize,
             height: property.height,
@@ -272,6 +283,7 @@ export function SelectFieldProperties({ id }) {
             options: property.options,
             disable: property.disable,
             hide: property.hide,
+            autofocus:property.autofocus,
             color: property.color,
             fontsize: property.fontsize,
             height: property.height,
@@ -465,7 +477,7 @@ export function SelectFieldProperties({ id }) {
                 />
 
 
-
+                
                 <FormField
                     control={form.control}
                     name="required"
@@ -486,6 +498,7 @@ export function SelectFieldProperties({ id }) {
                         </FormItem>
                     )}
                 />
+
 
                 <FormField
                     control={form.control}
@@ -545,6 +558,27 @@ export function SelectFieldProperties({ id }) {
                             </FormControl>
                         </FormItem>
                     )}
+                />
+
+                <FormField
+                        control={form.control}
+                        name="autofocus"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Auto Focus</FormLabel>
+                            <FormControl>
+                                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="true">Yes</SelectItem>
+                                    <SelectItem value="false">No</SelectItem>
+                                </SelectContent>
+                                </Select>
+                            </FormControl>
+                            </FormItem>
+                        )}
                 />
 
 

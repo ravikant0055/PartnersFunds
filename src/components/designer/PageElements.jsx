@@ -16,6 +16,8 @@ import { PiechartPreview } from '../fields/PieChart'
 import { RadarchartPreview } from '../fields/RadarChart'
 import { ImageFieldPreview } from '../fields/Image'
 import { TableFieldsPreview } from '../fields/Table'
+import { AreachartPreview } from '../fields/AreaChart'
+import { BubblechartPreview } from '../fields/BubbleChart'
 import { MultiSelectPreview } from '../fields/MultiSelect'
 
 const PageElements = ({element}) => {
@@ -39,8 +41,7 @@ const PageElements = ({element}) => {
     "piechart"       : <PiechartPreview id={element.id}/>,
     "radarchart"     : <RadarchartPreview id={element.id}/>,
     "image"          : <ImageFieldPreview id={element.id} />,
-    "tablefield"     : <TableFieldsPreview id={element.id}/>,
-    "multiselect"    : <MultiSelectPreview id={element.id}/>
+    "tablefield"     : <TableFieldsPreview id={element.id}/>
   }
 
 

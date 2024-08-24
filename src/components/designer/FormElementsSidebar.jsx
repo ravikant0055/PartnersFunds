@@ -17,6 +17,8 @@ import { PiechartFormElement } from '../fields/PieChart'
 import { RadarchartFormElement } from '../fields/RadarChart'
 import { ImageFormElement } from '../fields/Image'
 import { TableFieldFormElement } from '../fields/Table'
+import { AreachartFormElement } from '../fields/AreaChart'
+import { BubblechartFormElement } from '../fields/BubbleChart'
 import { MultiSelectsFormElement } from '../fields/MultiSelect'
 
 const FormElementsSidebar = () => {
@@ -46,6 +48,8 @@ const FormElementsSidebar = () => {
           <SideBarBtnElement formelement={LinechartFormElement}/>
           <SideBarBtnElement formelement={PiechartFormElement}/>
           <SideBarBtnElement formelement={RadarchartFormElement}/>
+          <SideBarBtnElement formelement={AreachartFormElement}/>
+          <SideBarBtnElement formelement={BubblechartFormElement}/>
         </div>
     </div>
   )

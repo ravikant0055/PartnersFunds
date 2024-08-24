@@ -20,6 +20,8 @@ import { PiechartProperties } from '../fields/PieChart';
 import { RadarchartProperties } from '../fields/RadarChart';
 import { ImageProperties } from '../fields/Image';
 import { TableProperties } from '../fields/Table';
+import { AreachartProperties } from '../fields/AreaChart';
+import { BubblechartProperties } from '../fields/BubbleChart';
 import { MultiSelectsProperties } from '../fields/MultiSelect';
 
 const PropertiesSidebar = ({selectedElement}) => {
@@ -50,6 +52,8 @@ const PropertiesSidebar = ({selectedElement}) => {
       "image"          : <ImageProperties id={id} />,
       "tablefield"     : <TableProperties id={id} />,
       "multiselect"    : <MultiSelectsProperties id={id} />,
+      "areachart"      : <AreachartProperties id={id}/>,
+      "bubblechart"    : <BubblechartProperties id={id}/>
   }
 
   return (

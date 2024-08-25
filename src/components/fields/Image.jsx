@@ -22,10 +22,14 @@ const AttributesData = {
     width: 85, // Default width
 }
 
-const Image = ({ id }) => {
-
-    console.log("img id", id);
+const Image = ({ id , x , y }) => {
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (!property || property.id !== id) {
+          dispatch(addprop({ id, x, y, ...AttributesData }));
+        }
+      }, [dispatch, id, property]);
     return (
         <div className='flex flex-col gap-2 w-full'>
             <Label

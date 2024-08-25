@@ -3,7 +3,8 @@ import { Label } from '../ui/label'
 import { RiSeparator } from 'react-icons/ri';
 import { Separator } from '../ui/separator';
 
-const SeparatorField = ({id}) => {
+const SeparatorField = ({id , x , y}) => {
+ 
   return (
     <div className='flex flex-col gap-5 w-full'>
       <Label className='text-muted-foreground'>Separator Field</Label>

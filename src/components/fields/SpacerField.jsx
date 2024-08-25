@@ -11,13 +11,13 @@ const AttributesData = {
   height : 20,
 }
 
-const SpacerFields = ({id}) => {
-  console.log("txt id",id);
+const SpacerFields = ({id , x , y}) => {
+
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
-    useEffect(() => {
+  useEffect(() => {
         if (!property || property.id !== id) {
-          dispatch(addprop({ id, ...AttributesData }));
+          dispatch(addprop({ id,x,y, ...AttributesData }));
       }
   }, [dispatch, id, property]);
   

@@ -42,7 +42,8 @@ const AttributesData = {
     height: "100%"
 }
 
-const BubbleChart = ({ id }) => {
+const BubbleChart = ({ id , x , y }) => {
+
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const dispatch = useDispatch();
 

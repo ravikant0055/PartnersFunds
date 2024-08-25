@@ -20,13 +20,13 @@ const AttributesData = {
   required: false,
 };
 
-const DateField = ({ id }) => {
+const DateField = ({ id , x , y }) => {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
 
   useEffect(() => {
     if (!property || property.id !== id) {
-      dispatch(addprop({ id, ...AttributesData }));
+      dispatch(addprop({ id,x,y, ...AttributesData }));
     }
   }, [dispatch, id, property]);
 

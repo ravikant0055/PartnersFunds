@@ -27,7 +27,8 @@ const AttributesData = {
     height: "100%"
 }
 
-const AreaChart = ({ id }) => {
+const AreaChart = ({ id , x , y }) => {
+
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const dispatch = useDispatch();
 

@@ -1,6 +1,6 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
+const initialState=[];
 
 const AttributeDataSlice = createSlice({
     name: 'attribute',
@@ -13,17 +13,17 @@ const AttributeDataSlice = createSlice({
             return state.filter((item) => item.id !== action.payload);
         },
         reorderElements: (state, action) => {
-            const { draggedId, overId } = action.payload;
-            const draggedIndex = state.findIndex((item) => item.id === draggedId);
-            const overIndex = state.findIndex((item) => item.id === overId);
+            const { draggedId, x, y } = action.payload;
+            const elementIndex = state.findIndex((item) => item.id === draggedId);
       
-            if (draggedIndex !== -1 && overIndex !== -1 && draggedIndex !== overIndex) {
-              const [movedItem] = state.splice(draggedIndex, 1);
-              state.splice(overIndex, 0, movedItem);
+            if (elementIndex !== -1) {
+                // Update the x and y coordinates of the dragged element
+                state[elementIndex].x = x;
+                state[elementIndex].y = y;
             }
         },
     }
 });
 
-export const {addElement,deleteElement,reorderElements} = AttributeDataSlice.actions;
+export const { addElement, deleteElement, reorderElements } = AttributeDataSlice.actions;
 export default AttributeDataSlice.reducer;

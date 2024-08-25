@@ -43,10 +43,12 @@ const PageElements = ({element}) => {
     "image"          : <ImageFieldPreview id={element.id} />,
     "tablefield"     : <TableFieldsPreview id={element.id}/>
   }
-
-
   return (
-    <div>{pageData[element.type]}</div>
+    <div className="relative">
+      <div style={{ position: 'absolute', left: `${element.x}px`, top: `${element.y}px` }}>
+        {pageData[element.type]}
+      </div>
+    </div>
   )
 }
 

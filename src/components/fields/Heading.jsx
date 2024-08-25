@@ -18,13 +18,12 @@ const AttributesData = {
   tooltip:"",
 }
 
-const Heading = ({ id }) => {
-  console.log("txt id", id);
+const Heading = ({ id, x, y }) => {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
   useEffect(() => {
     if (!property || property.id !== id) {
-      dispatch(addprop({ id, ...AttributesData }));
+      dispatch(addprop({ id, x, y, ...AttributesData }));
     }
   }, [dispatch, id, property]);
 
@@ -150,7 +149,7 @@ export function HeadingProperties({ id }) {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const expressionData = useSelector((state) => state.expressiondata);
-
+  console.log("property data", property);
   const form = useForm({
     mode: "onBlur",
     defaultValues: {

@@ -18,7 +18,7 @@ const AttributesData = {
   textsize: 16,
   textcolor: "", // Default font color
   height: 50, // Default height
-  width: 500, // Default width
+  width: 200, // Default width
   type: "text",
   maxlength: 20,
   minlength: 0,
@@ -43,13 +43,19 @@ const AttributesData = {
 }
 
 
-const TextFields = ({ id }) => {
+const TextFields = ({ id, x ,y }) => {
+  console.log("x", x);
+  console.log("y", y);
+  // const {id , x , y} = element;
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!property || property.id !== id) {
-      dispatch(addprop({ id, ...AttributesData }));
+      dispatch(addprop({ id, x, y, ...AttributesData }));
+    }
+    else{
+      
     }
   }, [dispatch, id, property]);
 
@@ -269,7 +275,6 @@ export function TextProperties({ id }) {
   const viewData = useSelector((state) => state.viewdata);
 
   console.log("entityData", entityData);
-
 
   console.log("property data", property);
 

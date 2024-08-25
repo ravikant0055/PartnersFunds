@@ -29,12 +29,12 @@ const chartConfig = {
   },
 }
 
-const Barchart = ({ id }) => {
+const Barchart = ({ id , x , y }) => {
   const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
   const dispatch = useDispatch();
     useEffect(() => {
         if (!property || property.id !== id) {
-          dispatch(addprop({ id, ...AttributesData }));
+          dispatch(addprop({ id,x,y, ...AttributesData }));
       }
   }, [dispatch, id, property]);
   

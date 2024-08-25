@@ -37,9 +37,9 @@ const PreviewDialogBtn = () => {
         </div>
 
         <div className='bg-accent flex flex-col flex-grow items-center justify-center p-4 overflow-y-auto' style={{ backgroundImage: `url(${paperSvg})` }}>
-          <div className='max-w-[620px] flex flex-col flex-grow  gap-4  bg-background h-full w-full rounded-2xl p-8 overflow-y-auto'>
+          <div className='max-w-[1100px] bg-background h-full w-full rounded-2xl  overflow-y-auto'>
                 {myData.map((item)=>{
-                  return <PageElements key={item.id} element={item}/>
+                  return <PageElements key={item.id}  element={item}/>
                 })}
           </div>
         </div>

@@ -129,10 +129,11 @@ export function ToggleProperties({id}) {
           control={form.control}
           name="label"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Label</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Label</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -147,11 +148,11 @@ export function ToggleProperties({id}) {
           control={form.control}
           name="required"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Required</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Required</FormLabel>
               <FormControl>
                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                   </SelectTrigger>
                   <SelectContent>

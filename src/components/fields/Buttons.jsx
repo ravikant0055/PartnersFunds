@@ -19,7 +19,11 @@ const AttributesData = {
   disable:false,
   hide:false,
   type:"",
-  onclick: ""
+  onclick: {
+    type: "",          // Store the type here
+    onclick_exp: "",
+    onclick_db: "",
+  },
 }
 
 const Buttons = ({ id }) => {
@@ -217,7 +221,11 @@ export function ButtonProperties({ id }) {
       fontcolor: property.fontcolor,
       height: property.height,
       width: property.width,
-      onclick: property.onclick
+      onclick: {
+        type: property.onclick.type || "",  // Ensure type is set
+        onclick_exp: property.onclick.onclick_exp || "",
+        onclick_db: property.onclick.onclick_db || "",
+      },
     },
   });
 
@@ -231,7 +239,11 @@ export function ButtonProperties({ id }) {
       fontcolor: property.fontcolor,
       height: property.height,
       width: property.width,
-      onclick: property.onclick
+      onclick: {
+        type: property.onclick.type || "",  // Ensure type is set
+        onclick_exp: property.onclick.onclick_exp || "",
+        onclick_db: property.onclick.onclick_db || "",
+      },
     });
   }, [form, property]);
 
@@ -251,20 +263,56 @@ export function ButtonProperties({ id }) {
     console.log("apply change");
   };
 
+  // const handleOnclickChange = (value) => {
+  //   setOnclick(value);
+  //   form.setValue('onclick', value);
+  // };
+
+  // const handleOnclickExpChange = (value) => {
+  //   // form.setValue('onclick_exp', value);
+  //   form.setValue('onclick', value);
+  // };
+
+  // const handleOnclickDbChange = (e) => {
+  //   const value = e.target.value;
+  //   // form.setValue('onclick_db', value);
+  //   form.setValue('onclick', value);
+  // };
+
   const handleOnclickChange = (value) => {
-    setOnclick(value);
-    form.setValue('onclick', value);
+    setOnclick((prevOnclick) => ({
+      ...prevOnclick,
+      type: value,
+    }));
+    form.setValue("onclick", {
+      ...onclick,
+      type: value,
+    });
   };
-
+  
+  // Handle the change for the onClick expression
   const handleOnclickExpChange = (value) => {
-    // form.setValue('onclick_exp', value);
-    form.setValue('onclick', value);
+    setOnclick((prevOnclick) => ({
+      ...prevOnclick,
+      onclick_exp: value,
+    }));
+    form.setValue("onclick", {
+      ...onclick,
+      onclick_exp: value,
+    });
   };
-
+  
+  // Handle the change for the onClick DB function
   const handleOnclickDbChange = (e) => {
     const value = e.target.value;
-    // form.setValue('onclick_db', value);
-    form.setValue('onclick', value);
+    setOnclick((prevOnclick) => ({
+      ...prevOnclick,
+      onclick_db: value,
+    }));
+    form.setValue("onclick", {
+      ...onclick,
+      onclick_db: value,
+    });
   };
 
   return (
@@ -279,10 +327,11 @@ export function ButtonProperties({ id }) {
           control={form.control}
           name="label"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Label</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Label</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -297,11 +346,11 @@ export function ButtonProperties({ id }) {
           control={form.control}
           name="type"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Button Type</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Button Type</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={!field.value ? "select type" : field.value} />
                   </SelectTrigger>
                   <SelectContent>
@@ -319,20 +368,21 @@ export function ButtonProperties({ id }) {
           control={form.control}
           name="disable"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Disable</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Disable</FormLabel>
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder="select expression">
                       {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    <SelectItem value={"true"}>Yes</SelectItem>
+                    <SelectItem value={"false"}>No</SelectItem>
                     {expressionData?.map((item) => (
                       <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
                         {item.expressionname}
@@ -349,20 +399,21 @@ export function ButtonProperties({ id }) {
           control={form.control}
           name="hide"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Hide</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Hide</FormLabel>
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder="select expression">
                       {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    <SelectItem value={"true"}>Yes</SelectItem>
+                    <SelectItem value={"false"}>No</SelectItem>
                     {expressionData?.map((item) => (
                       <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
                         {item.expressionname}
@@ -379,17 +430,17 @@ export function ButtonProperties({ id }) {
           control={form.control}
           name="onclick"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>onClick</FormLabel>
+            <FormItem className="prop-div">
+              <FormLabel className="prop-label">onClick</FormLabel>
               <FormControl>
-                <Select value={field.value} onValueChange={handleOnclickChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={field.value} />
+                <Select value={field.value.type} onValueChange={handleOnclickChange}>
+                  <SelectTrigger className="prop-area">
+                    <SelectValue placeholder="Select option" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={'no'}>No</SelectItem>
-                    <SelectItem value={'onclickexp'}>Expression</SelectItem>
-                    <SelectItem value={'onclickdb'}>DB Function</SelectItem>
+                    <SelectItem value="no">No</SelectItem>
+                    <SelectItem value="onclickexp">Expression</SelectItem>
+                    <SelectItem value="onclickdb">DB Function</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -397,68 +448,82 @@ export function ButtonProperties({ id }) {
           )}
         />
 
-        {onclick === 'onclickexp' && (
+        {onclick.type === "onclickexp" && (
           <FormField
-          control={form.control}
-          name="onclick_exp"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>onClick Expression</FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value}
-                  onValueChange={handleOnclickExpChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="select expression">
-                      {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={"false".toString()}>No</SelectItem>
-                    {expressionData?.map((item) => (
-                      <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
-                        {item.expressionname}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-            </FormItem>
-          )}
-        />
+            control={form.control}
+            name="onclick_exp"
+            render={({ field }) => (
+              <FormItem className="prop-div">
+                <FormLabel className="prop-label">onClick Expression</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={handleOnclickExpChange}>
+                    <SelectTrigger className="prop-area">
+                      <SelectValue placeholder="Select expression">
+                        {field.value === false
+                          ? "No"
+                          : expressionData?.find(
+                              (item) =>
+                                JSON.stringify(item.conditions) ===
+                                JSON.stringify(field.value)
+                            )?.expressionname}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={"false".toString()}>No</SelectItem>
+                      {expressionData?.map((item) => (
+                        <SelectItem
+                          key={item.expression_id}
+                          value={JSON.stringify(item.conditions)}
+                        >
+                          {item.expressionname}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
         )}
 
-        {onclick === 'onclickdb' &&(
+        {onclick.type === "onclickdb" && (
           <FormField
-          control={form.control}
-          name="onclick_db"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>onClick DB Function</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="text"
-                  onChange={handleOnclickDbChange}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+            control={form.control}
+            name="onclick_db"
+            render={({ field }) => (
+              <FormItem className="prop-div">
+                <FormLabel className="prop-label">onClick DB Function</FormLabel>
+                <FormControl>
+                  <Input
+                    className="prop-area"
+                    {...field}
+                    type="text"
+                    onChange={handleOnclickDbChange}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") e.currentTarget.blur();
+                    }}
+                    onFocus={(e) =>
+                      e.currentTarget.setSelectionRange(
+                        e.currentTarget.value.length,
+                        e.currentTarget.value.length
+                      )
+                    }
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
         )}
 
         <FormField
           control={form.control}
           name="color"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Button Colour</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Button Colour</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="color"
                   onKeyDown={(e) => {
@@ -474,10 +539,11 @@ export function ButtonProperties({ id }) {
           control={form.control}
           name="fontsize"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Font size</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Font size</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -495,10 +561,11 @@ export function ButtonProperties({ id }) {
           control={form.control}
           name="fontcolor"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Font color</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Font color</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="color"
                   onKeyDown={(e) => {
@@ -514,10 +581,11 @@ export function ButtonProperties({ id }) {
           control={form.control}
           name="height"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Button height (px)</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Button height (px)</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -535,10 +603,11 @@ export function ButtonProperties({ id }) {
           control={form.control}
           name="width"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Button width (px)</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Button width (px)</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -552,27 +621,8 @@ export function ButtonProperties({ id }) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="onclick"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>onClick</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="text"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
         <div className="w-full flex items-center justify-center">
-          <Button type='button' className='w-[40%]' onClick={handleReset}>
+          <Button type='button' className='prop-reset-btn' onClick={handleReset}>
             Reset
           </Button>
         </div>

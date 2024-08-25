@@ -309,10 +309,11 @@ export function CheckboxProperties({ id }) {
                     control={form.control}
                     name="labelHeader"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Label Header</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label' >Label Header</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -327,10 +328,11 @@ export function CheckboxProperties({ id }) {
                     control={form.control}
                     name="label"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Label</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Label</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -345,11 +347,11 @@ export function CheckboxProperties({ id }) {
                 control={form.control}
                 name="readonly"
                 render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Read Only</FormLabel>
+                    <FormItem className='prop-div'>
+                    <FormLabel className='prop-label'>Read Only</FormLabel>
                     <FormControl>
                         <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                        <SelectTrigger>
+                        <SelectTrigger className='prop-area'>
                             <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                         </SelectTrigger>
                         <SelectContent>
@@ -366,14 +368,14 @@ export function CheckboxProperties({ id }) {
                     control={form.control}
                     name="eovo.EO.entityobject"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Entity Object Name</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Entity Object Name</FormLabel>
                             <FormControl>
                                 <Select
                                     value={field.value}
                                     onValueChange={field.onChange}
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className='prop-area'>
                                         <SelectValue placeholder="select enity object">
                                             {field.value === false ? "No" : JSON.stringify(field.value)?.entityname}
                                         </SelectValue>
@@ -395,10 +397,11 @@ export function CheckboxProperties({ id }) {
                     control={form.control}
                     name="eovo.EO.entityattribute"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Entity Object Attribute</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Entity Object Attribute</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -413,14 +416,14 @@ export function CheckboxProperties({ id }) {
                     control={form.control}
                     name="eovo.VO.viewobject"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>View Object Name</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>View Object Name</FormLabel>
                             <FormControl>
                                 <Select
                                     value={field.value}
                                     onValueChange={field.onChange}
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className='prop-area'>
                                         <SelectValue placeholder="select view object">
                                             {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
                                         </SelectValue>
@@ -443,10 +446,11 @@ export function CheckboxProperties({ id }) {
                     control={form.control}
                     name="eovo.VO.viewattribute"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>View Object Attribute</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>View Object Attribute</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -462,11 +466,11 @@ export function CheckboxProperties({ id }) {
                 control={form.control}
                 name="required"
                 render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Required</FormLabel>
+                    <FormItem className='prop-div'>
+                    <FormLabel className='prop-label'>Required</FormLabel>
                     <FormControl>
                         <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                        <SelectTrigger>
+                        <SelectTrigger className='prop-area'>
                             <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                         </SelectTrigger>
                         <SelectContent>
@@ -485,10 +489,10 @@ export function CheckboxProperties({ id }) {
                     render={({ field }) => (
                         <FormItem>
                             <div className='flex justify-between items-center'>
-                                <FormLabel>Option</FormLabel>
+                                <FormLabel className='prop-label'>Option</FormLabel>
                                 <Button
                                     variant={"outline"}
-                                    className="gap-2"
+                                    className="gap-2  h-[30px] text-[12px] "
                                     onClick={(e) => {
                                         e.preventDefault();
                                         form.setValue("options", field.value.concat("New Option"));
@@ -501,7 +505,8 @@ export function CheckboxProperties({ id }) {
                             <div className='flex flex-col gap-2'>
                                 {form.watch("options").map((option, index) => (
                                     <div key={index} className='flex items-center justify-between gap-1'>
-                                        <Input placeholder="" value={option} onChange={(e) => {
+                                        <Input
+                                            className='prop-area' placeholder="" value={option} onChange={(e) => {
                                             field.value[index] = e.target.value;
                                             field.onChange(field.value);
                                         }}
@@ -528,10 +533,11 @@ export function CheckboxProperties({ id }) {
                     control={form.control}
                     name="fontcolor"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Text color</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Text color</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     type="color"
                                     onKeyDown={(e) => {
@@ -546,10 +552,11 @@ export function CheckboxProperties({ id }) {
                     control={form.control}
                     name="fontweight"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Font Weight</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Font Weight</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     type="number"
                                     step="1"
@@ -566,10 +573,11 @@ export function CheckboxProperties({ id }) {
                     control={form.control}
                     name="fontsize"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Font Size (px)</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Font Size (px)</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     type="number"
                                     step="1"
@@ -585,7 +593,7 @@ export function CheckboxProperties({ id }) {
                 {/* ======================== */}
 
                 <div className="w-full flex items-center justify-center">
-                    <Button type='button' className='w-[40%]' onClick={handleReset}>
+                    <Button type='button' className='prop-reset-btn' onClick={handleReset}>
                         Reset
                     </Button>
                 </div>

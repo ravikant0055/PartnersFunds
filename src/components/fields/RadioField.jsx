@@ -275,10 +275,11 @@ export function RadioFieldProperties({ id }) {
                     control={form.control}
                     name="labelHeader"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Label Header</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Label Header</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -293,10 +294,11 @@ export function RadioFieldProperties({ id }) {
                     control={form.control}
                     name="label"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Label</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Label</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -307,12 +309,12 @@ export function RadioFieldProperties({ id }) {
                     )}
                 />
 
-<FormField
+                <FormField
                     control={form.control}
                     name="eovo.EO.entityobject"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Entity Object Name</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Entity Object Name</FormLabel>
                             <FormControl>
                                 <Select
                                     value={field.value}
@@ -340,10 +342,11 @@ export function RadioFieldProperties({ id }) {
                     control={form.control}
                     name="eovo.EO.entityattribute"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Entity Object Attribute</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Entity Object Attribute</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -358,8 +361,8 @@ export function RadioFieldProperties({ id }) {
                     control={form.control}
                     name="eovo.VO.viewobject"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>View Object Name</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>View Object Name</FormLabel>
                             <FormControl>
                                 <Select
                                     value={field.value}
@@ -388,10 +391,11 @@ export function RadioFieldProperties({ id }) {
                     control={form.control}
                     name="eovo.VO.viewattribute"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>View Object Attribute</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>View Object Attribute</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -406,12 +410,18 @@ export function RadioFieldProperties({ id }) {
                     control={form.control}
                     name="required"
                     render={({ field }) => (
-                        <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm ">
-                            <div className="space-y-0.5">
-                                <FormLabel>Required</FormLabel>
-                            </div>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Required</FormLabel>
                             <FormControl>
-                                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                                    <SelectTrigger className='prop-area'>
+                                        <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="true">Yes</SelectItem>
+                                        <SelectItem value="false">No</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                         </FormItem>
                     )}
@@ -423,10 +433,10 @@ export function RadioFieldProperties({ id }) {
                     render={({ field }) => (
                         <FormItem>
                             <div className='flex justify-between items-center'>
-                                <FormLabel>Option</FormLabel>
+                                <FormLabel className='prop-label'>Option</FormLabel>
                                 <Button
                                     variant={"outline"}
-                                    className="gap-2"
+                                    className="gap-2 h-[30px] text-[12px]"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         form.setValue("options", field.value.concat("New Option"));
@@ -439,7 +449,8 @@ export function RadioFieldProperties({ id }) {
                             <div className='flex flex-col gap-2'>
                                 {form.watch("options").map((option, index) => (
                                     <div key={index} className='flex items-center justify-between gap-1'>
-                                        <Input placeholder="" value={option} onChange={(e) => {
+                                        <Input 
+                                            className='prop-area' placeholder="" value={option} onChange={(e) => {
                                             field.value[index] = e.target.value;
                                             field.onChange(field.value);
                                         }}
@@ -465,10 +476,11 @@ export function RadioFieldProperties({ id }) {
                     control={form.control}
                     name="headercolor"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Header Color</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Header Color</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     type="color"
                                     onKeyDown={(e) => {
@@ -483,10 +495,11 @@ export function RadioFieldProperties({ id }) {
                     control={form.control}
                     name="radiocolor"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Radio Color</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Radio Color</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     type="color"
                                     onKeyDown={(e) => {
@@ -501,10 +514,11 @@ export function RadioFieldProperties({ id }) {
                     control={form.control}
                     name="fontweight"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Font Weight</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Font Weight</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     type="number"
                                     step="1"
@@ -521,10 +535,11 @@ export function RadioFieldProperties({ id }) {
                     control={form.control}
                     name="fontsize"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Font Size (px)</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Font Size (px)</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     type="number"
                                     step="1"
@@ -540,7 +555,7 @@ export function RadioFieldProperties({ id }) {
                 {/* ======================================= */}
 
                 <div className="w-full flex items-center justify-center">
-                    <Button type='button' className='w-[40%]' onClick={handleReset}>
+                    <Button type='button' className='prop-reset-div' onClick={handleReset}>
                         Reset
                     </Button>
                 </div>

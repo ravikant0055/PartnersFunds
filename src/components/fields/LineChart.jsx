@@ -205,10 +205,11 @@ export function LinechartProperties({ id }) {
           control={form.control}
           name="label"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Label</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Label</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -223,10 +224,11 @@ export function LinechartProperties({ id }) {
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Description</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();

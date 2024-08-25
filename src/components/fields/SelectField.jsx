@@ -213,7 +213,7 @@ export function SelectFieldsPage({ id, properties, submitValues }) {
                 value={inputValue}
                 onValueChange={handleChange}
             >
-                <SelectTrigger>
+                <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={property.placeholder} />
                 </SelectTrigger>
                 <SelectContent>
@@ -328,10 +328,11 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="label"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Label</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Label</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -346,11 +347,11 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="labelposition"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Label Position</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Label Position</FormLabel>
                             <FormControl>
                                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                                    <SelectTrigger>
+                                    <SelectTrigger className='prop-area'>
                                         <SelectValue placeholder={field.value ? 'Top' : 'Side'} />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -367,10 +368,11 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="placeholder"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>PlaceHolder</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>PlaceHolder</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -385,14 +387,14 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="eovo.EO.entityobject"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Entity Object Name</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Entity Object Name</FormLabel>
                             <FormControl>
                                 <Select
                                     value={field.value}
                                     onValueChange={field.onChange}
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className='prop-area'>
                                         <SelectValue placeholder="select enity object">
                                             {field.value === false ? "No" : JSON.stringify(field.value)?.entityname}
                                         </SelectValue>
@@ -414,10 +416,11 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="eovo.EO.entityattribute"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Entity Object Attribute</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Entity Object Attribute</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -432,14 +435,14 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="eovo.VO.viewobject"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>View Object Name</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>View Object Name</FormLabel>
                             <FormControl>
                                 <Select
                                     value={field.value}
                                     onValueChange={field.onChange}
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className='prop-area'>
                                         <SelectValue placeholder="select view object">
                                             {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
                                         </SelectValue>
@@ -462,10 +465,11 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="eovo.VO.viewattribute"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>View Object Attribute</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>View Object Attribute</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -482,11 +486,11 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="required"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Required</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Required</FormLabel>
                             <FormControl>
                                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                                    <SelectTrigger>
+                                    <SelectTrigger className='prop-area'>
                                         <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -504,14 +508,14 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="disable"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Disable</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Disable</FormLabel>
                             <FormControl>
                                 <Select
                                     value={field.value}
                                     onValueChange={field.onChange}
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className='prop-area'>
                                         <SelectValue placeholder="select expression">
                                             {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
                                         </SelectValue>
@@ -534,14 +538,14 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="hide"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Hide</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Hide</FormLabel>
                             <FormControl>
                                 <Select
                                     value={field.value}
                                     onValueChange={field.onChange}
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className='prop-area'>
                                         <SelectValue placeholder="select expression">
                                             {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
                                         </SelectValue>
@@ -564,11 +568,11 @@ export function SelectFieldProperties({ id }) {
                         control={form.control}
                         name="autofocus"
                         render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Auto Focus</FormLabel>
+                            <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Auto Focus</FormLabel>
                             <FormControl>
                                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                                <SelectTrigger>
+                                <SelectTrigger className='prop-area'>
                                     <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -588,10 +592,10 @@ export function SelectFieldProperties({ id }) {
                     render={({ field }) => (
                         <FormItem>
                             <div className='flex justify-between items-center'>
-                                <FormLabel>Option</FormLabel>
+                                <FormLabel className='prop-label'>Option</FormLabel>
                                 <Button
                                     variant={"outline"}
-                                    className="py-2 px-2 h-fit"
+                                    className="h-[25px] text-[12px] px-2"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         form.setValue("options", field.value.concat("New Option"));
@@ -603,7 +607,8 @@ export function SelectFieldProperties({ id }) {
                             <div className='flex flex-col gap-2'>
                                 {form.watch("options").map((option, index) => (
                                     <div key={index} className='flex items-center justify-between gap-1'>
-                                        <Input placeholder="" value={option} onChange={(e) => {
+                                        <Input 
+                                            className='prop-area' placeholder="" value={option} onChange={(e) => {
                                             field.value[index] = e.target.value;
                                             field.onChange(field.value);
                                         }}
@@ -628,10 +633,11 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="fontsize"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>FontSize</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>FontSize</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     type="number"
                                     step="1"
@@ -649,10 +655,11 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="height"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Select height (px)</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Select height (px)</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     type="number"
                                     step="1"
@@ -670,10 +677,11 @@ export function SelectFieldProperties({ id }) {
                     control={form.control}
                     name="width"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Select width (px)</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Select width (px)</FormLabel>
                             <FormControl>
-                                <Input
+                                <Input 
+                                    className='prop-area'
                                     {...field}
                                     type="number"
                                     step="1"
@@ -687,7 +695,7 @@ export function SelectFieldProperties({ id }) {
                     )}
                 />
                 <div className="w-full flex items-center justify-center">
-                    <Button type='button' className='w-[40%]' onClick={handleReset}>
+                    <Button type='button' className='prop-reset-btn' onClick={handleReset}>
                         Reset
                     </Button>
                 </div>

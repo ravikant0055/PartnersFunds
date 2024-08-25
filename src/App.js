@@ -13,6 +13,7 @@ import Nodatapage from './components/builder/Nodatapage';
 import { PrimeReactProvider } from 'primereact/api';
 import { MultiSelect } from 'primereact/multiselect';
 import { useState } from 'react';
+import './App.css';
 
 function App() {
 

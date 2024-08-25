@@ -259,12 +259,12 @@ const table = useReactTable({
 
               <div className={`flex items-center py-4 ${!property.filter ? 'hidden' : ''}`}>
                   <Input
+                    className='prop-area max-w-sm'
                       placeholder="Filter emails..."
                       value={(table.getColumn("email")?.getFilterValue() ) ?? ""}
                       onChange={(event) =>
                           table.getColumn("email")?.setFilterValue(event.target.value)
                       }
-                      className="max-w-sm"
                   />
                   <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -463,12 +463,12 @@ const table = useReactTable({
 
               <div className={`flex items-center py-4 ${!property.filter ? 'hidden' : ''}`}>
                   <Input
+                    className='prop-area max-w-sm'
                       placeholder="Filter emails..."
                       value={(table.getColumn("email")?.getFilterValue()) ?? ""}
                       onChange={(event) =>
                           table.getColumn("email")?.setFilterValue(event.target.value)
                       }
-                      className="max-w-sm"
                   />
                   <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -635,7 +635,8 @@ export function TableFieldsPage({ properties, id, submitValues }) {
         {property.label}
         {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
-      <Input placeholder={property.placeholder} style={{
+      <Input
+        className='prop-area' placeholder={property.placeholder} style={{
         fontSize: property.textsize + "px",
         color: property.textcolor,
         height: property.height + "px",
@@ -760,10 +761,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="label"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Label</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Label</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -778,11 +780,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="labelposition"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Label Position</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Label Position</FormLabel>
               <FormControl>
                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={field.value ? 'Top' : 'Side'} />
                   </SelectTrigger>
                   <SelectContent>
@@ -799,11 +801,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="filter"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Filters</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Filters</FormLabel>
               <FormControl>
                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                   </SelectTrigger>
                   <SelectContent>
@@ -820,11 +822,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="sort"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Sort</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Sort</FormLabel>
               <FormControl>
                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                   </SelectTrigger>
                   <SelectContent>
@@ -841,10 +843,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="pagination"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Pagination ( No. of line per page ) </FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Pagination ( No. of line per page ) </FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -859,11 +862,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="required"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Required</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Required</FormLabel>
               <FormControl>
                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                   </SelectTrigger>
                   <SelectContent>
@@ -880,14 +883,14 @@ export function TableProperties({ id }) {
           control={form.control}
           name="disable"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Disable</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Disable</FormLabel>
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder="select expression">
                       {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
                     </SelectValue>
@@ -910,14 +913,14 @@ export function TableProperties({ id }) {
           control={form.control}
           name="hide"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Hide</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Hide</FormLabel>
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder="select expression">
                       {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
                     </SelectValue>
@@ -942,14 +945,14 @@ export function TableProperties({ id }) {
           control={form.control}
           name="eovo.EO.entityobject"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Entity Object Name</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Entity Object Name</FormLabel>
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder="select enity object">
                       {field.value === false ? "No" : JSON.stringify(field.value)?.entityname}
                     </SelectValue>
@@ -971,10 +974,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="eovo.EO.entityattribute"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Entity Object Attribute</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Entity Object Attribute</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -989,14 +993,14 @@ export function TableProperties({ id }) {
           control={form.control}
           name="eovo.VO.viewobject"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>View Object Name</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>View Object Name</FormLabel>
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder="select view object">
                       {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
                     </SelectValue>
@@ -1019,10 +1023,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="eovo.VO.viewattribute"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>View Object Attribute</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>View Object Attribute</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -1040,10 +1045,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="labelsize"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Label Size</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Label Size</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -1061,10 +1067,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="textsize"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Text Size</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Text Size</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -1083,10 +1090,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="labelcolor"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Label Color</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Label Color</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="color"
                   onKeyDown={(e) => {
@@ -1102,10 +1110,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="textcolor"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Text Color</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Text Color</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="color"
                   onKeyDown={(e) => {
@@ -1121,10 +1130,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="height"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Text height (px)</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Text height (px)</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -1142,10 +1152,11 @@ export function TableProperties({ id }) {
           control={form.control}
           name="width"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Text width (px)</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Text width (px)</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -1161,7 +1172,7 @@ export function TableProperties({ id }) {
 
 
         <div className="w-full flex items-center justify-center">
-          <Button type='button' className='w-[40%]' onClick={handleReset}>
+          <Button type='button' className='prop-reset-btn' onClick={handleReset}>
             Reset
           </Button>
         </div>

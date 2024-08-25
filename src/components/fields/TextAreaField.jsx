@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel  } from '../ui/form';
 import { BsTextareaResize } from "react-icons/bs";
 import { Textarea } from '../ui/textarea';
 import { useDispatch, useSelector } from 'react-redux';
@@ -313,10 +313,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="label"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Label</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Label</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -331,11 +332,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="labelposition"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Label Position</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Label Position</FormLabel >
               <FormControl>
                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={field.value ? 'Top' : 'Side'} />
                   </SelectTrigger>
                   <SelectContent>
@@ -352,10 +353,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="placeholder"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>PlaceHolder</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>PlaceHolder</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -370,11 +372,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="readonly"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Read Only</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Read Only</FormLabel >
               <FormControl>
                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                   </SelectTrigger>
                   <SelectContent>
@@ -391,11 +393,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="autofocus"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Auto Focus</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Auto Focus</FormLabel >
               <FormControl>
                 <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                   </SelectTrigger>
                   <SelectContent>
@@ -412,14 +414,14 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="disable"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Disable</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Disable</FormLabel >
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder="select expression">
                       {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
                     </SelectValue>
@@ -443,14 +445,14 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="eovo.EO.entityobject"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Entity Object Name</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Entity Object Name</FormLabel >
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder="select enity object">
                       {field.value === false ? "No" : JSON.stringify(field.value)?.entityname}
                     </SelectValue>
@@ -473,10 +475,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="eovo.EO.entityattribute"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Entity Object Attribute</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Entity Object Attribute</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -491,14 +494,14 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="eovo.VO.viewobject"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>View Object Name</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>View Object Name</FormLabel >
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder="select view object">
                       {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
                     </SelectValue>
@@ -521,10 +524,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="eovo.VO.viewattribute"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>View Object Attribute</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>View Object Attribute</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -540,10 +544,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="fontsize"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Font size</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Font size</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -563,10 +568,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="maxlength"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Max Length</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Max Length</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -584,10 +590,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="minlength"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Min Length</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Min Length</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -605,10 +612,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="width"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>TextArea width (px)</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>TextArea width (px)</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -626,10 +634,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="height"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>TextArea height (px)</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>TextArea height (px)</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -647,10 +656,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="rows"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Rows</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Rows</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -668,10 +678,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="cols"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cols</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Cols</FormLabel >
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -690,11 +701,11 @@ export function TextAreaProperties({ id }) {
           control={form.control}
           name="required"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Required</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Required</FormLabel >
               <FormControl>
                 <Select value={field.value} onValueChange={(value) => field.onChange(value === 'true')}>
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
                   </SelectTrigger>
                   <SelectContent>
@@ -708,7 +719,7 @@ export function TextAreaProperties({ id }) {
         />
 
         <div className="w-full flex items-center justify-center">
-          <Button type='button' className='w-[40%]' onClick={handleReset}>
+          <Button type='button' className='prop-reset-btn' onClick={handleReset}>
             Reset 
           </Button>
         </div>

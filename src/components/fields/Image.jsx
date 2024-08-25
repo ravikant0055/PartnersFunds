@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { Button } from '../ui/button';
 import '../../index.css'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const AttributesData = {
     label: "Image",
@@ -114,7 +115,8 @@ export function ImageFieldPage({ id, properties, submitValues }) {
                 >
                     <span>No image selected</span>
                 </div>
-                <Input type="file" id="imageUpload" name="image" accept="image/*"
+                <Input
+                    className='prop-area' type="file" id="imageUpload" name="image" accept="image/*"
                     onChange={previewImage}
                     style={{
                         position: 'absolute',
@@ -206,10 +208,11 @@ export function ImageProperties({ id }) {
                     control={form.control}
                     name="label"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Label</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Label</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -224,10 +227,11 @@ export function ImageProperties({ id }) {
                     control={form.control}
                     name="tooltip"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Tooltip</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Tooltip</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -242,10 +246,11 @@ export function ImageProperties({ id }) {
                     control={form.control}
                     name="src"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Src</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Src</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -260,10 +265,11 @@ export function ImageProperties({ id }) {
                     control={form.control}
                     name="alt"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Alt</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Alt</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") e.currentTarget.blur();
@@ -282,10 +288,11 @@ export function ImageProperties({ id }) {
                     control={form.control}
                     name="height"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Image height (px)</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Image height (px)</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     type="number"
                                     step="1"
@@ -303,10 +310,11 @@ export function ImageProperties({ id }) {
                     control={form.control}
                     name="width"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Image width (px)</FormLabel>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Image width (px)</FormLabel>
                             <FormControl>
                                 <Input
+                                    className='prop-area'
                                     {...field}
                                     type="number"
                                     step="1"
@@ -326,19 +334,25 @@ export function ImageProperties({ id }) {
                     control={form.control}
                     name="required"
                     render={({ field }) => (
-                        <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm ">
-                            <div className="space-y-0.5">
-                                <FormLabel>Required</FormLabel>
-                            </div>
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Required</FormLabel>
                             <FormControl>
-                                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
+                                    <SelectTrigger className='prop-area'>
+                                        <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="true">Yes</SelectItem>
+                                        <SelectItem value="false">No</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                         </FormItem>
                     )}
                 />
 
                 <div className="w-full flex items-center justify-center">
-                    <Button type='button' className='w-[40%]' onClick={handleReset}>
+                    <Button type='button' className='prop-reset-btn' onClick={handleReset}>
                         Reset
                     </Button>
                 </div>

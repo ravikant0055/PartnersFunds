@@ -202,10 +202,11 @@ export function HeadingProperties({ id }) {
           control={form.control}
           name="label"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Label</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Label</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -220,10 +221,11 @@ export function HeadingProperties({ id }) {
           control={form.control}
           name="tooltip"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tooltip</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Tooltip</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -238,21 +240,21 @@ export function HeadingProperties({ id }) {
           control={form.control}
           name="hide"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Hide</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Hide</FormLabel>
               <FormControl>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className='prop-area'>
                     <SelectValue placeholder="select expression">
                       {field.value === false ? "No" : (expressionData?.find(item => JSON.stringify(item.conditions) === JSON.stringify(field.value))?.expressionname)}
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={"true".toString()}>Yes</SelectItem>
-                    <SelectItem value={"false".toString()}>No</SelectItem>
+                    <SelectItem value={"true"}>Yes</SelectItem>
+                    <SelectItem value={"false"}>No</SelectItem>
                     {expressionData?.map((item) => (
                       <SelectItem key={item.expression_id} value={JSON.stringify(item.conditions)}>
                         {item.expressionname}
@@ -271,10 +273,11 @@ export function HeadingProperties({ id }) {
           control={form.control}
           name="fontsize"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Font Size (px)</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Font Size (px)</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -292,10 +295,11 @@ export function HeadingProperties({ id }) {
           control={form.control}
           name="fontcolor"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Font Color</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Font Color</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="color"
                   onKeyDown={(e) => {
@@ -312,10 +316,11 @@ export function HeadingProperties({ id }) {
           control={form.control}
           name="fontweight"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Font Weight</FormLabel>
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Font Weight</FormLabel>
               <FormControl>
                 <Input
+                  className='prop-area'
                   {...field}
                   type="number"
                   step="1"
@@ -331,7 +336,7 @@ export function HeadingProperties({ id }) {
 
         {/* ======================================== */}
         <div className="w-full flex items-center justify-center">
-          <Button type='button' className='w-[40%]' onClick={handleReset}>
+          <Button type='button' className='prop-reset-btn' onClick={handleReset}>
             Reset
           </Button>
         </div>

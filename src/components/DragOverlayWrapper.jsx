@@ -22,7 +22,7 @@ import TableFields, { TableFieldFormElement } from './fields/Table';
 import AreaChart, { AreachartFormElement } from './fields/AreaChart';
 import BubbleChart, { BubblechartFormElement } from './fields/BubbleChart';
 import MultiSelects, { MultiSelectsFormElement } from './fields/MultiSelect';
-import TitlesField, { TitlesFieldFormElement } from './fields/TitlesField';
+import TilesField, { TilesFieldFormElement} from './fields/TilesField';
 
 
 function DragOverlayWrapper() {
@@ -71,7 +71,7 @@ function DragOverlayWrapper() {
             "multiselect"    : MultiSelectsFormElement,
             "areachart"      : AreachartFormElement,
             "bubblechart"    : BubblechartFormElement,
-            "titlefield"     : TitlesFieldFormElement,
+            "tilesfield"     : TilesFieldFormElement,
 
         }
         node = <SideBarBtnElementDragOverlay formelement={formelement[type]}/>;
@@ -102,13 +102,13 @@ function DragOverlayWrapper() {
         "areachart"         : <AreaChart/>,
         "bubblechart"       : <BubbleChart/>,
         "multiselect"       : <MultiSelects/>,
-        "titlefield"        : <TitlesField/>
+        "tilesfield"        : <TilesField/>
        }
 
        console.log("2ndtype",type);
        node = (
-        <div className='flex bg-accent border rounded-md h-[120px] w-full py-2
-         px-4 opacity-90 pointer pointer-events-none'>
+        <div className='rounded-md h-[10px] w-full py-2
+         px-4 pointer pointer-events-none'>
            {formshadow[type]}
         </div>
        )

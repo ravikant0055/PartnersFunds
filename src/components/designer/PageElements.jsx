@@ -19,7 +19,7 @@ import { TableFieldsPreview } from '../fields/Table'
 import { AreachartPreview } from '../fields/AreaChart'
 import { BubblechartPreview } from '../fields/BubbleChart'
 import { MultiSelectPreview } from '../fields/MultiSelect'
-import { TitlesFieldPreview } from '../fields/TitlesField'
+import { TilesFieldPreview} from '../fields/TilesField'
 
 const PageElements = ({element}) => {
   console.log("page element:",element.type);
@@ -43,7 +43,7 @@ const PageElements = ({element}) => {
     "radarchart"     : <RadarchartPreview id={element.id}/>,
     "image"          : <ImageFieldPreview id={element.id} />,
     "tablefield"     : <TableFieldsPreview id={element.id}/>,
-    "titlefield"     : <TitlesFieldPreview id={element.id}/>,
+    "tilesfield"     : <TilesFieldPreview id={element.id}/>,
   }
   return (
     <div className="relative">

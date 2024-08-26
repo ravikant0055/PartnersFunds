@@ -9,20 +9,29 @@ import { addprop, updateprop } from '../../store/AttributePropDataSlice';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Textarea } from '../ui/textarea';
 
 const AttributesData = {
-    label: "TitlesField",
+    label: "TilesField",
     paragraph: "Provide essential information about each team-member, including their role",
     fontsize: 20,
     fontweight: 600,
     fontcolor: "",
+    bgcolor: "",
     hide: false,
     tooltip: "",
     src: "",
-    labelIcon: false
+    labelIcon: true,
+    eovo: {
+        VO: {
+            viewobject: "",
+            viewattribute: ""
+        }
+    },
+    onclick: ""
 }
 
-const TitlesField = ({ id, x, y }) => {
+const TilesField = ({ id, x, y }) => {
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const dispatch = useDispatch();
     useEffect(() => {
@@ -32,8 +41,8 @@ const TitlesField = ({ id, x, y }) => {
     }, [dispatch, id, property]);
 
     return (
-        <div className='flex flex-col gap-4 w-full'>
-            <div className={`${property.labelIcon ? " " : "hidden"}`}>
+        <div onClick={property.onclick} className='flex flex-col gap-4 w-full shadow-md p-4 rounded-lg' style={{ backgroundColor: property.bgcolor }}>
+            <div className={`${property.labelIcon ? " " : "hidden"} flex flex-col gap-3`}>
                 <Avatar className='hidden: ${true}'>
                     <AvatarImage src={"/assets/" + property.src} />
                     <AvatarFallback>CN</AvatarFallback>
@@ -46,70 +55,76 @@ const TitlesField = ({ id, x, y }) => {
                     {property.label}
                 </Label>
             </div>
-            <p className='w-[150px]'>{property.paragraph}</p>
+            <p className='w-[150px]' style={{ color: property.fontcolor }}>{property.paragraph}</p>
         </div>
     )
 }
 
-export function TitlesFieldPreview({ id }) {
+export function TilesFieldPreview({ id }) {
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const attributePropData = useSelector((state) => state.propertiesdata);
-    function evaluateConditions(enableConditions, attributePropData) {
-        return enableConditions.every((condition, index) => {
-            const { attribute, operator, attvalues, parentOperator } = condition;
-            const attrData = attributePropData.find(attr => attr.id === attribute);
+    console.log("click property",property.onclick);
+    // function evaluateConditions(enableConditions, attributePropData) {
+    //     return enableConditions.every((condition, index) => {
+    //         const { attribute, operator, attvalues, parentOperator } = condition;
+    //         const attrData = attributePropData.find(attr => attr.id === attribute);
 
-            if (!attrData) return false; // Attribute not found in data, return false
+    //         if (!attrData) return false; // Attribute not found in data, return false
 
-            const attrValue = attrData.value;
+    //         const attrValue = attrData.value;
 
-            let conditionResult = false;
-            switch (operator) {
-                case "==":
-                    conditionResult = attrValue === attvalues;
-                    break;
-                case "!=":
-                    conditionResult = attrValue !== attvalues;
-                    break;
-                // Add other operators if needed
-                default:
-                    return false; // Unknown operator
-            }
+    //         let conditionResult = false;
+    //         switch (operator) {
+    //             case "==":
+    //                 conditionResult = attrValue === attvalues;
+    //                 break;
+    //             case "!=":
+    //                 conditionResult = attrValue !== attvalues;
+    //                 break;
+    //             // Add other operators if needed
+    //             default:
+    //                 return false; // Unknown operator
+    //         }
 
-            if (index > 0 && parentOperator === "AND") {
-                return evaluateConditions(enableConditions.slice(0, index), attributePropData) && conditionResult;
-            } else if (index > 0 && parentOperator === "OR") {
-                return evaluateConditions(enableConditions.slice(0, index), attributePropData) || conditionResult;
-            }
+    //         if (index > 0 && parentOperator === "AND") {
+    //             return evaluateConditions(enableConditions.slice(0, index), attributePropData) && conditionResult;
+    //         } else if (index > 0 && parentOperator === "OR") {
+    //             return evaluateConditions(enableConditions.slice(0, index), attributePropData) || conditionResult;
+    //         }
 
-            return conditionResult;
-        });
-    }
+    //         return conditionResult;
+    //     });
+    // }
 
-    if (property.hide === "true") {
-        var shouldYeshide = true;
-    } else {
-        const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
-        var shouldHide = hideConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
-    }
+    // if (property.hide === "true") {
+    //     var shouldYeshide = true;
+    // } else {
+    //     const hideConditions = property.hide !== false ? JSON.parse(property.hide) : [];
+    //     var shouldHide = hideConditions.length > 0 && !evaluateConditions(hideConditions, attributePropData);
+    // }
+    
 
     return (
-        <div className='flex flex-col gap-2 w-full'>
-            <Label
-                title={property.tooltip}
-                className={`${shouldHide || shouldYeshide ? 'hidden' : ''}`}
-                style={{
+        <div onClick={property.onclick} className='flex flex-col gap-4 w-full shadow-md p-4 rounded-lg' style={{ backgroundColor: property.bgcolor }}>
+            <div className={`${property.labelIcon ? " " : "hidden"} flex flex-col gap-3`}>
+                <Avatar className='hidden: ${true}'>
+                    <AvatarImage src={"/assets/" + property.src} />
+                    <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <Label style={{
                     fontSize: property.fontsize + "px",
                     fontWeight: property.fontweight,
-                    color: property.fontcolor
+                    color: property.fontcolor,
                 }}>
-                {property.label}
-            </Label>
+                    {property.label}
+                </Label>
+            </div>
+            <p className='w-[150px]' style={{ color: property.fontcolor }}>{property.paragraph}</p>
         </div>
     )
 }
 
-export function TitlesFieldPage({ id, properties, submitValues }) {
+export function TilesFieldPage({ id, properties, submitValues }) {
     // const property = properties;
     const [values, setValues] = useState("");
     const property = AttributesData;
@@ -149,17 +164,18 @@ export function TitlesFieldPage({ id, properties, submitValues }) {
     )
 }
 
-export const TitlesFieldFormElement = {
-    type: "titlefield",
+export const TilesFieldFormElement = {
+    type: "tilesfield",
     icon: MdOutlineTitle,
-    label: "Title Field"
+    label: "Tile Field"
 }
 
 
-export function TitlesFieldProperties({ id }) {
+export function TilesFieldProperties({ id }) {
     const dispatch = useDispatch();
     const property = useSelector((state) => state.propertiesdata.find(item => item.id === id)) || AttributesData;
     const expressionData = useSelector((state) => state.expressiondata);
+    const viewData = useSelector((state) => state.viewdata);
     const [labelIcon, setlabelIcon] = useState(property.labelIcon);
     console.log("property data", property);
     const form = useForm({
@@ -172,7 +188,16 @@ export function TitlesFieldProperties({ id }) {
             fontweight: property.fontweight,
             fontcolor: property.fontcolor,
             src: property.src,
-            labelIcon: property.labelIcon
+            labelIcon: property.labelIcon,
+            paragraph: property.paragraph,
+            bgcolor: property.bgcolor,
+            eovo: {
+                VO: {
+                    viewobject: property.eovo.VO.viewobject,
+                    viewattribute: property.eovo.VO.viewattribute,
+                }
+            },
+            onclick: property.onclick
         },
     });
 
@@ -185,7 +210,16 @@ export function TitlesFieldProperties({ id }) {
             tooltip: property.tooltip,
             fontcolor: property.fontcolor,
             src: property.src,
-            labelIcon: property.labelIcon
+            labelIcon: property.labelIcon,
+            paragraph: property.paragraph,
+            bgcolor: property.bgcolor,
+            eovo: {
+                VO: {
+                    viewobject: property.eovo.VO.viewobject,
+                    viewattribute: property.eovo.VO.viewattribute,
+                }
+            },
+            onclick: property.onclick
         });
     }, [form, property]);
 
@@ -235,33 +269,104 @@ export function TitlesFieldProperties({ id }) {
                         </FormItem>
                     )}
                 />
-                {labelIcon === true &&(
-<>
-                    <FormField
-                        control={form.control}
-                        name="label"
-                        render={({ field }) => (
-                            <FormItem className='prop-div'>
-                                <FormLabel className='prop-label'>Label</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        className='prop-area'
-                                        {...field}
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter") e.currentTarget.blur();
-                                        }}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
 
                 <FormField
                     control={form.control}
-                    name="src"
+                    name="paragraph"
                     render={({ field }) => (
                         <FormItem className='prop-div'>
-                            <FormLabel className='prop-label'>Src</FormLabel>
+                            <FormLabel className='prop-label'>Description</FormLabel>
+                            <FormControl>
+                                <Textarea
+                                    className='w-[130px] h-[140px]'
+                                    {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                {labelIcon === true && (
+                    <>
+                        <FormField
+                            control={form.control}
+                            name="label"
+                            render={({ field }) => (
+                                <FormItem className='prop-div'>
+                                    <FormLabel className='prop-label'>Label</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            className='prop-area'
+                                            {...field}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") e.currentTarget.blur();
+                                            }}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="src"
+                            render={({ field }) => (
+                                <FormItem className='prop-div'>
+                                    <FormLabel className='prop-label'>Src</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            className='prop-area'
+                                            {...field}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") e.currentTarget.blur();
+                                            }}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                    </>
+                )}
+
+                <FormField
+                    control={form.control}
+                    name="eovo.VO.viewobject"
+                    render={({ field }) => (
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>View Object Name</FormLabel>
+                            <FormControl>
+                                <Select
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                >
+                                    <SelectTrigger className='prop-area' >
+                                        <SelectValue placeholder="select view object">
+                                            {field.value === false ? "No" : JSON.stringify(field.value)?.viewname}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value={"false".toString()}>No</SelectItem>
+                                        {viewData?.map((item, index) => (
+                                            <SelectItem key={index} value={JSON.stringify(item.viewname)}>
+                                                {item.viewname}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="eovo.VO.viewattribute"
+                    render={({ field }) => (
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>View Object Attribute</FormLabel>
                             <FormControl>
                                 <Input
                                     className='prop-area'
@@ -274,8 +379,25 @@ export function TitlesFieldProperties({ id }) {
                         </FormItem>
                     )}
                 />
-                </>
-                )}
+
+                <FormField
+                    control={form.control}
+                    name="onclick"
+                    render={({ field }) => (
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>onClick</FormLabel>
+                            <FormControl>
+                                <Input
+                                    className='prop-area'
+                                    {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
 
                 <FormField
                     control={form.control}
@@ -354,6 +476,26 @@ export function TitlesFieldProperties({ id }) {
 
                 <FormField
                     control={form.control}
+                    name="bgcolor"
+                    render={({ field }) => (
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Background Color</FormLabel>
+                            <FormControl>
+                                <Input
+                                    className='prop-area'
+                                    {...field}
+                                    type="color"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
                     name="fontcolor"
                     render={({ field }) => (
                         <FormItem className='prop-div'>
@@ -407,4 +549,4 @@ export function TitlesFieldProperties({ id }) {
     );
 }
 
-export default TitlesField
+export default TilesField

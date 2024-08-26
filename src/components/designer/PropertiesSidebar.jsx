@@ -23,7 +23,7 @@ import { TableProperties } from '../fields/Table';
 import { AreachartProperties } from '../fields/AreaChart';
 import { BubblechartProperties } from '../fields/BubbleChart';
 import { MultiSelectsProperties } from '../fields/MultiSelect';
-import { TitlesFieldProperties } from '../fields/TitlesField';
+import { TilesFieldProperties} from '../fields/TilesField';
 
 const PropertiesSidebar = ({selectedElement}) => {
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ const PropertiesSidebar = ({selectedElement}) => {
       "multiselect"    : <MultiSelectsProperties id={id} />,
       "areachart"      : <AreachartProperties id={id}/>,
       "bubblechart"    : <BubblechartProperties id={id}/>,
-      "titlefield"     : <TitlesFieldProperties id={id}/>
+      "tilesfield"     : <TilesFieldProperties id={id}/>
   }
 
   return (

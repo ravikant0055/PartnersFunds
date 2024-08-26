@@ -29,7 +29,7 @@ import TableFields from "../fields/Table";
 import AreaChart from "../fields/AreaChart";
 import BubbleChart from "../fields/BubbleChart";
 import MultiSelects from "../fields/MultiSelect";
-import TitlesField from "../fields/TitlesField";
+import TilesField from "../fields/TilesField";
 
 const Designer = () => {
 
@@ -198,7 +198,7 @@ function DesignerElementWrapper({ element, onDelete, style }) {
     multiselect      : <MultiSelects id={element.id} x={element.x} y={element.y} />,
     areachart       : <AreaChart id={element.id} x={element.x} y={element.y} />,
     bubblechart     : <BubbleChart id={element.id} x={element.x} y={element.y} />,
-    titlefield      : <TitlesField id={element.id} x={element.x} y={element.y} />,
+    tilesfield      : <TilesField id={element.id} x={element.x} y={element.y} />,
   };
 
   if (draggable.isDragging) return null;
@@ -209,7 +209,7 @@ function DesignerElementWrapper({ element, onDelete, style }) {
       {...draggable.listeners}
       {...draggable.attributes}
       style={style} // Apply the passed style
-      className="text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
+      className="text-foreground hover:cursor-pointer rounded-md ring-accent ring-inset"
       onMouseEnter={() => setMouseIsOver(true)}
       onMouseLeave={() => setMouseIsOver(false)}
       onClick={(e) => selectedElement(e)}

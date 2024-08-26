@@ -29,6 +29,7 @@ import TableFields from "../fields/Table";
 import AreaChart from "../fields/AreaChart";
 import BubbleChart from "../fields/BubbleChart";
 import MultiSelects from "../fields/MultiSelect";
+import TitlesField from "../fields/TitlesField";
 
 const Designer = () => {
 
@@ -197,6 +198,7 @@ function DesignerElementWrapper({ element, onDelete, style }) {
     multiselect      : <MultiSelects id={element.id} x={element.x} y={element.y} />,
     areachart       : <AreaChart id={element.id} x={element.x} y={element.y} />,
     bubblechart     : <BubbleChart id={element.id} x={element.x} y={element.y} />,
+    titlefield      : <TitlesField id={element.id} x={element.x} y={element.y} />,
   };
 
   if (draggable.isDragging) return null;

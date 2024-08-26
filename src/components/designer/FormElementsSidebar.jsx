@@ -20,6 +20,7 @@ import { TableFieldFormElement } from '../fields/Table'
 import { AreachartFormElement } from '../fields/AreaChart'
 import { BubblechartFormElement } from '../fields/BubbleChart'
 import { MultiSelectsFormElement } from '../fields/MultiSelect'
+import { TitlesFieldFormElement } from '../fields/TitlesField'
 
 const FormElementsSidebar = () => {
   return (
@@ -42,6 +43,7 @@ const FormElementsSidebar = () => {
           <SideBarBtnElement formelement={RadioFieldFormElement}/>
           <SideBarBtnElement formelement={TableFieldFormElement}/>
           <SideBarBtnElement formelement={ImageFormElement} />
+          <SideBarBtnElement formelement={TitlesFieldFormElement} />
 
           <p className='text-sm text-muted-foreground col-span-2 place-self-start my-2'>Graphs Elements </p>
           <SideBarBtnElement formelement={BarchartFormElement}/>

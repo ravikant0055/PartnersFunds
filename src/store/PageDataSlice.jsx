@@ -175,11 +175,11 @@ export const createView = createAsyncThunk('page/createView',
     console.log("entity value",values);
     try {
       const currentDate = new Date().toISOString().split('T')[0];
-      const { viewname, voquery } = values;
+      const {eventtype, viewname, voquery } = values;
       const response = await axios.post('http://localhost:8080/page/saveViewObject', {
             view_object_name: viewname,
             view_object_sql_query: voquery,
-            event_type: "abcd",
+            event_type: eventtype,
             created_by: "praveen",
             creation_date: currentDate,
             last_updated_by: "praveen",

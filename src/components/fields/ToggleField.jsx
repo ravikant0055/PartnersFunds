@@ -25,12 +25,12 @@ const ToggleField = ({id , x , y}) => {
   }, [dispatch, id, property]);
   
   return (
-    <div className='flex items-top space-x-2'>
+    <div className='toggle-div'>
             <Switch />
-            <div className='grid gap-1.5 leading-none'>
+            <div className='toggle-label-div'>
                 <Label>
                     {property.label}
-                    {property.required && <span className='text-red-600 font-bold'> *</span>}
+                    {property.required && <span className='required-css'> *</span>}
                 </Label>
             </div>
         </div>
@@ -124,6 +124,25 @@ export function ToggleProperties({id}) {
           e.preventDefault();
         }}
         className="space-y-3"> 
+
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Id</FormLabel>
+              <FormControl>
+                <Input
+                  readOnly
+                  disabled
+                  className='prop-area'
+                  {...field}
+                  value={id}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         
         <FormField
           control={form.control}

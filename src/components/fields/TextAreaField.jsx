@@ -25,8 +25,8 @@ const AttributesData = {
   minlength : 0,
   fontsize: "16px", // Default font size
   fontcolor: "", // Default font color
-  height: "50px", // Default height
-  width: "200px", // Default width
+  height: 80, // Default height
+  width: 250, // Default width
   value: "",
   eovo: {
     EO: {
@@ -50,10 +50,10 @@ const TextAreaField = ({ id , x , y }) => {
   }, [dispatch, id, property]);
 
   return (
-    <div className='flex flex-col gap-2 w-full'>
+    <div className='main-div'>
       <Label>
         {property.label}
-        {property.required && <span className='text-red-600 font-bold'> *</span>}
+        {property.required && <span className='required-css'> *</span>}
       </Label>
 
       <Textarea readOnly disabled placeholder={property.placeholder} rows={property.rows} style={{
@@ -61,7 +61,7 @@ const TextAreaField = ({ id , x , y }) => {
         fontSize: property.fontsize + "px",
         height: property.height + "px",
         width: property.width + "px",
-      }} className='border-black'
+      }} className='border-css'
       />
 
     </div>
@@ -308,6 +308,26 @@ export function TextAreaProperties({ id }) {
         }}
         className="space-y-3"
       >
+
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Id</FormLabel>
+              <FormControl>
+                <Input
+                  readOnly
+                  disabled
+                  className='prop-area'
+                  {...field}
+                  value={id}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="label"

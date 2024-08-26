@@ -49,18 +49,18 @@ const SelectField = ({ id , x , y }) => {
     }, [dispatch, id, property]);
 
     return (
-        <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full`} style={{
+        <div className={`${property.labelposition ? 'labelposition-top' : 'labelposition-side'} labelposition-main-div`} style={{
             width: property.width + "px",
         }} >
-            <Label className='text-nowrap' style={{
+            <Label className='label-css' style={{
                 fontSize: property.fontsize + "px",
                 height: property.height + "px",
             }} >
                 {property.label}
-                {property.required && <span className='text-red-600 font-bold'> *</span>}
+                {property.required && <span className='required-css'> *</span>}
             </Label>
             <Select>
-                <SelectTrigger className='border-black'>
+                <SelectTrigger className='border-css'>
                     <SelectValue placeholder={property.placeholder} />
                 </SelectTrigger>
             </Select>
@@ -324,6 +324,26 @@ export function SelectFieldProperties({ id }) {
                 onSubmit={(e) => {
                     e.preventDefault();
                 }} className="space-y-3">
+
+                <FormField
+                    control={form.control}
+                    name="id"
+                    render={({ field }) => (
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Id</FormLabel>
+                            <FormControl>
+                                <Input
+                                    readOnly
+                                    disabled
+                                    className='prop-area'
+                                    {...field}
+                                    value={id}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+            
                 <FormField
                     control={form.control}
                     name="label"

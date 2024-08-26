@@ -31,13 +31,13 @@ const DateField = ({ id , x , y }) => {
   }, [dispatch, id, property]);
 
   return (
-    <div className='flex flex-col gap-2 w-full'>
+    <div className='main-div'>
       <Label>
         {property.label}
-        {property.required && <span className='text-red-600 font-bold'> *</span>}
+        {property.required && <span className='required-css'> *</span>}
       </Label>
-      <Button variant={"outline"} className='w-full justify-start text-left font-normal'>
-        <CalendarIcon className='mr-2 h-4 w-4' />
+      <Button variant={"outline"} className='date-btn'>
+        <CalendarIcon className='date-btn-icon' />
         <span>Pick a date</span>
       </Button>
     </div>
@@ -146,6 +146,25 @@ export function DateProperties({ id }) {
         onSubmit={(e) => e.preventDefault()}
         className="space-y-3"
       >
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Id</FormLabel>
+              <FormControl>
+                <Input
+                  readOnly
+                  disabled
+                  className='prop-area'
+                  {...field}
+                  value={id}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        
         <FormField
           control={form.control}
           name="label"

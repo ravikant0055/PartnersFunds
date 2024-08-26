@@ -38,6 +38,9 @@ const ViewobjectBtn = () => {
         ...values,
         view_id: viewID,
       };
+      console.log("view obej",updatedFormDataWithID);
+      
+      dispatch(addview(updatedFormDataWithID));
   
       if (isEditing && editIndex !== null) {
         dispatch(updateview({ index: editIndex, data: updatedFormDataWithID }));

@@ -43,7 +43,7 @@ const RadioField = ({ id , x , y }) => {
         }
     }, [dispatch, id, property]);
     return (
-        <div className='flex flex-col gap-2 w-full'>
+        <div className='main-div'>
             <Label
                 style={{
                     color: property.headercolor,
@@ -52,7 +52,7 @@ const RadioField = ({ id , x , y }) => {
                 }}
             >
                 {property.labelHeader}
-                {property.required && <span className='text-red-600 font-bold'> *</span>}
+                {property.required && <span className='required-css'> *</span>}
             </Label>
             <RadioGroup defaultValue="option-one" style={{
                 color: property.radiocolor,
@@ -60,7 +60,7 @@ const RadioField = ({ id , x , y }) => {
                 fontWeight: property.fontweight
             }}>
                 {property.options.map((option, index) => (
-                    <div key={index} className="flex items-center space-x-2">
+                    <div key={index} className="radiogroup-item-div">
                         <RadioGroupItem value={`option-${index}`} id={`radio-${id}-${index}`} />
                         <Label htmlFor={`radio-${id}-${index}`}
 
@@ -271,6 +271,26 @@ export function RadioFieldProperties({ id }) {
                 onSubmit={(e) => {
                     e.preventDefault();
                 }} className="space-y-3">
+
+                <FormField
+                control={form.control}
+                name="id"
+                render={({ field }) => (
+                    <FormItem className='prop-div'>
+                    <FormLabel className='prop-label'>Id</FormLabel>
+                    <FormControl>
+                        <Input
+                        readOnly
+                        disabled
+                        className='prop-area'
+                        {...field}
+                        value={id}
+                        />
+                    </FormControl>
+                    </FormItem>
+                )}
+                />
+                
                 <FormField
                     control={form.control}
                     name="labelHeader"

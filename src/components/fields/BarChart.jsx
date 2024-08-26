@@ -198,6 +198,26 @@ export function BarchartProperties({ id }) {
         }}
         className="space-y-3"
       >
+
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Id</FormLabel>
+              <FormControl>
+                <Input
+                  readOnly
+                  disabled
+                  className='prop-area'
+                  {...field}
+                  value={id}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="label"

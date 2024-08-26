@@ -9,7 +9,7 @@ const ViewobjectSlice = createSlice({
          state.push(action.payload);
      },
      removeview: (state,action) => {
-        return state.filter((item) => item.expression_id !== action.payload);
+        return state.filter((item) => item.view_id !== action.payload);
      },
    }
 });

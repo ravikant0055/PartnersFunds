@@ -169,7 +169,6 @@ const data = [
 
 const AttributesData = {
   label: "Table Name",
-  required: true,
   labelcolor: "", // Default color
   labelsize: 16, // Default font size
   textsize: 16,
@@ -186,11 +185,9 @@ const AttributesData = {
   eovo: {
     EO: {
       entityobject: "",
-      entityattribute: ""
     },
     VO: {
       viewobject: "",
-      viewattribute: ""
     }
   },
 
@@ -206,8 +203,6 @@ const TableFields = ({ id , x , y }) => {
       dispatch(addprop({ id, x, y, ...AttributesData }));
     }
   }, [dispatch, id, property]);
-
-
 
 //    ''''''''''''Table code''''''''''''''
 const [sorting, setSorting] = useState([]);
@@ -250,19 +245,18 @@ const table = useReactTable({
   }, [dispatch, id, property]);
 
   return (
-    <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full`}>
+    <div className={`${property.labelposition ? 'labelposition-top' : 'labelposition-side'} labelposition-main-div`}>
       <Label
         style={{
           color: property.labelcolor,
           fontSize: property.labelsize + "px"
         }}>
         {property.label}
-        {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
 
-          <div className="w-full">
+          <div className="table-main-div">
 
-              <div className={`flex items-center py-4 ${!property.filter ? 'hidden' : ''}`}>
+              <div className={`table-header-div ${!property.filter ? 'table-filter' : ''}`}>
                   <Input
                     className='prop-area max-w-sm'
                       placeholder="Filter emails..."
@@ -273,8 +267,8 @@ const table = useReactTable({
                   />
                   <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                          <Button variant="outline" className="ml-auto">
-                              Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
+                          <Button variant="outline" className="table-filter-btn">
+                              Columns <ChevronDownIcon className="table-filter-btnicon" />
                           </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
@@ -299,7 +293,7 @@ const table = useReactTable({
                   </DropdownMenu>
               </div>
 
-              <div className={`rounded-md border ${!property.filter ? 'mt-3' : ''} `}>
+              <div className={`table-content-div ${!property.filter ? 'mt-3' : ''} `}>
                   <Table>
                       <TableHeader>
                           {table.getHeaderGroups().map((headerGroup) => (
@@ -331,8 +325,8 @@ const table = useReactTable({
                   </Table>
               </div>
 
-                <div className="flex items-center justify-end space-x-2 py-4">
-                  <div className="flex-1 text-sm text-muted-foreground">
+                <div className="table-pagination-div">
+                  <div className="table-pagination-value">
                       {table.getFilteredSelectedRowModel().rows.length} of{" "}
                       {table.getFilteredRowModel().rows.length} row(s) selected.
                   </div>
@@ -638,7 +632,6 @@ export function TableFieldsPage({ properties, id, submitValues }) {
 
       >
         {property.label}
-        {property.required && <span className='text-red-600 font-bold'> *</span>}
       </Label>
       <Input
         className='prop-area' placeholder={property.placeholder} style={{
@@ -680,7 +673,6 @@ export function TableProperties({ id }) {
       id: id,
       label: property.label,
       labelposition: property.labelposition,
-      required: property.required,
       disable: property.disable,
       hide: property.hide,
       filter:property.filter,
@@ -695,11 +687,9 @@ export function TableProperties({ id }) {
       eovo: {
         EO: {
           entityobject: property.eovo.EO.entityobject,
-          entityattribute: property.eovo.EO.entityattribute,
         },
         VO: {
           viewobject: property.eovo.VO.viewobject,
-          viewattribute: property.eovo.VO.viewattribute,
         }
       },
     },
@@ -709,7 +699,6 @@ export function TableProperties({ id }) {
     form.reset({
       label: property.label,
       labelposition: property.labelposition,
-      required: property.required,
       disable: property.disable,
       hide: property.hide,
       filter:property.filter,
@@ -724,11 +713,9 @@ export function TableProperties({ id }) {
       eovo: {
         EO: {
           entityobject: property.eovo.EO.entityobject,
-          entityattribute: property.eovo.EO.entityattribute,
         },
         VO: {
           viewobject: property.eovo.VO.viewobject,
-          viewattribute: property.eovo.VO.viewattribute,
         }
       },
     });
@@ -761,6 +748,24 @@ export function TableProperties({ id }) {
         }}
         className="space-y-3">
 
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Id</FormLabel>
+              <FormControl>
+                <Input
+                  readOnly
+                  disabled
+                  className='prop-area'
+                  {...field}
+                  value={id}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -865,27 +870,6 @@ export function TableProperties({ id }) {
 
         <FormField
           control={form.control}
-          name="required"
-          render={({ field }) => (
-            <FormItem className='prop-div'>
-              <FormLabel className='prop-label'>Required</FormLabel>
-              <FormControl>
-                <Select value={field.value.toString()} onValueChange={(value) => field.onChange(value === 'true')}>
-                  <SelectTrigger className='prop-area'>
-                    <SelectValue placeholder={field.value ? 'Yes' : 'No'} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="true">Yes</SelectItem>
-                    <SelectItem value="false">No</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="disable"
           render={({ field }) => (
             <FormItem className='prop-div'>
@@ -975,24 +959,6 @@ export function TableProperties({ id }) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="eovo.EO.entityattribute"
-          render={({ field }) => (
-            <FormItem className='prop-div'>
-              <FormLabel className='prop-label'>Entity Object Attribute</FormLabel>
-              <FormControl>
-                <Input
-                  className='prop-area'
-                  {...field}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
 
         <FormField
           control={form.control}
@@ -1023,27 +989,6 @@ export function TableProperties({ id }) {
             </FormItem>
           )}
         />
-
-        <FormField
-          control={form.control}
-          name="eovo.VO.viewattribute"
-          render={({ field }) => (
-            <FormItem className='prop-div'>
-              <FormLabel className='prop-label'>View Object Attribute</FormLabel>
-              <FormControl>
-                <Input
-                  className='prop-area'
-                  {...field}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-
 
         {/* ====================================== */}
         <FormField

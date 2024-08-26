@@ -14,6 +14,7 @@ import { PrimeReactProvider } from 'primereact/api';
 import { MultiSelect } from 'primereact/multiselect';
 import { useState } from 'react';
 import './App.css';
+import './GenratedAttributes.css';
 
 function App() {
 

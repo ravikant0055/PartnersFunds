@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addentity } from 'src/store/EntittyObjectSlice';
 import { CiEdit } from 'react-icons/ci';
 import { MdDelete } from 'react-icons/md';
-import { addview } from 'src/store/ViewObjectSlice';
+import { addview, removeview } from 'src/store/ViewObjectSlice';
 import { Textarea } from '../ui/textarea';
 import { createView } from 'src/store/PageDataSlice';
 
@@ -38,6 +38,8 @@ const ViewobjectBtn = () => {
         ...values,
         view_id: viewID,
       };
+      console.log("view obej",updatedFormDataWithID);
+      
       dispatch(addview(updatedFormDataWithID));
     } catch (error) {
       console.error('Error:', error);
@@ -49,7 +51,8 @@ const ViewobjectBtn = () => {
   };
 
   const removeView = (e) => {
-    console.log("remove button hit with:",e)
+    dispatch(removeview(e));
+    console.log("remove view");
   }
 
   return (
@@ -109,7 +112,8 @@ const ViewobjectBtn = () => {
             />
 
             <DialogFooter>
-              <Button type="submit" className="w-full mt-4">Save
+              <Button type="submit" className="w-full mt-4">
+              {!form.formState.isSubmitting ? <span>Save</span> : <ImSpinner2 className="animate-spin" />}
               </Button>
             </DialogFooter>
           </form>
@@ -125,7 +129,7 @@ const ViewobjectBtn = () => {
                 </div>
                 <div className='flex gap-5'>
                 <CiEdit className="h-6 w-6 text-cyan-700 cursor-pointer" />
-                <MdDelete onClick={() => removeView(index)} className="h-6 w-6 text-red-500 cursor-pointer" />
+                <MdDelete onClick={() => removeView(item.view_id)} className="h-6 w-6 text-red-500 cursor-pointer" />
                 </div>
               </div>
           </div>

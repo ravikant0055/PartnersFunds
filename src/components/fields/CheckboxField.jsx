@@ -47,7 +47,7 @@ const CheckboxFields = ({ id , x , y }) => {
     const cid = `checkbox-${id}`;
     console.log("cid", cid);
     return (
-        <div className='flex flex-col gap-2 w-full'>
+        <div className='main-div'>
             <Label
                 style={{
                     color: property.fontcolor,
@@ -58,10 +58,10 @@ const CheckboxFields = ({ id , x , y }) => {
                 }}
             >
                 {property.labelHeader}
-                {property.required && <span className='text-red-600 font-bold'> *</span>}
+                {property.required && <span className='required-css'> *</span>}
             </Label>
             {property.options.map((option, index) => (
-                <div key={index} className="flex items-center space-x-2">
+                <div key={index} className="checkbox-div">
                     <Checkbox value={`option-${index}`} id={`checkbox-${id}-${index}`} name={option} style={{
                         color: property.fontcolor,
                         fontSize: property.fontsize + "px",
@@ -303,6 +303,25 @@ export function CheckboxProperties({ id }) {
                     e.preventDefault();
                 }}
                 className="space-y-3">
+
+                <FormField
+                    control={form.control}
+                    name="id"
+                    render={({ field }) => (
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Id</FormLabel>
+                            <FormControl>
+                                <Input
+                                    readOnly
+                                    disabled
+                                    className='prop-area'
+                                    {...field}
+                                    value={id}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />    
 
                 <FormField
                     control={form.control}

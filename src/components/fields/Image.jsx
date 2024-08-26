@@ -31,11 +31,11 @@ const Image = ({ id , x , y }) => {
         }
       }, [dispatch, id, property]);
     return (
-        <div className='flex flex-col gap-2 w-full'>
+        <div className='main-div'>
             <Label
             >
                 {property.label}
-                {property.required && <span className='text-red-600 font-bold'> *</span>}
+                {property.required && <span className='required-css'> *</span>}
             </Label>
             <img src={"/assets/"+property.src} alt={property.alt} title={property.tooltip} style={{width:property.width+"px", height:property.height+"px"}}/>
         </div>
@@ -210,6 +210,25 @@ export function ImageProperties({ id }) {
 
                 <FormField
                     control={form.control}
+                    name="id"
+                    render={({ field }) => (
+                        <FormItem className='prop-div'>
+                            <FormLabel className='prop-label'>Id</FormLabel>
+                            <FormControl>
+                                <Input
+                                    readOnly
+                                    disabled
+                                    className='prop-area'
+                                    {...field}
+                                    value={id}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />    
+
+                <FormField
+                    control={form.control}
                     name="label"
                     render={({ field }) => (
                         <FormItem className='prop-div'>
@@ -366,4 +385,4 @@ export function ImageProperties({ id }) {
 }
 
 
-export default Image
+export default Image;

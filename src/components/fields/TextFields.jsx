@@ -17,8 +17,8 @@ const AttributesData = {
   labelsize: 16, // Default font size
   textsize: 16,
   textcolor: "", // Default font color
-  height: 50, // Default height
-  width: 200, // Default width
+  height: 35, // Default height
+  width: 150, // Default width
   type: "text",
   maxlength: 20,
   minlength: 0,
@@ -60,7 +60,7 @@ const TextFields = ({ id, x ,y }) => {
   }, [dispatch, id, property]);
 
   return (
-    <div className={`${property.labelposition ? 'flex flex-col' : 'flex items-center'} gap-2 w-full`}>
+    <div className={`${property.labelposition ? 'labelposition-top' : 'labelposition-side'} labelposition-main-div`}>
       <Label
         style={{
           color: property.labelcolor,
@@ -68,14 +68,14 @@ const TextFields = ({ id, x ,y }) => {
         }}
       >
         {property.label}
-        {property.required && <span className='text-red-600 font-bold'> *</span>}
+        {property.required && <span className='required-css'> *</span>}
       </Label>
       <Input readOnly disabled placeholder={property.placeholder} style={{
         fontSize: property.textsize + "px",
         color: property.textcolor,
         height: property.height + "px",
         width: property.width + "px",
-      }} className='border-black' />
+      }} className='border-css' />
     </div>
   )
 }
@@ -372,6 +372,25 @@ export function TextProperties({ id }) {
           e.preventDefault();
         }}
         className="space-y-3">
+
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Id</FormLabel>
+              <FormControl>
+                <Input
+                  readOnly
+                  disabled
+                  className='prop-area'
+                  {...field}
+                  value={id}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />  
 
         <FormField
           control={form.control}

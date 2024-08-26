@@ -125,7 +125,7 @@ const Designer = () => {
           )}
   
           {myData.length > 0 && (
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-full overflow-y-auto">
               {myData.map((element) => (
                 <DesignerElementWrapper
                   key={element.id}

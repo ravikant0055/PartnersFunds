@@ -14,8 +14,8 @@ const AttributesData = {
   color: "", // Default color
   fontsize: 16, // Default font size
   fontcolor: "", // Default font color
-  height: 50, // Default height
-  width: 200, // Default width
+  height: 35, // Default height
+  width: 100, // Default width
   disable:false,
   hide:false,
   type:"",
@@ -36,7 +36,7 @@ const Buttons = ({ id, x, y }) => {
   }, [id, property]);
 
   return (
-    <div className='flex flex-col gap-2 w-full'>
+    <div className='main-div'>
       <Button
         style={{
           backgroundColor: property.color,
@@ -322,6 +322,26 @@ export function ButtonProperties({ id }) {
         }}
         className="space-y-3"
       >
+
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem className='prop-div'>
+              <FormLabel className='prop-label'>Id</FormLabel>
+              <FormControl>
+                <Input
+                  readOnly
+                  disabled
+                  className='prop-area'
+                  {...field}
+                  value={id}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="label"
